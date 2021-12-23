@@ -16,18 +16,21 @@ public class UserServiceImpl implements UserService {
 	@Setter(onMethod_=@Autowired) // UserMapper 주입
 	private UserMapper mapper;
 	
-	@Override
+	@Override 
+	// 회원 가입 처리
 	public void register(UserVO userVO) {
 		mapper.register(userVO);
 	}
 
 	@Override
+	//아이디 중복 확인
 	public int emailCheck(UserVO userVO) {
 		int result = mapper.emailCheck(userVO);
 		return result;
 	}
 
 	@Override
+	//닉네임 중복 확인
 	public int nicknameCheck(UserVO userVO) {
 		int result = mapper.nicknameCheck(userVO);
 		return result;
