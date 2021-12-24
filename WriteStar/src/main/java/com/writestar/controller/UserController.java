@@ -1,13 +1,17 @@
 package com.writestar.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.writestar.domain.UserVO;
+import com.writestar.domain.loginDTO;
 import com.writestar.service.UserService;
 
 import lombok.AllArgsConstructor;
@@ -54,9 +58,4 @@ public class UserController {
 		int result = userService.nicknameCheck(userVO);
 		return result;
 	}
-	
-	
-	// 로그인 화면
-	@GetMapping("/login")
-	public void login() {}
 }

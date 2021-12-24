@@ -21,12 +21,12 @@
 		</tr>
 		<tr>
 			<td>
-				<input type="password" name="password" placeholder="비밀번호">
+				<input type="password" id="password" name="password" placeholder="비밀번호">
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<input type="password" name="passwordConfirm" placeholder="비밀번호 확인">
+				<input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="비밀번호 확인">
 			</td>
 		</tr>
 		<tr>
@@ -68,6 +68,23 @@
 			alert("이메일 중복 확인을 하세요."); 						// 경고창
 			return false;
 		}
+		
+		var password = $("#password").val();
+		// 최소 8자 최소 하나의 문자, 하나의 숫자 및 하나의 특수문자
+		var regPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
+		if(!regPassword.test(password)) {
+			alert("비밀번호 양식이 올바르지 않습니다.");
+			document.registerForm.password.focus();
+			return false;
+		}
+		// 비밀번호 일치 확인
+		var passwordConfirm  = $("#passwordConfirm").val();
+		if(password != passwordConfirm) {
+			alert("비밀번호 확인이 일치하지 않습니다.");
+			document.registerForm.password.focus();
+			return false;
+		}
+		
 		if(document.registerForm.nicknameCheck.value == 'N'){
 			alert("닉네임 중복 확인을 하세요.");
 			return false;
@@ -83,10 +100,18 @@
 			// 이메일 입력란 공백 확인
 			var email = $("#email").val();						// 입력한 이메일 값
 			if(email.length == 0) {								// 이메일을 입력하지 않았다면
-				alert("이메일을 입력하세요");							// 경고창
+				alert("이메일을 입력하세요");						// 경고창
 				$("#email").focus();							// 커서 이동
 				return false;									// 실행 중지
 				}
+			
+			// 이메일 정규표현식 확인
+			var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+			if(!regEmail.test(email)) {
+				alert("이메일 입력이 올바르지 않습니다.");
+				$("#email").focus();							
+				return false;
+			}
 			
 			// 이메일 중복 확인
 			$.ajax({

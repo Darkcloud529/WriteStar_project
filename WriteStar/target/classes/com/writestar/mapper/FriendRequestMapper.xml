@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.writestar.mapper.FriendRequestMapper">		
+	<resultMap type="com.writestar.domain.UserVO" id="userInfo">
+		<result column="email" property="email"/>
+		<result column="pssword" property="pssword"/>
+		<result column="nickname" property="nickname"/>
+		<result column="user_info" property="user_info"/>
+	</resultMap>
+	
+	<resultMap type="com.writestar.domain.FriendRequestVO" id="friendRequestVo">
+		<result column="fno" property="fno"/>
+		<result column="from_user" property="from_user"/>
+		<result column="to_user" property="to_user"/>
+		<collection property="userVO" resultMap="userInfo" />
+	</resultMap>
+	
+	<select id="selectRequest" parameterType="com.writestar.domain.UserVO" resultMap="userInfo">
+		select A.email as email, A.nickname as nickname, A.user_info as user_info
+		  from tbl_user A,
+		      (select from_user
+		         from tbl_fr_request
+		        where to_user = 'yujin@test.com') B
+		 where B.from_user = A.email
+	</select>
+
+	<delete id="deleteRequest">
+		delete
+		  from tbl_fr_request
+		 where from_user = #{from_user}
+		   and to_user = #{to_user}
+	</delete>
+	
+</mapper>

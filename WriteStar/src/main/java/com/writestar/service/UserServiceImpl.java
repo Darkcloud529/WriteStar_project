@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.writestar.domain.UserVO;
+import com.writestar.domain.loginDTO;
 import com.writestar.mapper.UserMapper;
 
 import lombok.Setter;
@@ -34,6 +35,12 @@ public class UserServiceImpl implements UserService {
 	public int nicknameCheck(UserVO userVO) {
 		int result = mapper.nicknameCheck(userVO);
 		return result;
+	}
+
+	@Override
+	// 로그인 처리
+	public UserVO login(loginDTO loginDTO) {
+		return mapper.login(loginDTO);
 	}
 
 }

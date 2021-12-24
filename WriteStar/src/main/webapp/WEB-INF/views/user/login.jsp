@@ -8,7 +8,7 @@
 </head>
 <body>
 	<h1>로그인 페이지</h1>
-	<form action="" method="post" name="loginForm">
+	<form action="/user/loginPost" method="post" name="loginForm">
 		<table>
 			<tr>
 				<td>

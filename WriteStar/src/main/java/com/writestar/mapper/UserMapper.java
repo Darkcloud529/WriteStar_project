@@ -1,10 +1,11 @@
 package com.writestar.mapper;
 
 import com.writestar.domain.UserVO;
+import com.writestar.domain.loginDTO;
 
 public interface UserMapper {
 	//로그인
-	
+	public UserVO login(loginDTO loginDTO);
 	//회원 가입 처리
 	public void register(UserVO userVO);
 	//아이디 중복 확인
