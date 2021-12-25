@@ -25,11 +25,11 @@ public class UserController {
 	private UserService userService;
 	
 	// 회원 가입 화면
-	@GetMapping("/register")
+	@GetMapping("/userRegister")
 	public void register() {}
 	
 	// 회원 가입 처리
-	@PostMapping("/register")
+	@PostMapping("/userRegister")
 	//@Valid : 유효성 검사가 필요한 객체에 추가
 	//BindingResult : 객체 검증 결과에 대한 정보를 담고 있다.
 	public String register(UserVO userVO) {

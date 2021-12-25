@@ -12,12 +12,12 @@
 		<table>
 			<tr>
 				<td>
-					<input type="email" name="email" placeholder="이메일">
+					<input type="email" id ="email" name="email" placeholder="이메일">
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<input type="password" name="password" placeholder="비밀번호">
+					<input type="password" id="pw" name="password" placeholder="비밀번호">
 				</td>
 			</tr>
 			<tr>
