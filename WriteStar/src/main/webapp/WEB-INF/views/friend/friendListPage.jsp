@@ -21,8 +21,6 @@
 		            <th>email</th>
 		            <th>nickname</th>
 		            <th>user_info</th>
-		            <th>${login.email }</th>
-		            <th>${login.nickname }</th>
 		            <th>button</th>
 		        </tr>
 		    </thead>
