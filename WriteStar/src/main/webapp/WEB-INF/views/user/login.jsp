@@ -12,7 +12,7 @@
 		<table>
 			<tr>
 				<td>
-					<input type="email" id ="email" name="email" placeholder="이메일">
+					<input type="email" id ="email" name="username" placeholder="이메일">
 				</td>
 			</tr>
 			<tr>
@@ -25,14 +25,15 @@
 					<input type="submit" value="로그인" onclick="return loginCheck()">
 				</td>
 			</tr>
+			<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }" />
 		</table>
 	</form>
 	<script>
 	function loginCheck(){	
 
-		if(document.loginForm.email.value.length==0){
+		if(document.loginForm.username.value.length==0){
 			alert("이메일을 입력하세요");
-			document.loginForm.email.focus();
+			document.loginForm.username.focus();
 			return false;
 		}
 		if(document.loginForm.password.value.length==0){

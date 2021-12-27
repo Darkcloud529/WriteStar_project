@@ -1,6 +1,7 @@
 package com.writestar.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -13,4 +14,6 @@ public class BoardVO {
 	private String address;
 	private String post_type;
 	private String email;
+	
+	private List<BoardAttachVO> attachList;
 }

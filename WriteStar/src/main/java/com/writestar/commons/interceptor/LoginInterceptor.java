@@ -21,10 +21,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 	private static Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
 	
 	@Override
+	// 기존의 로그인 정보 제거
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		HttpSession httpSession = request.getSession();
-		// 기존의 로그인 정보 제거
+		
 		if(httpSession.getAttribute(LOGIN) != null) {
 			logger.info("clear login data before");
 			httpSession.removeAttribute(LOGIN);
@@ -33,6 +34,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 	}
 
 	@Override
+	//httpSession에 USER를 저장
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		

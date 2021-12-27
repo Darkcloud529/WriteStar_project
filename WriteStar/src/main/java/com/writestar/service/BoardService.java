@@ -2,6 +2,7 @@ package com.writestar.service;
 
 import java.util.List;
 
+import com.writestar.domain.BoardAttachVO;
 import com.writestar.domain.BoardVO;
 import com.writestar.domain.Criteria;
 
@@ -16,4 +17,6 @@ public interface BoardService {
 	public boolean remove(Long bno);
 	//글 목록
 	public List<BoardVO> getList(Criteria cri);
+	//첨부파일 
+	public List<BoardAttachVO> getAttachList(Long bno);
 }

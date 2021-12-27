@@ -1,5 +1,7 @@
 package com.writestar.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -42,5 +44,22 @@ public class UserLoginController {
 		}
 		// 비밀번호가 일치하면 model에 userVO를 user란 이름의 변수에 저장한다.
 		model.addAttribute("user", userVO);
+	}
+	
+	//로그아웃 페이지 테스트
+	@GetMapping("/logout_test")
+	public void logout_test() {}
+	
+	
+	// 로그아웃 처리
+	@GetMapping("/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) {
+		Object object = httpSession.getAttribute("login");
+		if (object != null) {
+			UserVO userVO = (UserVO) object;
+			httpSession.removeAttribute("login");
+			httpSession.invalidate();
+		}
+		return "/user/logout";
 	}
 }

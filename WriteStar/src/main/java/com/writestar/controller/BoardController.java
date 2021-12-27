@@ -34,8 +34,11 @@ public class BoardController {
 	//글등록처리
 	@PostMapping("/register")
 	public String register(BoardVO board, RedirectAttributes rttr) {
-		service.register(board);
-		rttr.addFlashAttribute("result", board.getBno());
+		//service.register(board);
+		//rttr.addFlashAttribute("result", board.getBno());
+		if(board.getAttachList() != null) {
+			board.getAttachList().forEach(attach -> log.info(attach));
+		}
 		return "redirect:/board/list";
 	}
 	
@@ -62,10 +65,6 @@ public class BoardController {
 		}
 		return "redirect:/board/list";
 	}
-	
-	
-	
-	
 	
 	}
 
