@@ -1,0 +1,40 @@
+#wrapper {width: 1440px; margin: 0 auto;} 
+#profile {float: left; margin: 360px 0 0 107px;
+            width: 235px; height: 505px; float: left;}
+#profile li {float: left; width: 100%; text-align: center;}
+#user_photo img {width: 150px; height: 150px; border-radius: 50%; margin-bottom: 20px;}
+#nickname {font-size: 20px; font-weight: bolder; margin-bottom: 20px;}
+#user_info {font-size: 14px; margin-bottom: 20px;}
+#modi_icon {margin-bottom: 20px; cursor: pointer;}
+#share span {border-right: 1px solid #000; padding-right: 10px;}
+button {width: 210px; height: 60px; background-color: #000; color: #fff; font-size: 24px;
+        font-weight: bolder; border-radius: 20px; cursor: pointer;}
+#new_star {margin-bottom: 15px;}
+
+
+#board {float: right; margin: 340px 120px 0 0; width: 802px;}
+#main h2 {font-size: 24px; font-weight: bolder; margin: 0 0 20px 10px;}
+#con_title input {width: 800px; height: 35px; font-size: 18px; border: 2px solid #c4c4c4;
+                    border-radius: 10px; margin-bottom: 33px;box-sizing: border-box; padding-left: 10px;
+                    } 
+#con_text textarea {width: 800px; font-size: 18px; border: 2px solid #c4c4c4;
+                    border-radius: 10px; margin-bottom: 38px; box-sizing: border-box; padding: 10px;}
+#address input {width: 800px; height: 35px; font-size: 18px; border: 2px solid #c4c4c4;
+                    border-radius: 10px; margin-bottom: 25px;box-sizing: border-box; padding-left: 10px;} 
+#attach_title {font-size: 18px; margin-left: 10px; margin-bottom: 15px; font-weight: bolder;}
+#file_btn { display: block; width: 85px; height: 20px; background-color: #000; color: #fff; border-radius: 10px;
+            cursor: pointer; font-size: 12px; line-height: 20px; float: right; margin-right: 580px; 
+            text-align: center;}
+#attach {width: 800px; height: 340px; border: 2px solid #c4c4c4;
+            border-radius: 10px; margin-bottom: 54px;box-sizing: border-box; padding-left: 10px;}
+#share_title {font-size: 18px; margin-left: 10px; margin-bottom: 10px; font-weight: bolder;}
+#share {font-size: 18px; margin-left: 15px; margin-bottom: 28px;}
+
+#main h3 {font-size: 18px; margin: 0 0 5px 10px;}
+#article_img img {width: 800px; height: 400px; margin-top: 10px; border-radius: 20px;
+                  margin-bottom: 25px;}
+
+#addReplyBtn {margin: 0 0 20px 590px;}
+#reply {border: 1px solid crimson;}
+#reply_title {font-size: 24px; font-weight: bolder;}
+#reply_title hr {width: 540px; position: relative; left: 100px; top: -25px;}
