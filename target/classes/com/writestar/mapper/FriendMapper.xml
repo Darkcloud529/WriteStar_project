@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.writestar.mapper.FriendMapper">		
+	<resultMap type="com.writestar.domain.UserVO" id="userInfo">
+		<result column="email" property="email"/>
+		<result column="pssword" property="pssword"/>
+		<result column="nickname" property="nickname"/>
+		<result column="user_info" property="user_info"/>
+	</resultMap>
+	
+	<resultMap type="com.writestar.domain.FriendVO" id="friendVo">
+		<result column="user_email" property="user_email"/>
+		<result column="friend_email" property="friend_email"/>
+		<collection property="userVO" resultMap="userInfo" />
+	</resultMap>
+
+	<select id="selectFriend" parameterType="com.writestar.domain.UserVO" resultMap="userInfo">
+		select A.friend_email as email, B.nickname as nickname, B.user_info as user_info
+		  from tbl_friend A, tbl_user B
+		 where A.user_email = 'yujin@test.com'
+		   and A.friend_email = B.email
+	</select>
+
+	<insert id="insertFriend">
+		insert into tbl_friend (user_email, friend_email) values (#{to_user}, #{from_user})
+	</insert>
+	
+	<insert id="reverseInsertFriend">
+		insert into tbl_friend (user_email, friend_email) values (#{from_user}, #{to_user})
+	</insert>
+	
+	<delete id="deleteFriend">
+		delete
+		  from tbl_friend
+		 where user_email in (#{to_user}, #{from_user})
+		   and friend_email in (#{from_user}, #{to_user})
+	</delete>
+
+</mapper>
