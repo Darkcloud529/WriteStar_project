@@ -42,10 +42,13 @@ public class FriendServiceImpl implements FriendService {
 	@Transactional
 	@Override
 	public boolean response(Map<String, Object> map) {
-		String hdnYN = (String) map.get("hdnYN");
 		
-		System.out.println(">>>>>>>>> FriendServiceImpl >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-		System.out.println(">>>>>>>>> hdnYN : " + hdnYN);
+		  String hdnYN = (String) map.get("hdnYN");
+		  
+		  System.out.println(">>>>>>>>> FriendServiceImpl >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+		  System.out.println(">>>>>>>>> hdnYN : " + hdnYN);
+		  System.out.println(">>>>>>>>> map : " + map);
+		 
 		
 		if ("Y".equals(hdnYN)) {
 			// 친구신청 테이블 기록 삭제

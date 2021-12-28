@@ -1,5 +1,7 @@
 package com.writestar.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
@@ -35,7 +37,7 @@ public class FriendController {
 	 
 	
 	// 친구신청 목록 조회
-	@GetMapping("/friendPage")
+	@GetMapping("/friendRequestPage")
 	public void list(Model model) {
 		model.addAttribute("list", service.selectRequestList());
 	}
@@ -43,17 +45,19 @@ public class FriendController {
 	// 친구신청 응답	
 	@ResponseBody
 	@RequestMapping(value="/response", method=RequestMethod.POST)
-	 public String response(@RequestParam Map<String, Object> map, RedirectAttributes rttr) {
+	public String response(@RequestParam Map<String, Object> map, RedirectAttributes rttr) {
+		String fromUser = (String) map.get("fromUser");
+		String toUser = (String) map.get("toUser");
 		String hdnYN = (String) map.get("hdnYN");
-
+		
 		System.out.println(">>>>>>>>> FriendController >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 		System.out.println(">>>>>>>>> map : " + map);
 		System.out.println(">>>>>>>>> hdnYN : " + hdnYN);
 		
 		if(service.response(map)) {
 			rttr.addFlashAttribute("result","success");
-		 }
+		}
 		 
-		return "redirect:/friend/friendPage";
+		return "redirect:/friend/friendRquestPage";
 	 }
 }

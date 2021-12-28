@@ -4,10 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.writestar.domain.BoardAttachVO;
 import com.writestar.domain.BoardVO;
 import com.writestar.domain.Criteria;
-import com.writestar.mapper.BoardAttachMapper;
 import com.writestar.mapper.BoardMapper;
 
 import lombok.AllArgsConstructor;
@@ -18,17 +16,17 @@ import lombok.extern.log4j.Log4j;
 @AllArgsConstructor
 public class BoardServiceImpl implements BoardService{
 	private BoardMapper mapper;
-	
-	private BoardAttachMapper attachMapper;
 
 	@Override
 	public void register(BoardVO board) {
 		mapper.insertSelectKey(board);
+		
 	}
 
 	@Override
 	public BoardVO get(Long bno) {
 		return mapper.read(bno);
+		
 	}
 
 	@Override
@@ -52,7 +50,10 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public List<BoardAttachVO> getAttachList(Long bno) {
-		return attachMapper.findByBno(bno);
+	public int getTotal(Criteria cri) {
+		return mapper.getTotalCount(cri);
 	}
+
+
+
 }
