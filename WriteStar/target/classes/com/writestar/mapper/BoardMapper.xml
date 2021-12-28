@@ -28,20 +28,54 @@
 	 </select>
 	 
 	 <insert id="insert">
-	 	insert into tbl_board (bno,title,content,regdate,address,post_type,email)
-	 	values (seq_board.nextval, #{title}, #{content},#{address},#{post_type},#{email})
+	 	insert
+	 	into tbl_board ( bno,
+ 						title,
+ 						content,
+						regdate,
+						address,
+						post_type,
+						email )
+	 	values ( #{bno}, 
+	 			 #{title}, 
+	 			 #{content}, 
+	 			 sysdate, 
+	 			 #{address}, 
+	 			 #{post_type}, 
+	 			 #{email})
 	 </insert>
 	 
 	 <insert id="insertSelectKey">
 	 	<selectKey keyProperty="bno" order="BEFORE" resultType="long">
 	 		select seq_board.nextval from dual
 	 	</selectKey>
-	 	insert into tbl_board (bno,title,content,regdate,address,post_type,email)
-	 	values(#{bno}, #{title}, #{content},#{address},#{post_type},#{email})
+	 	insert
+	 	into tbl_board ( bno,
+ 						title,
+ 						content,
+						regdate,
+						address,
+						post_type,
+						email )
+	 	values ( #{bno}, 
+	 			 #{title}, 
+	 			 #{content}, 
+	 			 sysdate, 
+	 			 #{address}, 
+	 			 #{post_type}, 
+	 			 #{email})
 	 </insert>
 	 
 	 <select id="read" resultType="com.writestar.domain.BoardVO">
-	 	select * from tbl_board where bno = #{bno}
+	 	select bno,
+	 		   title,
+	 		   content, 
+	 		   regdate, 
+	 		   address, 
+	 		   post_type, 
+	 		   email
+	 	  from tbl_board
+	 	 where bno = #{bno}
 	 </select>
 	 
 	 <delete id="delete">
@@ -50,6 +84,10 @@
 	 
 	 <update id="update">
 	 	update tbl_board set title=#{title}, content=#{content}, address=#{address},
-	 	post_type=#{post_type}, email=#{email}
+	 	post_type=#{post_type}, email=#{email} where bno = ${bno}
 	 </update>
+	 
+	 <select id="getTotalCount" resultType="int">
+	 	select count(*) from tbl_board where bno >0
+	 </select>
 	</mapper>
