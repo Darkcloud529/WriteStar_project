@@ -2,6 +2,7 @@ package com.writestar.service;
 
 import java.util.List;
 
+import com.writestar.domain.BoardAttachVO;
 import com.writestar.domain.BoardVO;
 import com.writestar.domain.Criteria;
 
@@ -18,4 +19,6 @@ public interface BoardService {
 	public List<BoardVO> getList(Criteria cri);
 	//전체 데이터 개수
 	public int getTotal(Criteria cri);
+	//첨부파일목록 호출
+	public List<BoardAttachVO> getAttachList(Long bno);
 }
