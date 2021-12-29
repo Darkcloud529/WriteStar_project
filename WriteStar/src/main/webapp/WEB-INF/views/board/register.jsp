@@ -62,7 +62,9 @@
 		                    <li id="address">
 		                        <input type="text" name="address" id="" placeholder="별을 본 곳의 주소를 입력해 주세요.">
 		                    </li>
-		                    <li id="attach_title">별 사진 첨부하기  <input type="file" name='uploadFile' multiple id="file_btn"></li>
+		                    <li id="attach_title">별 사진 첨부하기  
+		                    	<input type="file" id="file_btn" name='uploadFile' multiple>
+		                    </li>
 		                    <li id="attach">
 		                        <div class='uploadResult'>
 		                        	<ul>
@@ -83,7 +85,127 @@
 		            </div>
 		        </form>
 		    </div>
-			
+			<script>
+            	 $(document).ready(function(){            		 
+            		  var formObj = $("form[role='form']");            		  
+            		  $("button[type='submit']").on("click", function(e){            		    
+            		    e.preventDefault();  //전송을 막는다  
+            		    var str="";
+            		    //첨부파일미리보기 데이터를 사용해서 form태그에 hidden태그를 추가한 후 전송
+            		    $(".uploadResult ul li").each(function(i,obj){
+            		    	var jobj=$(obj);
+            		    	str+="<input type='hidden' name='attachList["+i+"].fileName' value='"+jobj.data("filename")+"'>";
+            		    	str+="<input type='hidden' name='attachList["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
+            		    	str+="<input type='hidden' name='attachList["+i+"].uploadPath' value='"+jobj.data("path")+"'>";
+            		    	str+="<input type='hidden' name='attachList["+i+"].fileType' value='"+jobj.data("type")+"'>";
+            		    });
+            		    formObj.append(str).submit();
+            		   		    
+            		  }); 
+            		  
+            		  var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$"); // 파일 정규표현식
+            		  var maxSize = 5242880; //5MB
+            		  
+            		  function checkExtension(fileName, fileSize){            		    
+            		    if(fileSize >= maxSize){
+            		      alert("파일 사이즈 초과");
+            		      return false;
+            		    }
+            		    
+            		    if(regex.test(fileName)){
+            		      alert("해당 종류의 파일은 업로드할 수 없습니다.");
+            		      return false;
+            		    }
+            		    return true;
+            		  }
+            		  
+            		  // 파일 업로드 
+            		  $("input[type='file']").change(function(e){
+            		    var formData = new FormData();            		    
+            		    var inputFile = $("input[name='uploadFile']");            		    
+            		    var files = inputFile[0].files;
+            		    
+            		    for(var i = 0; i < files.length; i++){
+            		      if(!checkExtension(files[i].name, files[i].size) ){
+            		        return false;
+            		      }
+            		      formData.append("uploadFile", files[i]);            		      
+            		    }
+            		    
+            		    $.ajax({
+            		      url: '/uploadAjaxAction',
+            		      processData: false, 
+            		      contentType: false,
+            		      data: formData,
+            		      type: 'POST',
+            		      dataType:'json',
+            		      success: function(result){ 
+            		    	console.log(result);
+            			    showUploadResult(result); 
+            		      }
+            		    });            		    
+            		  });
+            		  
+            		  // 업로드 결과를 화면에 섬네일로 표시
+            		  function showUploadResult(uploadResultArr){
+            			    //업로드파일이 없으면 중지
+            			    if(!uploadResultArr || uploadResultArr.length == 0){ 
+            			    	return; 
+            			    }            			    
+            			    
+            			    var uploadUL = $(".uploadResult ul");            			    
+            			    var str ="";
+            			    
+            			    $(uploadResultArr).each(function(i, obj){            			    
+            			        //이미지이면 썸네일을 보여준다.
+            			        if(obj.image){
+            			          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+            			          str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'><div>";
+            			          str += "<span> "+ obj.fileName+"</span>";
+            			          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+            			          str += "<img src='/display?fileName="+fileCallPath+"'>";
+            			          str += "</div>";
+            			          str +"</li>";
+            			        }else{
+            			          //파일이면 파일명과 attach.png를 보여준다
+            			          var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);            
+            			          var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+            			              
+            			          str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'><div>";
+            			          str += "<span> "+ obj.fileName+"</span>";
+            			          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+            			          str += "<img src='/resources/img/attach.png'></a>";
+            			          str += "</div>";
+            			          str +"</li>"; 
+            			          
+            			          //이미지 파일이 아닌 경우 반환하기
+            			          //alert("사진 파일만 올려주세요.");
+            			        } 
+            			    });
+            			    uploadUL.append(str);
+            			  }
+            		  
+            			// 'x' 아이콘 클릭시 삭제 이벤트 처리
+            		  $(".uploadResult").on("click", "button", function(e){             			      
+            			    var targetFile = $(this).data("file");
+            			    var type = $(this).data("type");
+            			    
+            			    var targetLi = $(this).closest("li");
+            			    
+            			    $.ajax({
+            			      url: '/deleteFile',
+            			      data: {fileName: targetFile, type:type},
+            			      dataType:'text',
+            			      type: 'POST',
+            			        success: function(result){
+            			           alert(result);            			           
+            			           targetLi.remove();
+            			         }
+            			    });
+            		});
+            	});
+          
+  </script>
 			
         
  <%@include file="../includes/footer.jsp" %>

@@ -2,9 +2,9 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>      
     
-    <div class="inner">
+    <div class="footer">
         <div class="main_logo">
-          <img src="image/logo.png" alt="logo">
+          <img src="" alt="logo">
         </div>
         <p class="copy">Copyright all rights reserved </p>
     </div>

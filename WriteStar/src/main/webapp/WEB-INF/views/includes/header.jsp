@@ -39,6 +39,6 @@
     </div>
     <div class="logo">
       <div class="box"></div>
-       <div><img src="image/logo.png" alt="logo"></div>
+       <div><img src="/resources/img/logo.png" alt="logo"></div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
