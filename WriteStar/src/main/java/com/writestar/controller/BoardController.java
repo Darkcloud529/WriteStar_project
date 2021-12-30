@@ -50,6 +50,7 @@ public class BoardController {
 	//글등록처리
 	@PostMapping("/register")
 	public String register(BoardVO board, RedirectAttributes rttr) {
+		log.info(board);
 		if(board.getAttachList() != null) {
 			board.getAttachList().forEach(attach -> log.info(attach));
 		}
@@ -78,7 +79,10 @@ public class BoardController {
 	//글 삭제
 	@PostMapping("/remove")
 	public String remove(@RequestParam("bno") Long bno,@ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
+		List<BoardAttachVO> attachList = service.getAttachList(bno);
 		if(service.remove(bno)) {
+			
+			deleteFiles(attachList);
 			rttr.addFlashAttribute("result", "success");
 		}
 		rttr.addAttribute("pageNum", cri.getPageNum());
@@ -89,8 +93,11 @@ public class BoardController {
 	@GetMapping(value = "/getAttachList",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<BoardAttachVO>> getAttachList(Long bno){
+		List<BoardAttachVO> list = service.getAttachList(bno);
+		log.info(list.get(0).isFileType());
 		return new ResponseEntity<>(service.getAttachList(bno), HttpStatus.OK);
 	}
+	
 	
 	private void deleteFiles(List<BoardAttachVO> attachList) {
 	    

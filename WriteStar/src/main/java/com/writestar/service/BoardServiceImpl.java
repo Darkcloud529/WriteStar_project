@@ -27,17 +27,17 @@ public class BoardServiceImpl implements BoardService{
 	@Transactional
 	@Override
 	public void register(BoardVO board) {
-		mapper.insertSelectKey(board);
+		mapper.insertSelectKey(board); 				// 게시글 등록
 		log.info(board);
 		if(board.getAttachList() == null || board.getAttachList().size() <= 0) {
 			return;
 		}
-		
+		// 첨부 파일 폴더에 추가 정보 입력
 		board.getAttachList().forEach(attach -> {
-			
-			attach.setBno(board.getBno());
+			attach.setBno(board.getBno());			// 첨부 파일의 게시글 번호
+			attach.setEmail(board.getEmail());		// 첨부 파일의 작성자(email)
+			log.info(attach);
 			attachMapper.insert(attach);
-			
 		});
 	}
 
@@ -46,9 +46,19 @@ public class BoardServiceImpl implements BoardService{
 		return mapper.read(bno);
 		
 	}
-
+	
+	@Transactional
 	@Override
-	public boolean modify(BoardVO board) {		
+	public boolean modify(BoardVO board) {	
+		attachMapper.deleteAll(board.getBno());
+		boolean modifyResult = mapper.update(board) == 1;
+		if(modifyResult && board.getAttachList() != null && board.getAttachList().size() > 0) {
+			board.getAttachList().forEach(attach -> {
+				attach.setBno(board.getBno());
+				attach.setEmail(board.getEmail());
+				attachMapper.insert(attach);
+			});
+		}
 		return mapper.update(board) == 1;
 	}
 
