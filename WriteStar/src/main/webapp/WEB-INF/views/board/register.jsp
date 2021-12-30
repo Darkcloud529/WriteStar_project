@@ -86,22 +86,25 @@
 		        </form>
 		    </div>
 			<script>
-            	 $(document).ready(function(){            		 
-            		  var formObj = $("form[role='form']");            		  
-            		  $("button[type='submit']").on("click", function(e){            		    
-            		    e.preventDefault();  //전송을 막는다  
-            		    var str="";
-            		    //첨부파일미리보기 데이터를 사용해서 form태그에 hidden태그를 추가한 후 전송
-            		    $(".uploadResult ul li").each(function(i,obj){
-            		    	var jobj=$(obj);
-            		    	str+="<input type='hidden' name='attachList["+i+"].fileName' value='"+jobj.data("filename")+"'>";
-            		    	str+="<input type='hidden' name='attachList["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
-            		    	str+="<input type='hidden' name='attachList["+i+"].uploadPath' value='"+jobj.data("path")+"'>";
-            		    	str+="<input type='hidden' name='attachList["+i+"].fileType' value='"+jobj.data("type")+"'>";
-            		    });
-            		    formObj.append(str).submit();
-            		   		    
-            		  }); 
+            	 $(document).ready(function(){   
+            		 
+      
+             		var formObj = $("form[role='form']");            		  
+             	    $("button[type='submit']").on("click", function(e){            		    
+             		    e.preventDefault();  //전송을 막는다  
+             		    var str="";
+             		    //첨부파일미리보기 데이터를 사용해서 form태그에 hidden태그를 추가한 후 전송
+             		    $(".uploadResult ul li").each(function(i,obj){
+             		    	var jobj=$(obj);
+             	
+             		    	str+="<input type='hidden' name='attachList["+i+"].fileName' value='"+jobj.data("filename")+"'>";
+             		    	str+="<input type='hidden' name='attachList["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
+             		    	str+="<input type='hidden' name='attachList["+i+"].uploadPath' value='"+jobj.data("path")+"'>";
+             		    	str+="<input type='hidden' name='attachList["+i+"].fileType' value='"+jobj.data("type")+"'>";
+             		    });
+             		    formObj.append(str).submit();
+             		   		    
+             		  }); 
             		  
             		  var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$"); // 파일 정규표현식
             		  var maxSize = 5242880; //5MB
@@ -140,7 +143,7 @@
             		      type: 'POST',
             		      dataType:'json',
             		      success: function(result){ 
-            		    	console.log(result);
+            		    	console.log(result);           		    	
             			    showUploadResult(result); 
             		      }
             		    });            		    
@@ -177,9 +180,6 @@
             			          str += "<img src='/resources/img/attach.png'></a>";
             			          str += "</div>";
             			          str +"</li>"; 
-            			          
-            			          //이미지 파일이 아닌 경우 반환하기
-            			          //alert("사진 파일만 올려주세요.");
             			        } 
             			    });
             			    uploadUL.append(str);
@@ -203,6 +203,7 @@
             			         }
             			    });
             		});
+            		
             	});
           
   </script>

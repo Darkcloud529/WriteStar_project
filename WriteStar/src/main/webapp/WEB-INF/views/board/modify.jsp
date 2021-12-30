@@ -139,7 +139,7 @@
             		      $(arr).each(function(i, attach){           		          
             		    	//이미지이면 썸네일을 보여준다.
             		    	    if(attach.fileType){
-            		    	      var fileCallPath =  encodeURIComponent( attach.uploadPath+"/"+attach.uuid +"_"+attach.fileName);
+            		    	      var fileCallPath =  encodeURIComponent( attach.uploadPath+"/s_"+attach.uuid +"_"+attach.fileName);
             		    	      str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.image+"'><div>";
             		    	      str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='cancle_btn'>x</button>";
             		    	      str += "<img src='/display?fileName="+fileCallPath+"'>";

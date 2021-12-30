@@ -4,8 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>    
     
 <%@ include file="../includes/header.jsp" %> 
-<c:out value="${login.email }"/>
-<h1> ${login.nickname }</h1>   
+   
 			<style>
 				.uploadResult {width: 100%; }				
 	            .uploadResult ul {float:left;}				
@@ -261,15 +260,17 @@
 	                            	   });   */
 	                            	   
 	                            	   /* 첨부파일 목록 ************************************************************************/
-	                            	   /* (function(){	                            		   
-	                            		    var bno = '<c:out value="${board.bno}"/>';	                            		   
+	                            	   (function(){	                            		   
+	                            		    var bno = '<c:out value="${board.bno}"/>';
+	                            		    console.log(${board.bno});
 	                            		    $.getJSON("/board/getAttachList", {bno: bno}, function(arr){	                            		     
 	                            		       var str = "";	                            		       
-	                            		       $(arr).each(function(i, attach){	                            		       
+	                            		       $(arr).each(function(i, attach){	  
+	                            		    	  console.log(attach);
+	                            		    	  console.log(attach.fileType);
 	                            		         //image type
 	                            		         if(attach.fileType){
-	                            		           var fileCallPath =  encodeURIComponent( attach.uploadPath+ "/"+attach.uuid +"_"+attach.fileName);
-	                            		           
+	                            		           var fileCallPath =  encodeURIComponent( attach.uploadPath+ "/s_"+attach.uuid +"_"+attach.fileName);
 	                            		           str += "<li style='cursor:pointer' data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"' ><div>";
 	                            		           str += "<img src='/display?fileName="+fileCallPath+"'>";
 	                            		           str += "</div>";
@@ -285,17 +286,17 @@
 	                            		       
 	                            		       $(".uploadResult ul").html(str); 
 	                            		     });
-	                            		  })(); */
+	                            		  })(); 
 	                            	    /* 첨부파일 목록 */
 		                               
 	                            	    /* 썸네일을 클릭했을 때 full screen으로 띄우기 *****************************************************************/
-		                           		/* function showImage(fileCallPath){
+		                           		function showImage(fileCallPath){
 		                           			$(".bigPictureWrapper").css("display","flex").show();
 		                           			$(".bigPicture").html("<img src='/display?fileName="+fileCallPath+"'>").animate({width:'100%',height:'100%'},1000);
-		                           		} */
+		                           		} 
 		                           		/* 썸네일을 클릭했을 때 full screen으로 띄우기 */
 		                           		
-		                           		/* $(".uploadResult").on("click","li",function(e){
+		                           		$(".uploadResult").on("click","li",function(e){
 		                           			var liObj=$(this);
 		                           			var path=encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
 		                           			if(liObj.data("type")){
@@ -309,7 +310,7 @@
 		                           			$(".bigPicture").animate({width:'0%',height:'0%'},1000,function(){
 		                    					$(".bigPictureWrapper").hide();
 		                    				});		
-		                           		}); */
+		                           		}); 
 	                            	   
                             	});
                             </script>
