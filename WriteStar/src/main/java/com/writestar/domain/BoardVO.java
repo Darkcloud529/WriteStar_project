@@ -14,6 +14,7 @@ public class BoardVO {
 	private String address;
 	private String post_type;
 	private String email;
-	//BoardAttachVO를 처리하기 위한 항목
+	
+	private UserVO userVO;
 	private List<BoardAttachVO> attachList;
 }

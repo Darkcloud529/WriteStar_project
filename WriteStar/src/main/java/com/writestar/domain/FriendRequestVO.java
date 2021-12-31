@@ -8,5 +8,5 @@ public class FriendRequestVO {
 	private String from_user;
 	private String to_user;
 	
-	private UserVO memberVO;
+	//private UserVO memberVO;
 }

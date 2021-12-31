@@ -12,11 +12,13 @@ import com.writestar.domain.Criteria;
 import com.writestar.mapper.BoardAttachMapper;
 import com.writestar.mapper.BoardMapper;
 
+import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
 @Service
+@AllArgsConstructor
 public class BoardServiceImpl implements BoardService{
 	@Setter(onMethod_= @Autowired)
 	private BoardMapper mapper;
@@ -27,7 +29,8 @@ public class BoardServiceImpl implements BoardService{
 	@Transactional
 	@Override
 	public void register(BoardVO board) {
-		mapper.insertSelectKey(board); 				// 게시글 등록
+		mapper.insertSelectKey(board);
+
 		log.info(board);
 		if(board.getAttachList() == null || board.getAttachList().size() <= 0) {
 			return;
@@ -46,10 +49,10 @@ public class BoardServiceImpl implements BoardService{
 		return mapper.read(bno);
 		
 	}
-	
+
 	@Transactional
 	@Override
-	public boolean modify(BoardVO board) {	
+	public boolean modify(BoardVO board) {		
 		attachMapper.deleteAll(board.getBno());
 		boolean modifyResult = mapper.update(board) == 1;
 		if(modifyResult && board.getAttachList() != null && board.getAttachList().size() > 0) {

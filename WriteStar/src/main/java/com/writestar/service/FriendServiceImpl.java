@@ -34,8 +34,8 @@ public class FriendServiceImpl implements FriendService {
 	// 친구요청 목록 조회
 	@Transactional
 	@Override
-	public List<FriendRequestVO> selectRequestList() {
-		return requestMapper.selectRequest();
+	public List<FriendRequestVO> selectRequestList(String to_user) {
+		return requestMapper.selectRequest(to_user);
 	}
 
 	// 친구요청 응답 처리

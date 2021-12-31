@@ -28,18 +28,17 @@ public class FriendController {
 	private FriendService service;
 	
 	// 친구 목록 조회
-	
-  @GetMapping("/friendListPage") public void friendList(Model model) {
-	  model.addAttribute("friendList", service.selectFriendList());
+	@GetMapping("/friendListPage")
+	public void friendList(Model model) {
+		model.addAttribute("friendList", service.selectFriendList());
 	  
-	  System.out.println(">>>>>>>>> friendList >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"); 
-  }
-	 
+		System.out.println(">>>>>>>>> friendList >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"); 
+	}
 	
 	// 친구신청 목록 조회
 	@GetMapping("/friendRequestPage")
-	public void list(Model model) {
-		model.addAttribute("list", service.selectRequestList());
+	public void list(@RequestParam("to_user") String to_user, Model model) {
+		model.addAttribute("list", service.selectRequestList(to_user));
 	}
 	
 	// 친구신청 응답	

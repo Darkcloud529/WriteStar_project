@@ -9,7 +9,7 @@ import com.writestar.domain.FriendRequestVO;
 
 public interface FriendRequestMapper {
 	// 친구신청 목록 조회
-	public List<FriendRequestVO> selectRequest();
+	public List<FriendRequestVO> selectRequest(String to_user);
 	
 	// 친구신청 등록
 	public void insertRequest(FriendRequestVO request);

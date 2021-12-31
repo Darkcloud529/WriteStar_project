@@ -11,7 +11,7 @@ public interface FriendService {
 	public List<FriendVO> selectFriendList();
 	
 	// 친구요청 목록 조회
-	public List<FriendRequestVO> selectRequestList();
+	public List<FriendRequestVO> selectRequestList(String to_user);
 	
 	// 친구요청 응답
 	public boolean response(Map<String, Object> map);
