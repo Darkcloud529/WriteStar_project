@@ -36,7 +36,7 @@
 			    	<td><c:out value="${friend.user_info}"/></td>
 			    	<td>
 			    		<input  type="hidden" class="fromUser" name="from_user" value="<c:out value="${friend.email}"/>">
-			    		<input  type="hidden" class="toUser"   name="to_user"   value="yujin@test.com">
+			    		<input  type="hidden" class="toUser"   name="to_user"   value="<c:out value="${login.email}"/>">
 			    		<input  type="hidden" class="hdnInput" name="hdnYN"     value="S" >
 			    		<button type="submit" class="approve"  value="Y" data-oper="Y">수락</button>
 			    		<button type="submit" class="refuse"   value="N" data-oper="N">거절</button>

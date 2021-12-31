@@ -18,117 +18,88 @@
 </head>
 <body>
 <div id="wrap">
-
-    <div id="content"> 
-        <div id="nickname">  <!-- 사용자프로필 -->
-            <%-- <img class="" src="${}"> --%> <!-- 사용자프로필사진가져오기 -->
-              <h2><%-- <c:out value="${board.nickname}"/> --%></h2> <!-- 사용자닉네임가져오기 -->
-            <div class="user_title">
-              <h5><%-- <c:out value="${}"/> --%></h5> <!-- 사용자소개글가져오기 -->
-              <div id="edit"><i class="fas fa-edit"></i></div> <!--클릭시 프로필 수정하기  -->
-            </div>
-            <div>
-                <button id="new_star">새 별 쓰기</button> <!-- 게시글 작성하기 -->
-                <button id="friend_request">친구요청하기</button> <!-- 친구요청하기 -->
-            </div>
-          </div>
-      </div>
-      <%-- 
-       <section class="list"  class="clear">
-       <ul id="gallery">
-           <li class="img01">
-             <div class="border"> <!-- 썸네일사진들어가는 -->
-                     <h3 class="title"><c:out value="${board.title}"></c:out></h3><!-- 게시글제목 -->
-                     <span class="title02"><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate}"/>  <!-- 게시글 업데이트 날짜 -->
-                     <br><c:out value="${board.email}"/></span> <!-- 사용자닉네임 -->
-                     <span class="font01"><i class="fas fa-lock"></i></span> <!-- 비공개 -->
-
-              </div>
-           </li>
-           <li class="img02">
-            <div class="border">
-            <a href="#">
-                <!-- <img src="image/list02.png" alt="02"> -->
-                 <h3 class="title"><c:out value="${board.title}"></c:out></h3><!-- 게시글제목 -->
-                 <span class="title02"><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate}"/>  <!-- 게시글 업데이트 날짜 -->
-                 <br><c:out value="${board.email}"/></span> <!-- 사용자닉네임 -->
-                  <span class="font02"><i class="fas fa-lock-open"></i></i></span>
-            </a>
-          </div>
-          </li>
-          <li class="img03">
-            <div class="border">
-            <a href="#">
-                <!-- <img src="image/list03.png" alt="03"> -->
-                  <h3 class="title"><c:out value="${board.title}"></c:out></h3><!-- 게시글제목 -->
-                     <span class="title02"><fmt:formatDate pattern="yyyy-MM-dd" value="${board.updateDate}"/>  <!-- 게시글 업데이트 날짜 -->
-                     <br><c:out value="${board.email}"/></span> <!-- 사용자닉네임 -->
-                  <span class="font02"><i class="fas fa-lock-open"></i></i></span>
-            </a>
-          </div>
-          </li>
-          <li class="img04">
-            <div class="border">
-            <a href="#">
-                <!-- <img src="image/list04.png" alt="04"> -->
-                  <h3 class="title"><c:out value="${board.title}"></c:out></h3><!-- 게시글제목 -->
-                     <span class="title02"><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate}"/>  <!-- 게시글 업데이트 날짜 -->
-                     <br><c:out value="${board.email}"/></span> <!-- 사용자닉네임 -->
-                  <span class="font01"><i class="fas fa-lock"></i></span>
-            </a>
-          </div>
-          </li>
-          <li class="img05">
-            <div class="border">
-            <a href="#">
-                <!-- <img src="image/list05.png" alt="05"> -->
-                  <h3 class="title"><c:out value="${board.title}"></c:out></h3><!-- 게시글제목 -->
-                     <span class="title02"><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate}"/>  <!-- 게시글 업데이트 날짜 -->
-                     <br><c:out value="${board.email}"/></span> <!-- 사용자닉네임 -->
-                  <span class="font01"><i class="fas fa-lock"></i></span>
-            </a>
-          </div>
-          </li>
-          <li class="img06">
-            <div class="border">
-            <a href="#">
-                <!-- <img src="image/list06.png" alt="06"> -->
-                  <h3 class="title"><c:out value="${board.title}"></c:out></h3><!-- 게시글제목 -->
-                     <span class="title02"><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate}"/>  <!-- 게시글 업데이트 날짜 -->
-                     <br><c:out value="${board.email}"/></span> <!-- 사용자닉네임 -->
-                  <span class="font02"><i class="fas fa-lock-open"></i></i></span>
-            </a>
-          </div>
-          </li>
-       </ul>
-    </section>
-            --%>
-       <c:forEach items="${list}" var="board">
-         <ul>
-           <div>
-           <li><c:out value="${board.title}"></c:out></li> <!-- 게시글제목 -->
-           <li><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate}"/></li> <!-- 게시글 업데이트 날짜 -->
-           <li><c:out value="${board.email}"/></li> <!-- 사용자닉네임 -->
-           <span class="font01"><i class="fas fa-lock"></i></span> <!-- 게시글 비공개 (아이콘) -->
-           </div>
-         </ul>
+	<div id="content" class="clear">
+		<aside>
+			<div id="nickname" >
+            	<img src="image/User.png" alt="">
+            	<h4>혼별혼별</h4>
+            	<div id="user_info">
+              		<p>새벽에 잘 깨서 새벽에 별보기 좋아하는....<br>
+                		혼자 별보기 좋아하는............</p>
+              	</div>
+              	
+          		<div id="edit"><i class="fas fa-edit"></i></div>
+          		
+				<div id="button">
+	          		<div>
+	            		<button class="new_star">새 별 쓰기</button>
+	          		</div>
+	          		<div>
+	            		<button class="friend_request">친구요청하기</button>
+	          		</div>
+				</div>
+			</div>
+		</aside>
       
-      </c:forEach>
-           
-</div>
+<%-- <a href="/friend/friendRequestPage?to_user=${login.email}">친구목록</a> --%>
 
-<script>
-		$("#new_star").on("click",function(){
+<%--
+	<c:forEach items="${list}" var="board" begin="0" end="3">
+		<ul>
+			<div class="border">
+			</div>
+           	<p class="title"><c:out value="${board.title}"></c:out></p> <!-- 게시글제목 -->
+           	<p class="date"><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate}"/></p> <!-- 게시글 업데이트 날짜 -->
+           	<p class="nickname"><c:out value="${board.email}"/></p> <!-- 사용자닉네임 -->
+		</ul>  
+	</c:forEach>
+--%>
+        
+    <c:forEach items="${list}" var="board" begin="0" end="1">
+		<ul id="gallery01">
+			<li>
+				<div class="border">
+           		</div>
+            <div id="picter_01">
+              <p class="title"><c:out value="${board.title}"></c:out></p>
+              <p class="date"><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate}"/></p>
+              <p class="nickname"><c:out value="${board.userVO.nickname}"/></p>
+            </div>
+              <span class="font01"><i class="fas fa-lock-open"></i></i></span>
+          	</li>
+      	  	<li>
+            	<div class="border">
+           		</div>
+	            <div id="picter_02">
+	              <p class="title"><c:out value="${board.title}"></c:out></p>
+	              <p class="date"><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate}"/></p>
+	              <p class="nickname"><c:out value="${board.userVO.nickname}"/></p>
+	            </div>
+              	<span class="font02"><i class="fas fa-lock-open"></i></i></span>        
+          	</li>
+          	<li>
+	            <div class="border">
+	           	</div>
+	            <div id="picter_03">
+	              <p class="title"><c:out value="${board.title}"></c:out></p>
+	              <p class="date"><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate}"/></p>
+	              <p class="nickname"><c:out value="${board.userVO.nickname}"/></p>
+	            </div>
+              <span class="font03"><i class="fas fa-lock-open"></i></i></span>
+          </li> 
+        </ul>
+	</c:forEach>
+	
+	<script>
+		$(".new_star").on("click",function(){
 			self.location="/board/register";
 		});
-		$("#friend_request").on("click",function(){
+		$(".friend_request").on("click",function(){
 			self.location="";
 		});
-		
-</script> 
+	</script>
 
 </body>
 </html>
-
         
  <%@include file="../includes/footer.jsp" %>   

@@ -17,6 +17,9 @@
     <link href="/resources/css/list.css" rel="stylesheet">
 </head>
 <body>
+
+<%-- <a href="/friend/friendRequestPage?to_user=${login.email}"> --%>
+
  <div class="inner">
         <nav class="main_box">
             <ul id="gnb" class="clear">
@@ -26,7 +29,7 @@
                 <li><a href="#">Star Map</a></li>
                 <li>
                   <input id="search" type="text" placeholder="검색어를 입력하세요.">
-                  <i class="fas fa-search" style="font-size: 18px;"></i>
+                  <button type="button"  id="img_btn"><img src="/resources/img/search.png"></button>
                 </li>
            </ul>
       </nav>
@@ -41,4 +44,8 @@
       <div class="box"></div>
        <div><img src="/resources/img/logo.png" alt="logo"></div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+    
+
+    </script>
+     

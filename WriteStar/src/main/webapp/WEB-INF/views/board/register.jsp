@@ -5,10 +5,8 @@
     
 <%@ include file="../includes/header.jsp" %>    
 			<style>
-				.uploadResult {width: 100%; }				
-		        .uploadResult ul {float:left;}				
-		        .uploadResult ul li {}				
-		        .uploadResult ul li img {width: 260px; height: 260px; position:relative; border-radius: 20px;}
+				.uploadResult {width: 100%; }						
+		        .uploadResult ul li img {width: 100%; height: 100%; position:relative; border-radius: 20px;}
 		        .cancle_btn {width: 30px; height: 30px; background-color: #000; border-radius: 50%;}
 		
 		        .bigPictureWrapper {position: absolute; display: none; justify-content: center; align-items: center;
@@ -26,17 +24,18 @@
 		                <li id="user_photo">
 		                    <img src="/resources/img/userPhoto.png" alt="#">
 		                </li>
-		                <li id="nickname">
-		                    <h3>혼별혼별</h3>
-		                </li>
-		                <li id="user_info">
-		                    <p>새벽에 잘 깨서 새벽에 별보기 좋아하는.... <br>
-		                        혼자 별 보기 좋아하는.....
-		                    </p>
-		                </li>
-		                <li id="modi_icon">
-		                    <span class="iconify" data-icon="entypo:pencil"></span>
-		                </li>
+				        <li id="nickname">
+							<input name="nickname" value='<c:out value="${user.nickname}"/>'readonly>
+						</li>
+						<li id="user_info">
+							<input name="user_info" value='<c:out value="${user.user_info}"/>'readonly>
+						</li>
+						<li id="modi_icon">
+							<span class="iconify" data-icon="entypo:pencil"></span>
+						</li>
+		                <li id="confirm_icon">
+							<span class="iconify" data-icon="line-md:confirm-circle"></span>
+						</li>
 		                <li id="new_star">
 		                    <button>새별쓰기</button>
 		                </li>
@@ -88,6 +87,23 @@
 			<script>
             	 $(document).ready(function(){   
             		 
+            		 //user info 수정 버튼//////////////////////////////
+                     $("#confirm_icon").hide();
+                     $("#modi_icon").on("click", function(){
+                          $("#user_info input").removeAttr("readonly");
+                          $("#user_info input").addClass("info_change");
+                          $("#confirm_icon").show();
+                          $("#modi_icon").hide();
+                          console.log("변경 아이콘 클릭");
+                     });
+                     $("#confirm_icon").on("click", function(){
+                          $("#user_info input").attr("readonly",true);
+                          $("#user_info input").removeClass("info_change");
+                          $("#confirm_icon").hide();
+                          $("#modi_icon").show();
+                          console.log("컴펌 아이콘 클릭");
+                     });
+                     ////////////////////////////////////////////////
       
              		var formObj = $("form[role='form']");            		  
              	    $("button[type='submit']").on("click", function(e){            		    
@@ -162,10 +178,9 @@
             			    $(uploadResultArr).each(function(i, obj){            			    
             			        //이미지이면 썸네일을 보여준다.
             			        if(obj.image){
-            			          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+            			          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/"+obj.uuid +"_"+obj.fileName);
             			          str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'><div>";
-            			          str += "<span> "+ obj.fileName+"</span>";
-            			          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+            			          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='cancle_btn'>x</button>";
             			          str += "<img src='/display?fileName="+fileCallPath+"'>";
             			          str += "</div>";
             			          str +"</li>";
@@ -176,7 +191,7 @@
             			              
             			          str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'><div>";
             			          str += "<span> "+ obj.fileName+"</span>";
-            			          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+            			          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='cancle_btn'>x</button>";
             			          str += "<img src='/resources/img/attach.png'></a>";
             			          str += "</div>";
             			          str +"</li>"; 

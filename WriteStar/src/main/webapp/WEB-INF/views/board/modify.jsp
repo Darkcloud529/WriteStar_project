@@ -15,8 +15,8 @@
 	                                    top:0%; width:100%; height:100%; background-color: gray; z-index: 100;}				
 	            .bigPicture {position: relative; display:flex; justify-content: center; align-items: center;}
 	            .bigPicture img {width:600px;}
-	            #new_star {display:none}
-	            #friend_request {display:none}
+	            #new_star {display:none;}
+	            #friend_request {display:none;}
 			</style>
 			
 			<script src="https://code.iconify.design/2/2.1.0/iconify.min.js"></script>
@@ -58,7 +58,7 @@
 		                <ul id="main">
 		                    <li id="article_title"><input name="title" value='<c:out value="${board.title}"/>'></li>
 		                    <li id="article_date"><input name="redDate" value='<fmt:formatDate pattern="yyyy/MM/dd" value="${board.regdate}"/>' readonly></li>
-		                    <li id="article_user">By <input name="email" value='<c:out value="${board.email}"/>' readonly></li>
+		                    <li id="article_nickname">By <input name="email" value='<c:out value="${board.email}"/>' readonly></li>
 		                    <li id="article_img">
 		                        <div class='uploadResult'>
 		                        	<ul>
@@ -139,7 +139,7 @@
             		      $(arr).each(function(i, attach){           		          
             		    	//이미지이면 썸네일을 보여준다.
             		    	    if(attach.fileType){
-            		    	      var fileCallPath =  encodeURIComponent( attach.uploadPath+"/s_"+attach.uuid +"_"+attach.fileName);
+            		    	      var fileCallPath =  encodeURIComponent( attach.uploadPath+"/"+attach.uuid +"_"+attach.fileName);
             		    	      str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.image+"'><div>";
             		    	      str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='cancle_btn'>x</button>";
             		    	      str += "<img src='/display?fileName="+fileCallPath+"'>";
