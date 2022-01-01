@@ -12,7 +12,8 @@ public interface UserMapper {
 	public int emailCheck(UserVO userVO);
 	//닉네임 중복 확인
 	public int nicknameCheck(UserVO userVO);
+	//프로필 정보 변경
+	public int userInfoUpdate(UserVO userVO);
 	//닉네임 변경
 	//비밀번호 변경
-	//프로필 정보 변경
 }

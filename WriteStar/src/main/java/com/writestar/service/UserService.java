@@ -12,4 +12,6 @@ public interface UserService {
 	public int nicknameCheck(UserVO userVO);
 	//로그인 처리
 	public UserVO login(loginDTO loginDTO);
+	//프로필 정보 변경
+	public boolean userInfoModify(UserVO userVO);
 }
