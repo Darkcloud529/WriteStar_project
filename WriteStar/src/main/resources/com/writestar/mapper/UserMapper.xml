@@ -34,8 +34,4 @@
   	<select id="login" resultMap="userVOResultMap">
   		select * from tbl_user where email = #{email}
   	</select>
-  	
-  	<update id="userInfoUpdate">
-  		update tbl_user set user_info = #{user_info} where email = #{email}
-  	</update>
   </mapper>

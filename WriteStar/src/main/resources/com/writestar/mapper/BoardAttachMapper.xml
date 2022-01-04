@@ -2,25 +2,31 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- <mapper namespace="com.writestar.mapper.BoardAttachMapper">
+<mapper namespace="com.writestar.mapper.BoardAttachMapper">
+
+ 	<!-- 첨부 파일 등록 sql문 -->
  	<insert id="insert">
-		insert into tbl_attach_file (uuid, uploadpath, filename, filetype, bno)
-		values (#{uuid}, #{uploadPath}, #{fileName}, #{fileType}, #{bno} )
+		insert into tbl_attach_file (uuid, filetype, uploadpath, filename, bno, email)
+		values (#{uuid}, #{fileType}, #{uploadPath}, #{fileName}, #{bno}, #{email} )
 	</insert>
 	
+	<!-- 첨부 파일 삭제 sql문 -->
 	<delete id="delete">
 		delete from tbl_attach_file where uuid = #{uuid}
 	</delete>
 	
-	<select id="findByBno" resultType="com.writestar.mapper.BoardAttachMapper">
+	<!-- 특정 게시물의 번호로 첨부 파일 찾는 sql문 -->
+	<select id="findByBno" resultType="com.writestar.domain.BoardAttachVO">
 		select * from tbl_attach_file where bno = #{bno}
 	</select>
 	
+	<!-- 게시물 삭제 시 첨부 파일도 삭제 sql문 -->
 	<delete id="deleteAll">
 		delete tbl_attach_file where bno = #{bno}
 	</delete>
 	
-	<select id="getOldFiles" resultType="com.writestar.mapper.BoardAttachMapper">
+	<!-- 어제 날짜를 기준으로 첨부 파일 검색 sql문 -->
+	<select id="getOldFiles" resultType="com.writestar.domain.BoardAttachVO">
 		select * from tbl_attach_file where uploadpath = to_char(sysdate -1, 'yyyy\mm\dd')
 	</select>
- </mapper>
+</mapper>

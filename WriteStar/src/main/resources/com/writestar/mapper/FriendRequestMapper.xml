@@ -5,7 +5,7 @@
 <mapper namespace="com.writestar.mapper.FriendRequestMapper">		
 	<resultMap type="com.writestar.domain.UserVO" id="userInfo">
 		<result column="email" property="email"/>
-		<result column="pssword" property="pssword"/>
+		<result column="password" property="password"/>
 		<result column="nickname" property="nickname"/>
 		<result column="user_info" property="user_info"/>
 	</resultMap>
@@ -17,12 +17,12 @@
 		<collection property="userVO" resultMap="userInfo" />
 	</resultMap>
 	
-	<select id="selectRequest" parameterType="com.writestar.domain.UserVO" resultMap="userInfo">
+	<select id="selectRequest" resultMap="userInfo">
 		select A.email as email, A.nickname as nickname, A.user_info as user_info
 		  from tbl_user A,
 		      (select from_user
 		         from tbl_fr_request
-		        where to_user = 'yujin@test.com') B
+		        where to_user = #{to_user}) B
 		 where B.from_user = A.email
 	</select>
 
@@ -33,4 +33,13 @@
 		   and to_user = #{to_user}
 	</delete>
 	
+	<insert id="insertRequest">
+		insert
+		into tbl_fr_request (fno,
+							 from_user,
+							 to_user)
+		values (seq_request.nextval,
+				#{from_user},
+				#{to_user})
+	</insert>
 </mapper>

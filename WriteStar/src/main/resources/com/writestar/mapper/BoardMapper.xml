@@ -2,28 +2,55 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- <mapper namespace="com.writestar.mapper.BoardMapper">
-
- 
+ <mapper namespace="com.writestar.mapper.BoardMapper"> 
+ 	<resultMap type="com.writestar.domain.UserVO" id="userInfo">
+		<result column="email" property="email"/>
+		<result column="password" property="password"/>
+		<result column="nickname" property="nickname"/>
+		<result column="user_info" property="user_info"/>
+	</resultMap>
+	
+	<resultMap type="com.writestar.domain.BoardVO" id="boardVo">
+		<result column="bno" property="bno"/>
+		<result column="title" property="title"/>
+		<result column="content" property="content"/>
+		<result column="regdate" property="regdate"/>
+		<result column="address" property="address"/>
+		<result column="post_type" property="post_type"/>
+		<result column="email" property="email"/>
+		<collection property="userVO" resultMap="userInfo" />
+	</resultMap>
+	
 	 <select id="getList" resultType="com.writestar.domain.BoardVO">
 	 	<![CDATA[
-	 	select * from tbl_board where bno >0
+	 		select * from tbl_board where bno >0
 	 	]]>
 	 </select>
 	 
-	 <select id="getListWithPaging" resultType="com.writestar.domain.BoardVO">
+	 <!-- 검색을 위해 동적 sql 처리 -->
+	 <select id="getListWithPaging" resultMap="boardVo">
 	 	<![CDATA[
-	 	select
-	 		bno, title, content, regdate, address, post_type, email
-	 	from
-	 	(
-	 		select /*+INDEX_DESC(tbl_board, pk_board) */
-	 			rownum rn, bno, title, content, regdate, address, post_type, email
-	 		from
-	 			tbl_board
-	 		where rownum <= #{pageNum} * #{amount}
-	 	 )
-	 	 where rn > (#{pageNum} -1) * #{amount} 			
+		 	select
+		 		bno, title, content, regdate, address, post_type, email, nickname
+		 	from
+		 	(
+		 		select /*+INDEX_DESC(tbl_board, pk_board) */
+				       rownum as rn,
+				       b.bno as bno,
+				       b.title as title,
+				       b.content as content,
+				       b.regdate as regdate,
+				       b.address as address,
+				       b.post_type as post_type,
+				       b.email as email,
+				       a.nickname as nickname
+		 		  from tbl_user a, tbl_board b
+		 		 where a.email = b.email
+	 	]]>
+	 	<![CDATA[
+	 		       and rownum <= #{pageNum} * #{amount}
+	 	    )
+	 	    where rn > (#{pageNum} -1) * #{amount} 			
 	 	]]>
 	 </select>
 	 
@@ -88,6 +115,9 @@
 	 </update>
 	 
 	 <select id="getTotalCount" resultType="int">
-	 	select count(*) from tbl_board where bno >0
+	 	select count(*) from tbl_board 
+	 	where
+
+	 	 bno >0
 	 </select>
 	</mapper>

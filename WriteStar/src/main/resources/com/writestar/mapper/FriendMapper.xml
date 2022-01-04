@@ -19,7 +19,7 @@
 	<select id="selectFriend" parameterType="com.writestar.domain.UserVO" resultMap="userInfo">
 		select A.friend_email as email, B.nickname as nickname, B.user_info as user_info
 		  from tbl_friend A, tbl_user B
-		 where A.user_email = 'yujin@test.com'
+		 where A.user_email = #{to_user}
 		   and A.friend_email = B.email
 	</select>
 
@@ -34,8 +34,8 @@
 	<delete id="deleteFriend">
 		delete
 		  from tbl_friend
-		 where user_email in (#{to_user}, #{from_user})
-		   and friend_email in (#{from_user}, #{to_user})
+		 where user_email in (#{user_email}, #{friend_email})
+		   and friend_email in (#{user_email}, #{friend_email})
 	</delete>
 
 </mapper>
