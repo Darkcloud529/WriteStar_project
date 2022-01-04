@@ -27,8 +27,8 @@ public class FriendServiceImpl implements FriendService {
 	// 친구 목록 조회
 	@Transactional
 	@Override
-	public List<FriendVO> selectFriendList() {
-		return mapper.selectFriend();
+	public List<FriendVO> selectFriendList(String to_user) {
+		return mapper.selectFriend(to_user);
 	}
 	
 	// 친구요청 목록 조회
@@ -63,4 +63,18 @@ public class FriendServiceImpl implements FriendService {
 		
 		return false;
 	}
+	
+	// 친구신청
+	@Transactional
+	@Override
+	public void addFriend(FriendRequestVO request) {
+		requestMapper.insertRequest(request);
+	}
+
+	//친구 삭제
+	@Override
+	public void removeFriend(FriendVO friend) {
+		mapper.deleteFriend(friend);
+	}
+	
 }

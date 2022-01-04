@@ -43,10 +43,4 @@ public class UserServiceImpl implements UserService {
 		return mapper.login(loginDTO);
 	}
 
-	@Override
-	// 프로필 정보 변경
-	public boolean userInfoModify(UserVO userVO) {
-		return mapper.userInfoUpdate(userVO) == 1;
-	}
-
 }

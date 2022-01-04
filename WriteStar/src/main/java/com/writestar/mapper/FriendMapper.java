@@ -9,7 +9,7 @@ import com.writestar.domain.FriendVO;
 
 public interface FriendMapper {
 	// 친구 목록 조회
-	public List<FriendVO> selectFriend();
+	public List<FriendVO> selectFriend(String to_user);
 	
 	// 친구수락 데이터 입력
 	public void insertFriend(Map<String, Object> map);
@@ -19,5 +19,4 @@ public interface FriendMapper {
 	
 	// 친구삭제
 	public void deleteFriend(FriendVO friend);
-	
 }

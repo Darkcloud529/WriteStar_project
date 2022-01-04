@@ -58,9 +58,4 @@ public class UserController {
 		int result = userService.nicknameCheck(userVO);
 		return result;
 	}
-	
-	@PostMapping("/userInfoModify")
-	public String userInfoModify(UserVO userVO) {
-		return null;
-	}
 }

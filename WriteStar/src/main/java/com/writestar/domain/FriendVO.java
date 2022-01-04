@@ -9,6 +9,4 @@ import lombok.Data;
 public class FriendVO {
 	private String user_email;
 	private String friend_email;
-	
-	private UserVO memberInfo;
 }

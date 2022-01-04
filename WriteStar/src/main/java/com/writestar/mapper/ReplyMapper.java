@@ -21,5 +21,8 @@ public interface ReplyMapper {
 	public int deleteReply(Long rno);
 	
 	// 댓글 페이징
-	public List<ReplyVO> getListWithPaging(@Param("cri") Criteria cri, @Param("bno") Long bno);
+	public List<ReplyVO> getListWithPaging(
+			@Param("cri") Criteria cri, 
+			@Param("bno") Long bno);
+	
 }
