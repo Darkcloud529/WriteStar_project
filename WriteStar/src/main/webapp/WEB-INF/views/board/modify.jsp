@@ -78,9 +78,9 @@
 		                    </li>
 		                    <li id="share_title">공개설정</li>
 		                    <li id="share">
-		                        <input type="radio" name="post_type" id="" value="1" checked="checked"> 전체공개  
-		                        <input type="radio" name="post_type" id="" value="2"> 친구공개  
-		                        <input type="radio" name="post_type" id="" value="3"> 비공개 
+		                        <input type="radio" name="post_type" id="share_all" value="1" checked="checked"> 전체공개  
+		                        <input type="radio" name="post_type" id="share_friend" value="2"> 친구공개  
+		                        <input type="radio" name="post_type" id="share_no" value="3"> 비공개 
 		                    </li>
 		                    <li id="board_btn">
 		                        <button type="submit" data-oper="modify">수정하기</button>
@@ -127,7 +127,23 @@
             		        formObj.append(str).submit();
             	        }
             			formObj.submit();
+
             		});
+					
+        			
+            		/* 공개여부 표시 **********************************************************************/
+            		(function(){
+            			var share_status = '<c:out value="${board.post_type}"/>';
+                		console.log(share_status);
+                		if(share_status == 1){
+                			$('#share_all').attr("checked", true);
+                		} else if (share_status == 2){
+                			$('#share_friend').attr("checked", true);
+                		} else {
+                			$('#share_no').attr("checked", true);
+                		}
+            		})();
+            		/* 공개여부 표시 **********************************************************************/
             		
             		/* 첨부파일 목록 **********************************************************************/
             		(function(){
@@ -160,7 +176,7 @@
             		      $(".uploadResult ul").html(str);            		      
             		    });
             		  })();
-            		/* 첨부파일목록 */
+            		/* 첨부파일 목록 **********************************************************************/
             		
             		 $(".uploadResult").on("click", "button", function(e){  
             			  if(confirm("파일을 삭제하시겠습니까? ")){            			    
@@ -206,8 +222,8 @@
             			   type: 'POST',
             			   dataType:'json',
             			   success: function(result){
-            			     console.log(result); 
-            				 showUploadResult(result); //업로드 결과 처리 함수 
+            			   console.log(result); 
+            			   showUploadResult(result); //업로드 결과 처리 함수 
            			      }
            			    });            			    
            			  }); 
@@ -223,7 +239,7 @@
             		    $(uploadResultArr).each(function(i, obj){            					
             		    	//이미지이면 썸네일을 보여준다.
         			        if(obj.image){
-        			          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+        			          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/"+obj.uuid +"_"+obj.fileName);
         			          str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'><div>";
         			          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='cancle_btn'>x</button>";
         			          str += "<img src='/display?fileName="+fileCallPath+"'>";

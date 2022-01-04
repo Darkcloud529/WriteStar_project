@@ -21,7 +21,7 @@
 	<div id="content" class="clear">
 		<aside>
 			<div id="nickname" >
-            	<img src="image/User.png" alt="">
+            	<img src="/resources/img/userPhoto.png" alt="">
             	<h4>혼별혼별</h4>
             	<div id="user_info">
               		<p>새벽에 잘 깨서 새벽에 별보기 좋아하는....<br>
@@ -40,20 +40,6 @@
 				</div>
 			</div>
 		</aside>
-      
-<%-- <a href="/friend/friendRequestPage?to_user=${login.email}">친구목록</a> --%>
-
-<%--
-	<c:forEach items="${list}" var="board" begin="0" end="3">
-		<ul>
-			<div class="border">
-			</div>
-           	<p class="title"><c:out value="${board.title}"></c:out></p> <!-- 게시글제목 -->
-           	<p class="date"><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate}"/></p> <!-- 게시글 업데이트 날짜 -->
-           	<p class="nickname"><c:out value="${board.email}"/></p> <!-- 사용자닉네임 -->
-		</ul>  
-	</c:forEach>
---%>
         
     <c:forEach items="${list}" var="board" begin="0" end="1">
 		<ul id="gallery01">
@@ -96,6 +82,10 @@
 		});
 		$(".friend_request").on("click",function(){
 			self.location="";
+		});
+		
+		$("#edit").on("click",function(){
+            
 		});
 	</script>
 

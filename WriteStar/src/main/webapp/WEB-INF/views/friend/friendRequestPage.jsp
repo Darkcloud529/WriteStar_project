@@ -47,7 +47,33 @@
 		</form>
 	</div>
 	<hr>
-	<%-- <%@ include file="./friendListPage.jsp" %> --%>
+	<div>
+		<h1>친구 목록</h1>
+		<form role="form" id="form2" action="/friend/removeFriend" method="post">
+			<table width="100%">
+			    <thead>
+			        <tr>
+			            <th>email</th>
+			            <th>nickname</th>
+			            <th>user_info</th>
+			            <th>button</th>
+			        </tr>
+			    </thead>
+			    <c:forEach items="${friendList}" var="frList">
+				    <tr>
+				    	<td><c:out value="${frList.email}"/></td>
+				    	<td><c:out value="${frList.nickname}"/></td>
+				    	<td><c:out value="${frList.user_info}"/></td>
+				    	<td>
+				    		<input type="hidden"  class="friendEmail" name="friend_email" value="<c:out value="${frList.email}"/>">
+				    		<input type="hidden"  class="userEmail"   name="user_email"   value="<c:out value="${login.email}"/>">
+				    		<button type="submit" class="delete">삭제</button>
+				    	</td>
+				    </tr>
+			    </c:forEach>
+			</table>
+		</form>
+	</div>
 	
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<script>
@@ -123,6 +149,44 @@
 	                    console.log("ajax approve error");
 	                }
 	            });
+	    	});
+	    	
+	    	// 삭제버튼을 클릭했을 때
+	    	$(".delete").on("click",function(e){
+	    		e.preventDefault();
+	    		
+	    		var confirmResult = confirm("친구를 삭제하시겠습니까?");
+	    		
+	    		if (confirmResult == true) {
+		    		var friendEmail = $(this).parent("td").find(".friendEmail").clone();
+		    		var userEmail   = $(this).parent("td").find(".userEmail").clone();
+		    		
+		    		$("#form2").empty();
+
+					$("#form2").append(friendEmail);
+		    		$("#form2").append(userEmail);
+		    		
+		    		var formData = $("#form2").serialize();
+		    		
+		    		$.ajax({
+		                url : '/friend/removeFriend',
+		                type : 'post',
+		                data : {
+		                	friend_email : $("#form2").find(".friendEmail").val(),
+		                	user_email : $("#form2").find(".userEmail").val()
+		                },
+		                success : function(data){
+		                    console.log("ajax approve success");
+		                },
+		                error: function(){
+		                    console.log("ajax approve error");
+		                }
+		            });
+		    		
+	    		} else {
+	    			return false;
+	    		}
+	    		
 	    	});
 	    });
 	</script>

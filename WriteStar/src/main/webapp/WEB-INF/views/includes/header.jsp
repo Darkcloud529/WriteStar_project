@@ -23,10 +23,10 @@
  <div class="inner">
         <nav class="main_box">
             <ul id="gnb" class="clear">
-                <li><a href="#">Home</a></li>
+                <li><a href=#"">Home</a></li>
                 <li><a href="#">My star</a></li>
-                <li><a href="#">Other Planet</a></li>
-                <li><a href="#">Star Map</a></li>
+                <li><a href="/friend/friendListPage">Other Planet</a></li>
+                <li><a href="/board/starmap">Star Map</a></li>
                 <li>
                   <input id="search" type="text" placeholder="검색어를 입력하세요.">
                   <button type="button"  id="img_btn"><img src="/resources/img/search.png"></button>

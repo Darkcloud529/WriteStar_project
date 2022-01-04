@@ -75,8 +75,11 @@
 				</ul>
 				<!-- 댓글목록 ------------------------------------------------------------------------------------------------->
 					<button id="addReplyBtn" class="chat">댓글쓰기</button>
-					<ul id="reply">
+					<ul>
 						<li id="reply_title">다른 별에서 온 메세지<hr></li>
+					</ul>
+					<ul id="chatter">
+					
 					</ul>
 					<div class="panel-footer">
 					</div>
@@ -84,8 +87,8 @@
 			</div>
 		<form id="operForm" action="/board/modify" method="get">
 					   <input type="hidden" id="bno" name="bno" value='<c:out value="${board.bno}"/>'>
-					   <%--<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>'>
-					   <input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>'>
+					   <%--<<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>'>
+					   input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>'>
 					   <input type="hidden" name="type" value='<c:out value="${cri.type}"/>'>
 					   <input type="hidden" name="keyword" value='<c:out value="${cri.keyword}"/>'> --%>
 		</form>
@@ -109,112 +112,104 @@
 							});
 							
 							var bnoValue='<c:out value="${board.bno}"/>';
-							var replyUL=$(".chat");//댓글목록이 출려되는 ul태그
+							var replyUL=$("#chatter");//댓글목록이 출력되는 ul태그
 							
 							showList(1); 
 							
+							//댓글 목록을 get page에 표시하기 
 							function showList(page){
-								console.log("showList");
-								replyService.getList({bno:bnoValue,page:page||1},function(replyCnt,list){
-									console.log(list);
-									
-									//댓글등록후에는 마지막페이지로 이동
-									if(page==-1){
-										pageNum=Math.ceil(replyCnt/10.0);
-										showList(pageNum);
-										return;
-									}
-									
+								replyService.getList({bno:bnoValue,page:page||1},function(list){ //reply.js 함수 호출
 									var str="";
+								    //댓글의 갯수(list)가 0개이면 replyUL(#chatter)에 추가 내용 없음.
 									if(list==null || list.length==0){
 										replyUL.html("");
 										return;
 									}
+								    //DB단 댓글 갯수에 맞추어 li tag 추가.
 									for(var i=0,len=list.length || 0; i<len; i++){
-										str+="<li class='left clearfix' data-rno='"+list[i].rno+"' style='cursor:pointer'>";
-										str+=" <div><div class='header'><strong>"+list[i].replyer+"</strong>";
-										str+=" <small>"+replyService.displayTime(list[i].replyDate)+"</small></div>";
-										str+=" <p>"+list[i].reply+"</p></div></li>";
-										
+										str+="<li class='reply_list' data-rno='"+list[i].rno+"'style='cursor:pointer'>";
+										str+="<div class='reply_list_con'>"+list[i].content+"</div>";
+										str+="<div class='reply_list_nick'>"+list[i].email+"</div>";
+										str+="<div class='reply_list_date'>"+replyService.displayTime(list[i].replyDate)+"</div>";
+										str+="</div></li>";
 									}
 									console.log(str);
-									replyUL.html(str); //ul태그에 li태그 추가
-									
-								
+									replyUL.html(str); //replyUL(#chatter)에 li태그 추가
 								});
-							} 
+							};
 							
 							var modal = $(".modal");
-							var modalInputReply = modal.find("input[name='reply']");
-							var modalInputReplyer = modal.find("input[name='replyer']");
+							var modalInputReply = modal.find("input[name='content']");
+							var modalInputReplyer = modal.find("input[name='email']");
 							var modalInputReplyDate = modal.find("input[name='replyDate']");
 							
 							var modalModBtn = $("#modalModBtn");
 							var modalRemoveBtn = $("#modalRemoveBtn");
 							var modalRegisterBtn = $("#modalRegisterBtn");
 							
-							$("#addReplyBtn").on("click", function(e){                            	        
-								modal.find("input").val("");
-								modalInputReplyDate.closest("div").hide();
+							//댓글추가 버튼을 누르면 모갈 창 내 close, registration 버튼을 제외한 다른 버튼 숨긴 후 모달창 보여주기.
+							$("#addReplyBtn").on("click", function(e){
+								modal.find("input").val(""); //input box내 내용 삭제 
 								modal.find("button[id !='modalCloseBtn']").hide();                            	        
 								modalRegisterBtn.show();                            	        
-								$(".modal").modal("show");                            	        
+								modal.show();                            	        
 							  }); 
-
+							
+							//close 버튼 누르면 모달창 닫기.
 							$("#modalCloseBtn").on("click", function(e){                            	    	
-								modal.modal('hide');
+								modal.hide();
 							}); 
 
+							//댓글 등록 버튼을 누르면, reply.js 내 add function 실행 
 						   modalRegisterBtn.on("click",function(e){                            	        
-							  var reply = {
-									reply: modalInputReply.val(),
-									replyer:modalInputReplyer.val(),
-									bno:bnoValue
-								  };
-							  replyService.add(reply, function(result){                             	          
-								modal.find("input").val("");
-								modal.modal("hide");
-								
-								//showList(1);
-								showList(-1);//등록후 마지막페이지로 이동
+							  var reply = {content: modalInputReply.val(), email:modalInputReplyer.val(), bno:bnoValue};
+							  replyService.add(reply, function(result){
+								alert(result); //댓글 등록 성공 확인 창 띄움 
+							  	modal.find("input").val(""); //input box내 내용 삭제 
+							  	modal.hide(); //Modal 창 숨김 
+							  	//showList(-1);//등록후 마지막페이지로 이동
+							  	showList(1);//테스트 후 삭제 
 							  });                            	        
 							}); 
-							  
-							  $(".chat").on("click", "li", function(e){                            	          
-								  var rno = $(this).data("rno");                            	          
-								  replyService.get(rno, function(reply){                            	          
-									modalInputReply.val(reply.reply);
-									modalInputReplyer.val(reply.replyer);
-									modalInputReplyDate.val(replyService.displayTime( reply.replyDate)).attr("readonly","readonly");
-									modal.data("rno", reply.rno);
+						
+							//댓글을 클릭했을 때 
+						  $("#chatter").on("click", "li", function(e){                            	          
+							  var rno = $(this).data("rno");                            	          
+							  replyService.get (rno, function(reply){                            	          
+								modalInputReply.val(reply.content);
+								modalInputReplyer.val(reply.email);
+								modalInputReplyDate.val(replyService.displayTime( reply.replyDate)).attr("readonly","readonly");
+								modal.data("rno", reply.rno);
+								modal.find("button[id !='modalCloseBtn']").hide();
+								modalModBtn.show();
+								modalRemoveBtn.show();
+								
+								modal.show(); 
 									
-									modal.find("button[id !='modalCloseBtn']").hide();
-									modalModBtn.show();
-									modalRemoveBtn.show();
-									
-									$(".modal").modal("show");
-										
-								  });
-								}); 
+							  });
+							}); 
 							  
-							  modalModBtn.on("click", function(e){
-								  
-								  var reply = {rno:modal.data("rno"), reply: modalInputReply.val()};                            	      
-								  replyService.update(reply, function(result){
-									modal.modal("hide");
-									showList(pageNum);                            	        
-								  });                            	      
-								}); 
+						  //댓글 수정 버튼을 누르면, reply.js 내 update function 실행	
+						  modalModBtn.on("click", function(e){
+							  var reply = {rno:modal.data("rno"), content: modalInputReply.val()};                            	      
+							  replyService.update (reply, function(result){
+								modal.hide();
+								//showList(pageNum); 
+								showList(1);//테스트 후 삭제 
+							  });                            	      
+							}); 
 
-							  modalRemoveBtn.on("click", function (e){                            	    	  
-									var rno = modal.data("rno");                            	  	  
-									replyService.remove(rno, function(result){
-										modal.modal("hide");
-										showList(pageNum);                            	  	      
-									});                            	  	  
-								  });  
+						  //댓글 삭제 버튼을 누르면, reply.js 내 remove function 실행
+						  modalRemoveBtn.on("click", function (e){                            	    	  
+								var rno = modal.data("rno");                            	  	  
+								replyService.remove(rno, function(result){
+									modal.hide();
+									//showList(pageNum);
+									showList(1);//테스트 후 삭제 
+								});                            	  	  
+						  });  
 							   
-							  var pageNum = 1;
+							   /* var pageNum = 1;
 							   var replyPageFooter = $(".panel-footer");
 								
 							   function showReplyPage(replyCnt){
@@ -261,7 +256,7 @@
 								   pageNum = targetPageNum;
 								   
 								   showList(pageNum);
-							   });   
+							   }); */   
 							   
 							   /* 첨부파일 목록 ************************************************************************/
 							   (function(){	                            		   
@@ -317,30 +312,27 @@
 						});
 					</script>
 	
-	<!-- Modal -------------------------------------------------------------------------------->
-	<div class="modal">
-		   <div class="modal-main">
-			   <div class="modal-content">
-				<div class="modal-body">
-					<div class="form-group">
-						<label>Replyer</label> 
-						<input name='replyer'>
-					</div>	
-					<div class="form-group">
-						<label>Reply</label> 
-						<input name='reply'>
-					</div>      		      
-				</div>
-				<div class="modal-footer">
-					<button id='modalModBtn' type="button">Modify</button>
-					<button id='modalRemoveBtn' type="button">Remove</button>
-					<button id='modalRegisterBtn' type="button">Register</button>
-					<button id='modalCloseBtn' type="button">Close</button>
-				  </div>          
-			  </div>				         
-		   </div>					       
-	  </div> 
-	<!-- modal -->
+					<!-- Modal -------------------------------------------------------------------------------->
+					<div class="modal">
+						   <div class="modal-main">
+								<div class="modal-body">
+									<div class="reply_nickname">
+										<label>By</label> 
+										<input name='email'>
+									</div>	
+									<div class="reply_content">
+										<input name="content" placeholder="댓글을 입력해 주세요.">
+									</div>  		      
+								</div>
+								<div class="modal-footer">
+									<button id='modalModBtn' type="button">Modify</button>
+									<button id='modalRemoveBtn' type="button">Remove</button>
+									<button id='modalRegisterBtn' type="button">Register</button>
+									<button id='modalCloseBtn' type="button">Close</button>
+								  </div>          
+						   </div>					       
+					  </div> 
+					<!-- modal -->
             
             
         
