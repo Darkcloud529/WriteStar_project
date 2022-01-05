@@ -3,16 +3,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
 	<h1>로그인 페이지</h1>
-	<form action="/user/loginPost" method="post" name="loginForm">
+	<form action="/login" method='post' name="loginForm">
 		<table>
 			<tr>
 				<td>
-					<input type="email" id ="email" name="email" placeholder="이메일">
+					<input type="email" id ="email" name="username" placeholder="이메일">
 				</td>
 			</tr>
 			<tr>
@@ -23,9 +24,9 @@
 			<tr>
 				<td>
 					<input type="submit" value="로그인" onclick="return loginCheck()">
+					<input type="hidden" id="" name="${_csrf.parameterName }" value="${_csrf.token }">
 				</td>
 			</tr>
-			
 		</table>
 	</form>
 	<script>
