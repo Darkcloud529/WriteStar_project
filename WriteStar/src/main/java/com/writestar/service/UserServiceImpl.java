@@ -37,10 +37,16 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 
+
 	@Override
-	// 로그인 처리
-	public UserVO login(loginDTO loginDTO) {
-		return mapper.login(loginDTO);
+	public void grantAuth(UserVO userVO) {
+		mapper.auth(userVO);
+	}
+
+	@Override
+	public boolean userInfoModify(UserVO userVO) {
+		// TODO Auto-generated method stub
+		return mapper.userInfoUpdate(userVO) == 1;
 	}
 
 }

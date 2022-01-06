@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,10 +47,12 @@ public class BoardController {
 	
 	//글등록화면-입력페이지를 보여주는 역할
 	@GetMapping("/register")
+	@PreAuthorize("isAuthenticated()")
 	public void register() {}
 	
 	//글등록처리
 	@PostMapping("/register")
+	@PreAuthorize("isAuthenticated()")
 	public String register(BoardVO board, RedirectAttributes rttr) {
 		log.info(board);
 		if(board.getAttachList() != null) {
@@ -69,6 +72,7 @@ public class BoardController {
 	}
 	
 	//글 수정
+	@PreAuthorize("principal.username == #board.email")
 	@PostMapping("/modify")
 	public String modify(BoardVO board,@ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		if(service.modify(board)) {
@@ -83,6 +87,7 @@ public class BoardController {
 	}
 	
 	//글 삭제
+	@PreAuthorize("principal.username == #email")
 	@PostMapping("/remove")
 	public String remove(@RequestParam("bno") Long bno,@ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		List<BoardAttachVO> attachList = service.getAttachList(bno);
