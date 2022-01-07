@@ -36,13 +36,34 @@
 	</update>
 	
 	<select id="getListWithPaging" resultType="com.writestar.domain.ReplyVO">
-		select rno,
-		       bno,
-		       content,
-		       replyDate,
-		       email
-		  from tbl_reply
-		 where bno = #{bno}
-	  order by rno asc
+		<![CDATA[
+			 select  
+			 	x.*
+			 from (
+			 	select rownum as rn, t.*
+			 	from(
+			 		select /*+INDEX(tbl_reply idx_reply) */ 
+			      	rno, bno, content, replyDate, email
+			    	from tbl_reply
+			    	where bno =  #{bno}
+			    	and rno > 0
+			    	order by replyDate asc
+			 	) t
+			   ]]>  
+			   <![CDATA[
+			    where rownum <= #{cri.pageNum} * #{cri.amount}
+			    ) x
+					where x.rn > (#{cri.pageNum} -1) * #{cri.amount}
+		]]>
 	</select>
+	
+	<select id="getCountByBno" resultType="int">
+		<![CDATA[
+			select count(rno) from tbl_reply where bno = #{bno}
+		]]>
+	</select>
+	
+	<update id="updateReplyCnt">
+		update tbl_board set replycnt = replycnt + #{amount} where bno = #{bno}
+	</update>
 </mapper>
