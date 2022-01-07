@@ -18,17 +18,17 @@
 			
 		    <script src="https://code.iconify.design/2/2.1.0/iconify.min.js"></script>
             
-            <div id="wrapper">
+            
 		        <div id="profile">
 		            <ul id="user">
 		                <li id="user_photo">
 		                    <img src="/resources/img/userPhoto.png" alt="#">
 		                </li>
 				        <li id="nickname">
-							<input name="nickname" value='<c:out value="${user.nickname}"/>'readonly>
+							<input name="nickname" value='<c:out value="${login.nickname}"/>'readonly>
 						</li>
 						<li id="user_info">
-							<input name="user_info" value='<c:out value="${user.user_info}"/>'readonly>
+							<input name="user_info" value='<c:out value="${login.user_info}"/>'readonly>
 						</li>
 						<li id="modi_icon">
 							<span class="iconify" data-icon="entypo:pencil"></span>
@@ -52,8 +52,8 @@
 		                    <li id="con_title">
 		                        <input type="text" name="title" id="" placeholder="새로운 별 자리 제목을 입력하세요." >
 		                    </li>
-		                    <li id="email">
-		                        <input type="text" name="email" id="" placeholder="사용자 이메일" >
+		                    <li id="email_hidden">
+		                        <input type="text" name="email" id="" placeholder='<c:out value="${login.email}"/>' >
 		                    </li>
 		                    <li id="con_text">
 		                        <textarea name="content" id="" cols="30" rows="8" placeholder="내 별 자리에 대한 내용을 입력해 주세요."></textarea>
@@ -83,7 +83,7 @@
 		                </ul>
 		            </div>
 		        </form>
-		    </div>
+		   
 			<script>
             	 $(document).ready(function(){   
             		 
@@ -91,6 +91,7 @@
                      $("#confirm_icon").hide();
                      $("#modi_icon").on("click", function(){
                           $("#user_info input").removeAttr("readonly");
+                          $("#nickname input").addClass("info_change");
                           $("#user_info input").addClass("info_change");
                           $("#confirm_icon").show();
                           $("#modi_icon").hide();
@@ -98,6 +99,7 @@
                      });
                      $("#confirm_icon").on("click", function(){
                           $("#user_info input").attr("readonly",true);
+                          $("#nickname input").removeClass("info_change");
                           $("#user_info input").removeClass("info_change");
                           $("#confirm_icon").hide();
                           $("#modi_icon").show();

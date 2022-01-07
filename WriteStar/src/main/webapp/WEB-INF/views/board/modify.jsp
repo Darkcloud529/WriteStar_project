@@ -21,23 +21,24 @@
 			
 			<script src="https://code.iconify.design/2/2.1.0/iconify.min.js"></script>
 				
-            <div id="wrapper">
+            
 		        <div id="profile">
 		            <ul id="user">
 		                <li id="user_photo">
 		                    <img src="/resources/img/userPhoto.png" alt="#">
 		                </li>
-		                <li id="nickname">
-		                    <h3>혼별혼별</h3>
-		                </li>
-		                <li id="user_info">
-		                    <p>새벽에 잘 깨서 새벽에 별보기 좋아하는.... <br>
-		                        혼자 별 보기 좋아하는.....
-		                    </p>
-		                </li>
-		                <li id="modi_icon">
-		                    <span class="iconify" data-icon="entypo:pencil"></span>
-		                </li>
+				        <li id="nickname">
+							<input name="nickname" value='<c:out value="${login.nickname}"/>'readonly>
+						</li>
+						<li id="user_info">
+							<input name="user_info" value='<c:out value="${login.user_info}"/>'readonly>
+						</li>
+						<li id="modi_icon">
+							<span class="iconify" data-icon="entypo:pencil"></span>
+						</li>
+		                <li id="confirm_icon">
+							<span class="iconify" data-icon="line-md:confirm-circle"></span>
+						</li>
 		                <li id="new_star">
 		                    <button>새별쓰기</button>
 		                </li>
@@ -90,9 +91,30 @@
 		                </ul>
 		            </div>
 		        </form>
-		    </div>
+		   
             <script type="text/javascript">
             	$(document).ready(function(){
+            		
+            		//user info 수정 버튼//////////////////////////////
+                    $("#confirm_icon").hide();
+                    $("#modi_icon").on("click", function(){
+                         $("#user_info input").removeAttr("readonly");
+                         $("#nickname input").addClass("info_change");
+                         $("#user_info input").addClass("info_change");
+                         $("#confirm_icon").show();
+                         $("#modi_icon").hide();
+                         console.log("변경 아이콘 클릭");
+                    });
+                    $("#confirm_icon").on("click", function(){
+                         $("#user_info input").attr("readonly",true);
+                         $("#nickname input").removeClass("info_change");
+                         $("#user_info input").removeClass("info_change");
+                         $("#confirm_icon").hide();
+                         $("#modi_icon").show();
+                         console.log("컴펌 아이콘 클릭");
+                    });
+                    ////////////////////////////////////////////////
+            		
             		var formObj=$("form");
             		$("button").on("click",function(e){
             			e.preventDefault();//전송방지

@@ -1,34 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-	<h1>로그인 페이지</h1>
-	<form action="/login" method='post' name="loginForm">
-		<table>
+ <%@ include file="../includes/header.jsp" %> 
+
+	<div id="user_box">
+	<form action="/user/loginPost" method="post" name="loginForm">
+		<table id="table">
 			<tr>
 				<td>
-					<input type="email" id ="email" name="username" placeholder="이메일">
+					<input type="email" id ="email" name="email" placeholder="Email 입력">
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<input type="password" id="pw" name="password" placeholder="비밀번호">
+					<input type="password" id="pw" name="password" placeholder="비밀번호 입력" >
 				</td>
 			</tr>
 			<tr>
-				<td>
-					<input type="submit" value="로그인" onclick="return loginCheck()">
-					<input type="hidden" id="" name="${_csrf.parameterName }" value="${_csrf.token }">
+				<td style="text-align:center;">
+					<input type ="submit" id="start" value="내 별로 이동" onclick="return loginCheck()"></input>
+					<input type ="button" id="cancel" value="취소" onClick="location.href='/'"></input>
 				</td>
 			</tr>
+			
 		</table>
 	</form>
+	</div>
 	<script>
 	function loginCheck(){	
 
@@ -44,5 +40,5 @@
 		}
 	}
 	</script>
-</body>
-</html>
+	
+ <%@include file="../includes/footer.jsp" %>   

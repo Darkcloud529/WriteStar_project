@@ -4,9 +4,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>    
     
 <%@ include file="../includes/header.jsp" %> 
-<c:out value="${login.email }"/>
-<h1> ${login.nickname }</h1>   
-			<style>
+<%-- <c:out value="${login.email }"/>
+<h1> ${login.nickname }</h1>  --%>  
+	<style>
 		.uploadResult {width: 100%;}				
 		.uploadResult ul {float:left;}				
 		.uploadResult ul li {}				
@@ -19,34 +19,33 @@
 		.bigPicture img {width:600px;}
 		
 	</style>
-	
-	<script src="https://code.iconify.design/2/2.1.0/iconify.min.js"></script>
 		
-	<div id="wrapper">
-		<div id="profile">
-			<ul id="user">
-				<li id="user_photo">
-					<img src="/resources/img/userPhoto.png" alt="#">
-				</li>
-				<li id="nickname">
-					<h3>혼별혼별</h3>
-				</li>
-				<li id="user_info">
-					<p>새벽에 잘 깨서 새벽에 별보기 좋아하는.... <br>
-						혼자 별 보기 좋아하는.....
-					</p>
-				</li>
-				<li id="modi_icon">
-					<span class="iconify" data-icon="entypo:pencil"></span>
-				</li>
-				<li id="new_star">
-					<button>새별쓰기</button>
-				</li>
-				<li id="friend_request">
-					<button>친구 요청하기</button>
-				</li>
-			</ul>
-		</div>
+	
+			<div id="profile">
+		            <ul id="user">
+		                <li id="user_photo">
+		                    <img src="/resources/img/userPhoto.png" alt="#">
+		                </li>
+				        <li id="nickname">
+							<input name="nickname" value='<c:out value="${login.nickname}"/>'readonly>
+						</li>
+						<li id="user_info">
+							<input name="user_info" value='<c:out value="${login.user_info}"/>'readonly>
+						</li>
+						<li id="modi_icon">
+							<span class="iconify" data-icon="entypo:pencil"></span>
+						</li>
+		                <li id="confirm_icon">
+							<span class="iconify" data-icon="line-md:confirm-circle"></span>
+						</li>
+		                <li id="new_star">
+		                    <button>새별쓰기</button>
+		                </li>
+		                <li id="friend_request">
+		                    <button>친구 요청하기</button>
+		                </li>
+		            </ul>
+		        </div>
 			<div id="board">
 				<ul id="main">
 					<li id="article_title_get"><input name="title" value='<c:out value="${board.title}"/>'readonly></li>
@@ -92,12 +91,33 @@
 					   <input type="hidden" name="type" value='<c:out value="${cri.type}"/>'>
 					   <input type="hidden" name="keyword" value='<c:out value="${cri.keyword}"/>'> --%>
 		</form>
-	</div>
+	
 												
 					<script type="text/javascript" src="/resources/js/reply.js"></script>
 					
 					<script type="text/javascript">
 						$(document).ready(function(){
+							
+							//user info 수정 버튼//////////////////////////////
+		                     $("#confirm_icon").hide();
+		                     $("#modi_icon").on("click", function(){
+		                          $("#user_info input").removeAttr("readonly");
+		                          $("#nickname input").addClass("info_change");
+		                          $("#user_info input").addClass("info_change");
+		                          $("#confirm_icon").show();
+		                          $("#modi_icon").hide();
+		                          console.log("변경 아이콘 클릭");
+		                     });
+		                     $("#confirm_icon").on("click", function(){
+		                          $("#user_info input").attr("readonly",true);
+		                          $("#nickname input").removeClass("info_change");
+		                          $("#user_info input").removeClass("info_change");
+		                          $("#confirm_icon").hide();
+		                          $("#modi_icon").show();
+		                          console.log("컴펌 아이콘 클릭");
+		                     });
+		                     ////////////////////////////////////////////////
+							
 							$("#new_star").on("click",function(){
 								self.location="/board/register";
 							});
@@ -118,9 +138,19 @@
 							
 							//댓글 목록을 get page에 표시하기 
 							function showList(page){
-								replyService.getList({bno:bnoValue,page:page||1},function(list){ //reply.js 함수 호출
-									var str="";
-								    //댓글의 갯수(list)가 0개이면 replyUL(#chatter)에 추가 내용 없음.
+								replyService.getList({bno:bnoValue,page:page||1},
+										function(replyCnt, list){ //reply.js 함수 호출
+								
+									
+								if(page == -1) {
+									pageNum = Math.ceil(replyCnt/10.0);
+									showList(pageNum);
+									return;
+								}
+								
+								var str="";
+								
+								//댓글의 갯수(list)가 0개이면 replyUL(#chatter)에 추가 내용 없음.
 									if(list==null || list.length==0){
 										replyUL.html("");
 										return;
@@ -135,6 +165,8 @@
 									}
 									console.log(str);
 									replyUL.html(str); //replyUL(#chatter)에 li태그 추가
+									
+								 	showReplyPage(replyCnt);
 								});
 							};
 							
@@ -167,8 +199,8 @@
 								alert(result); //댓글 등록 성공 확인 창 띄움 
 							  	modal.find("input").val(""); //input box내 내용 삭제 
 							  	modal.hide(); //Modal 창 숨김 
-							  	//showList(-1);//등록후 마지막페이지로 이동
-							  	showList(1);//테스트 후 삭제 
+							  	showList(-1);//등록후 마지막페이지로 이동
+							  	//showList(1);//테스트 후 삭제 
 							  });                            	        
 							}); 
 						
@@ -194,8 +226,8 @@
 							  var reply = {rno:modal.data("rno"), content: modalInputReply.val()};                            	      
 							  replyService.update (reply, function(result){
 								modal.hide();
-								//showList(pageNum); 
-								showList(1);//테스트 후 삭제 
+								showList(pageNum); 
+								//showList(1);//테스트 후 삭제 
 							  });                            	      
 							}); 
 
@@ -204,24 +236,25 @@
 								var rno = modal.data("rno");                            	  	  
 								replyService.remove(rno, function(result){
 									modal.hide();
-									//showList(pageNum);
-									showList(1);//테스트 후 삭제 
+									showList(pageNum);
+									//showList(1);//테스트 후 삭제 
 								});                            	  	  
 						  });  
 							   
-							   /* var pageNum = 1;
+						  		//페이징 처리 
+							   var pageNum = 1;
 							   var replyPageFooter = $(".panel-footer");
 								
 							   function showReplyPage(replyCnt){
 								  
-							   var endNum = Math.ceil(pageNum / 10.0) * 10;  
+							   var endNum = Math.ceil(pageNum / 5.0) * 10;  
 							   var startNum = endNum - 9; 
 								  
 							   var prev = startNum != 1;
 							   var next = false;
 								  
 							   if(endNum * 10 >= replyCnt){
-								 endNum = Math.ceil(replyCnt/10.0);
+								 endNum = Math.ceil(replyCnt/5.0);
 							   }
 								  
 							   if(endNum * 10 < replyCnt){
@@ -245,18 +278,20 @@
 								 }
 								  
 								 str += "</ul></div>";	                            	      
-								  
+								 
+								 console.log(str);
 								 replyPageFooter.html(str);
 							   } 
 							   
 							   replyPageFooter.on("click","li a", function(e){
 								   e.preventDefault();	                            	       
 								   
-								   var targetPageNum = $(this).attr("href");  
+								   var targetPageNum = $(this).attr("href"); 
+								   
 								   pageNum = targetPageNum;
 								   
 								   showList(pageNum);
-							   }); */   
+							   });   
 							   
 							   /* 첨부파일 목록 ************************************************************************/
 							   (function(){	                            		   

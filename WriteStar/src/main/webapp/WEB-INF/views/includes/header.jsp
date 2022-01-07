@@ -8,44 +8,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>별을쓰다</title>
        
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-    <link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square-round.css" rel="stylesheet">
     <link rel="stylesheet" href="/resources/css/reset.css" />
     <link rel="stylesheet" href="/resources/css/style.css">
     <link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square-round.css" rel="stylesheet">
     <script src="https://code.iconify.design/2/2.1.0/iconify.min.js"></script>
-    <link href="/resources/css/list.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-
-<%-- <a href="/friend/friendRequestPage?to_user=${login.email}"> --%>
-
- <div class="inner">
-        <nav class="main_box">
-            <ul id="gnb" class="clear">
-                <li><a href=#"">Home</a></li>
-                <li><a href="#">My star</a></li>
-                <li><a href="/friend/friendListPage">Other Planet</a></li>
-                <li><a href="/board/starmap">Star Map</a></li>
-                <li>
-                  <input id="search" type="text" placeholder="검색어를 입력하세요.">
-                  <button type="button"  id="img_btn"><img src="/resources/img/search.png"></button>
-                </li>
-           </ul>
-      </nav>
-      <nav>
-        <ul>
-            <li id="join"><a href="#">Join <i class="fas fa-star"></i></a></li>
-            <li id="login"><a href="#">Log Out<<<<-<i class="fas fa-star" style="color:red"></i></a></li>
-       </ul>
-      </nav>
-    </div>
-    <div class="logo">
-      <div class="box"></div>
-       <div><img src="/resources/img/logo.png" alt="logo"></div>
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
-    
-
-    </script>
-     
+	<div id="wrapper">
+	        <nav class="main_box">
+	            <ul id="gnb">
+	                <li><a href="/">Home</a></li>
+	                <li><a href="/board/list">My star</a></li>
+	                <li><a href="/friend/friendListPage">Other Planet</a></li>
+	                <li><a href="/board/starmap">Star Map</a></li>
+	                <li>
+	                  <form id='searchForm' action="/search/searchResult" method='get'>
+	                  	<input id="search" type="text" name="keyword" placeholder="검색어를 입력하세요.">
+	                  	<button type="submit" id="search_icon"><span class="iconify" data-icon="bx:bx-search-alt"></span></button>
+	                  	
+	                  </form>
+	                </li>
+	                <div id="gnb_right">
+	                    <li id="join"><a href="/user/userRegister">Join <span class="iconify" data-icon="noto-v1:shooting-star"></span></a></li>
+	                    <li id="login"><a href="/user/login">Log In >>>> <span class="iconify" data-icon="noto-v1:shooting-star"></span></a></li>
+	                    <li id="logout"><a href="/user/logout">Log Out <<<< <span class="iconify" data-icon="noto-v1:shooting-star"></span></a></li>
+	                </div>
+	           </ul>
+	        </nav>
+	        <div id="logo">
+	        <div><img src="/resources/img/logo.png" alt="logo"></div>
+	        </div>
+	        
+	        <script type="text/javascript">
+				$(document).ready(function(){
+					
+					//로그인 상태에 따라서 로그인, 로그아웃 변경//////////////////////////////
+					var checking = '<c:out value="${login.email}"/>';
+					console.log(checking);
+                    if (checking == "" || '<c:out value=""/>'){
+                    	console.log("로그인 안된 상태");
+                    	$("#login").show();
+                    	$("#logout").hide();
+                    } else {
+                    	console.log("로그인 상태");
+                    	$("#join").hide();
+                    	$("#login").hide();
+                    	$("#logout").show();
+                    }
+                    });
+                    ////////////////////////////////////////////////
+                    
+                    var searchForm = $("#searchForm");
+	    			var keyword = $('#searchForm').find("input[name='keyword']").val();
+	    			console.log("alert");
+                    
+		    </script>
