@@ -47,7 +47,6 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public BoardVO get(Long bno) {
 		return mapper.read(bno);
-		
 	}
 
 	@Transactional
@@ -70,11 +69,6 @@ public class BoardServiceImpl implements BoardService{
 		return mapper.delete(bno) == 1;
 	}
 
-	//@Override
-	//public List<BoardVO> getList() {
-	//	return mapper.getList();
-	//}
-
 	@Override
 	public List<BoardVO> getList(Criteria cri) {
 		return mapper.getListWithPaging(cri);
@@ -88,5 +82,15 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public List<BoardAttachVO> getAttachList(Long bno) {
 		return attachMapper.findByBno(bno);
+	}
+
+	@Override
+	public int hitsCount(Long bno) {
+		return mapper.updateHitsCnt(bno);
+	}
+
+	@Override
+	public List<BoardVO> selectTop5List() {
+		return mapper.selectTop5();
 	}
 }

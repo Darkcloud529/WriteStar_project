@@ -14,7 +14,9 @@ public class BoardVO {
 	private String address;
 	private String post_type;
 	private String email;
+	private Long hits;
 	
 	private UserVO userVO;
 	private List<BoardAttachVO> attachList;
+	private BoardAttachVO thumbnail; 
 }

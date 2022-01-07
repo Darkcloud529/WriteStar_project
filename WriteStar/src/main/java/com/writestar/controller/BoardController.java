@@ -1,14 +1,20 @@
 package com.writestar.controller;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +40,16 @@ import lombok.extern.log4j.Log4j;
 @AllArgsConstructor
 public class BoardController {
 	private BoardService service;
-    
+	
+	// 조회수 TOP 5 조회
+	@GetMapping("/selectTop5List")
+	public void selectTop5List(Model model) {
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>> BoardController >>>>>>>>>>>>>>>>>>>>>>");
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>> selectTop5List >>>>>>>>>>>>>>>>>>>>>>");
+		
+		model.addAttribute("topList", service.selectTop5List());
+	}
+	
 	//글 목록
 	@GetMapping("/list")
 	public void list(Criteria cri, Model model) {
@@ -47,12 +62,10 @@ public class BoardController {
 	
 	//글등록화면-입력페이지를 보여주는 역할
 	@GetMapping("/register")
-	@PreAuthorize("isAuthenticated()")
 	public void register() {}
 	
 	//글등록처리
 	@PostMapping("/register")
-	@PreAuthorize("isAuthenticated()")
 	public String register(BoardVO board, RedirectAttributes rttr) {
 		log.info(board);
 		if(board.getAttachList() != null) {
@@ -67,12 +80,15 @@ public class BoardController {
 	
 	//글상세보기.글수정화면
 	@GetMapping({"/get","/modify"})
-	public void get(@RequestParam("bno") Long bno,@ModelAttribute("cri")Criteria cri, Model model) {
-		model.addAttribute("board",service.get(bno));
+	public void get(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, Model model) {
+		// 조회수 처리
+		service.hitsCount(bno);
+		
+	    // 게시글 상세 조회
+		model.addAttribute("board", service.get(bno));
 	}
 	
 	//글 수정
-	@PreAuthorize("principal.username == #board.email")
 	@PostMapping("/modify")
 	public String modify(BoardVO board,@ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		if(service.modify(board)) {
@@ -87,7 +103,6 @@ public class BoardController {
 	}
 	
 	//글 삭제
-	@PreAuthorize("principal.username == #email")
 	@PostMapping("/remove")
 	public String remove(@RequestParam("bno") Long bno,@ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		List<BoardAttachVO> attachList = service.getAttachList(bno);
@@ -98,7 +113,7 @@ public class BoardController {
 		
 		rttr.addAttribute("pageNum", cri.getPageNum());
 	    rttr.addAttribute("amount", cri.getAmount());
-	    rttr.addAttribute("keyword",cri.getKeyword());
+	    rttr.addAttribute("keyword", cri.getKeyword());
 	    
 		return "redirect:/board/list";
 	}

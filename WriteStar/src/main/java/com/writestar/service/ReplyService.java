@@ -3,7 +3,7 @@ package com.writestar.service;
 import java.util.List;
 
 import com.writestar.domain.Criteria;
-
+import com.writestar.domain.ReplyPageDTO;
 import com.writestar.domain.ReplyVO;
 
 public interface ReplyService {
@@ -18,5 +18,5 @@ public interface ReplyService {
 	
 	public List<ReplyVO> getReplyList(Criteria cri, Long bno);
 	
-
+	public ReplyPageDTO getListPage(Criteria cri, Long bno);
 }

@@ -16,23 +16,30 @@ public class Criteria {
 	
 	//검색 관련
 	private String keyword; //검색에 사용하는 키워드
+	private BoardVO boardVO; 
+	
+	private String type;
 	
 	public Criteria() {
-		this(1,10); // 기본생성자 기본값 지정
+		this(1,6); // 기본생성자 기본값 지정
 	}
 	
 	public Criteria(int pageNum, int amount) {
 		this.pageNum = pageNum;
 		this.amount = amount;
-		
 	}
+	
+	public String[] getTypeArr() {
+	    
+	    return type == null? new String[] {}: type.split("");
+	  }
 	
 	public String getListLink() { 
 		UriComponentsBuilder builder = UriComponentsBuilder.fromPath("") .queryParam("pageNum", this.pageNum)
-		//.queryParam("amount", this.getAmount()) .queryParam("type", this.getType())
+		.queryParam("amount", this.getAmount()) 
+		.queryParam("type", this.getType())
 		.queryParam("keyword", this.getKeyword());
 			  
 		return builder.toUriString();
 	}
 }
-

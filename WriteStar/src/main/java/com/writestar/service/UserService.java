@@ -10,8 +10,6 @@ public interface UserService {
 	public int emailCheck(UserVO userVO);
 	//닉네임 중복 확인
 	public int nicknameCheck(UserVO userVO);
-	//프로필 정보 변경
-	public boolean userInfoModify(UserVO userVO);
-	//회원 권한 부여
-	public void grantAuth(UserVO userVO);
+	//로그인 처리
+	public UserVO login(loginDTO loginDTO);
 }

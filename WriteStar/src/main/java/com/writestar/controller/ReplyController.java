@@ -1,7 +1,5 @@
 package com.writestar.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,9 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.writestar.domain.Criteria;
-
+import com.writestar.domain.ReplyPageDTO;
 import com.writestar.domain.ReplyVO;
-import com.writestar.mapper.BoardMapper;
 import com.writestar.service.ReplyService;
 
 import lombok.Setter;
@@ -39,9 +36,11 @@ public class ReplyController {
 	}
 	
 	@GetMapping(value = "/pages/{bno}/{page}", 	 produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
-	public ResponseEntity<List<ReplyVO>> getList( @PathVariable("page") int page, @PathVariable("bno") Long bno) {
-		Criteria cri = new Criteria(page,10);
-		return new ResponseEntity<>(service.getReplyList(cri, bno), HttpStatus.OK);
+	public ResponseEntity<ReplyPageDTO> getList( @PathVariable("page") int page, @PathVariable("bno") Long bno) {
+		Criteria cri = new Criteria(page,5);
+		log.info("get Reply list bno" + bno);
+		log.info("cri:" + cri);
+		return new ResponseEntity<>(service.getListPage(cri, bno), HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/{rno}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
