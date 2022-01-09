@@ -23,6 +23,7 @@ public class CustomUser extends User {
 		super(username, password, authorities);
 	}
 	
+	//UserVO를 통해 개인정보 확장
 	public CustomUser(UserVO vo) {
 
 		super(vo.getEmail(), vo.getPassword(), vo.getAuthList().stream()
