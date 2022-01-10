@@ -24,11 +24,9 @@ public class ReplyServiceImpl implements ReplyService{
 	@Setter(onMethod_=@Autowired)
 	private BoardMapper boardMapper;
 	
-	@Transactional
+	
 	@Override
 	public int registerReply(ReplyVO reply) {
-		
-		boardMapper.updateReplyCnt(reply.getBno(), 1);
 		return mapper.insertReply(reply);
 	}
 
@@ -42,11 +40,9 @@ public class ReplyServiceImpl implements ReplyService{
 		return mapper.updateReply(reply);
 	}
 	
-	@Transactional
 	@Override
 	public int removeReply(Long rno) {
 		ReplyVO vo = mapper.readReply(rno);
-		boardMapper.updateReplyCnt(vo.getBno(), -1);
 		return mapper.deleteReply(rno);
 	}
 

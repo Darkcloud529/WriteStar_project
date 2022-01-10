@@ -41,12 +41,22 @@ import lombok.extern.log4j.Log4j;
 public class BoardController {
 	private BoardService service;
 	
+	//index용으로 테스트....
+	@GetMapping("/index")
+	public void index(Criteria cri, Model model) {
+		model.addAttribute("list", service.getList(cri));
+		model.addAttribute("pageMaker", new PageDTO(cri, 123));
+		//123 임의의 값
+		int total = service.getTotal(cri);
+		model.addAttribute("pageMaker",new PageDTO(cri, total));
+	}
+	//index용으로 테스트....
+	
 	// 조회수 TOP 5 조회
 	@GetMapping("/selectTop5List")
 	public void selectTop5List(Model model) {
 		System.out.println(">>>>>>>>>>>>>>>>>>>>>> BoardController >>>>>>>>>>>>>>>>>>>>>>");
 		System.out.println(">>>>>>>>>>>>>>>>>>>>>> selectTop5List >>>>>>>>>>>>>>>>>>>>>>");
-		
 		model.addAttribute("topList", service.selectTop5List());
 	}
 	
@@ -91,12 +101,14 @@ public class BoardController {
 	//글 수정
 	@PostMapping("/modify")
 	public String modify(BoardVO board,@ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
+		log.info("modify" + board);
 		if(service.modify(board)) {
 			rttr.addFlashAttribute("result", "success");
 		}
 		
 	    rttr.addAttribute("pageNum", cri.getPageNum());
 	    rttr.addAttribute("amount", cri.getAmount());
+	    rttr.addAttribute("type", cri.getType());
 	    rttr.addAttribute("keyword",cri.getKeyword());
 	    
 		return "redirect:/board/list";
@@ -108,6 +120,7 @@ public class BoardController {
 		List<BoardAttachVO> attachList = service.getAttachList(bno);
 		
 		if(service.remove(bno)) {
+			deleteFiles(attachList);
 			rttr.addFlashAttribute("result", "success");
 		}
 		

@@ -21,6 +21,7 @@ public interface BoardService {
 	public int getTotal(Criteria cri);
 	// 첨부파일목록 호출
 	public List<BoardAttachVO> getAttachList(Long bno);
+	public void removeAttach(Long bno);
 	// 조회수
 	public int hitsCount(Long bno);
 	// 인기글 상위 5개

@@ -61,11 +61,14 @@ public class BoardServiceImpl implements BoardService{
 				attachMapper.insert(attach);
 			});
 		}
-		return mapper.update(board) == 1;
+		return modifyResult;
 	}
-
+	
+	@Transactional
 	@Override
 	public boolean remove(Long bno) {
+		
+		attachMapper.deleteAll(bno);
 		return mapper.delete(bno) == 1;
 	}
 
@@ -92,5 +95,10 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public List<BoardVO> selectTop5List() {
 		return mapper.selectTop5();
+	}
+
+	@Override
+	public void removeAttach(Long bno) {
+		attachMapper.deleteAll(bno);
 	}
 }

@@ -26,6 +26,4 @@ public interface BoardMapper {
 	public int updateHitsCnt(long bno);
 	// 인기글 상위 5개
 	public List<BoardVO> selectTop5();
-	
-	public void updateReplyCnt(@Param("bno") Long bno, @Param("amount") int amount);
 }
