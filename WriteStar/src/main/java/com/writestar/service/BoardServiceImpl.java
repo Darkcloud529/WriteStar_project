@@ -11,6 +11,7 @@ import com.writestar.domain.BoardVO;
 import com.writestar.domain.Criteria;
 import com.writestar.mapper.BoardAttachMapper;
 import com.writestar.mapper.BoardMapper;
+import com.writestar.mapper.ReplyMapper;
 
 import lombok.AllArgsConstructor;
 import lombok.Setter;
@@ -26,6 +27,9 @@ public class BoardServiceImpl implements BoardService{
 	@Setter(onMethod_= @Autowired)
 	private BoardAttachMapper attachMapper;
 
+	@Setter(onMethod_= @Autowired)
+	private ReplyMapper replyMapper;
+	
 	@Transactional
 	@Override
 	public void register(BoardVO board) {
@@ -63,11 +67,11 @@ public class BoardServiceImpl implements BoardService{
 		}
 		return modifyResult;
 	}
-	
+
 	@Transactional
 	@Override
 	public boolean remove(Long bno) {
-		
+		replyMapper.deleteAll(bno);
 		attachMapper.deleteAll(bno);
 		return mapper.delete(bno) == 1;
 	}
@@ -100,5 +104,10 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public void removeAttach(Long bno) {
 		attachMapper.deleteAll(bno);
+	}
+
+	@Override
+	public List<BoardVO> getMainList() {
+		return mapper.getMainList();
 	}
 }

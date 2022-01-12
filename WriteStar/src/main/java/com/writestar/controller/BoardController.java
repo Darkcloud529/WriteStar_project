@@ -1,16 +1,9 @@
 package com.writestar.controller;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,6 +23,8 @@ import com.writestar.domain.BoardVO;
 import com.writestar.domain.Criteria;
 import com.writestar.domain.PageDTO;
 import com.writestar.service.BoardService;
+import com.writestar.service.ReplyService;
+import com.writestar.service.UserService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -40,36 +35,34 @@ import lombok.extern.log4j.Log4j;
 @AllArgsConstructor
 public class BoardController {
 	private BoardService service;
-	
-	//index용으로 테스트....
-	@GetMapping("/index")
-	public void index(Criteria cri, Model model) {
-		model.addAttribute("list", service.getList(cri));
-		model.addAttribute("pageMaker", new PageDTO(cri, 123));
-		//123 임의의 값
-		int total = service.getTotal(cri);
-		model.addAttribute("pageMaker",new PageDTO(cri, total));
-	}
-	//index용으로 테스트....
+	private UserService userService;
+	private ReplyService replyService;
 	
 	// 조회수 TOP 5 조회
-	@GetMapping("/selectTop5List")
-	public void selectTop5List(Model model) {
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>> BoardController >>>>>>>>>>>>>>>>>>>>>>");
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>> selectTop5List >>>>>>>>>>>>>>>>>>>>>>");
+	@GetMapping("/main")
+	public void selectTop5List(Criteria cri, Model model) {
+		System.out.println(">>>>>>>>> BoardController >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+		System.out.println(">>>>>>>>> selectTop5List");
+		
 		model.addAttribute("topList", service.selectTop5List());
+		model.addAttribute("otherList", service.getMainList());
 	}
 	
 	//글 목록
 	@GetMapping("/list")
 	public void list(Criteria cri, Model model) {
+		// list 화면의 사용자 정보 호출
+		model.addAttribute("profile", userService.getUserInfo(cri));
+		
 		model.addAttribute("list", service.getList(cri));
-		model.addAttribute("pageMaker", new PageDTO(cri, 123));
-		//123 임의의 값
+		model.addAttribute("pageMaker", new PageDTO(cri, 123)); //123 임의의 값
+
+		model.addAttribute("email", cri);		// 친구신청 후 list 화면 유지
+		
 		int total = service.getTotal(cri);
 		model.addAttribute("pageMaker",new PageDTO(cri, total));
 	}
-	
+
 	//글등록화면-입력페이지를 보여주는 역할
 	@GetMapping("/register")
 	public void register() {}
@@ -85,7 +78,7 @@ public class BoardController {
 		service.register(board);
 		rttr.addFlashAttribute("result", board.getBno());
 		
-		return "redirect:/board/list";
+		return "redirect:/board/get?bno=" + board.getBno();
 	}
 	
 	//글상세보기.글수정화면
@@ -101,26 +94,22 @@ public class BoardController {
 	//글 수정
 	@PostMapping("/modify")
 	public String modify(BoardVO board,@ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
-		log.info("modify" + board);
 		if(service.modify(board)) {
 			rttr.addFlashAttribute("result", "success");
 		}
-		
-	    rttr.addAttribute("pageNum", cri.getPageNum());
-	    rttr.addAttribute("amount", cri.getAmount());
-	    rttr.addAttribute("type", cri.getType());
+
 	    rttr.addAttribute("keyword",cri.getKeyword());
 	    
-		return "redirect:/board/list";
+	    return "redirect:/board/get?bno=" + board.getBno();
 	}
 	
 	//글 삭제
 	@PostMapping("/remove")
 	public String remove(@RequestParam("bno") Long bno,@ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		List<BoardAttachVO> attachList = service.getAttachList(bno);
+		replyService.replyAllRemove(bno);
 		
 		if(service.remove(bno)) {
-			deleteFiles(attachList);
 			rttr.addFlashAttribute("result", "success");
 		}
 		
@@ -128,7 +117,7 @@ public class BoardController {
 	    rttr.addAttribute("amount", cri.getAmount());
 	    rttr.addAttribute("keyword", cri.getKeyword());
 	    
-		return "redirect:/board/list";
+		return "redirect:/board/list?email=" + cri.getEmail();
 	}
 	
 	@GetMapping(value = "/getAttachList",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -139,7 +128,6 @@ public class BoardController {
 		//log.info(list.get(0).isFileType());
 		return new ResponseEntity<>(service.getAttachList(bno), HttpStatus.OK);
 	}
-	
 	
 	private void deleteFiles(List<BoardAttachVO> attachList) {
 	    if(attachList == null || attachList.size() == 0) {

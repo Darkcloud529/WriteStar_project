@@ -1,17 +1,23 @@
 package com.writestar.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.writestar.domain.BoardAttachVO;
 import com.writestar.domain.UserVO;
 import com.writestar.domain.loginDTO;
+import com.writestar.service.BoardService;
 import com.writestar.service.UserService;
 
 import lombok.AllArgsConstructor;
@@ -57,5 +63,46 @@ public class UserController {
 	public int nicknameCheck(UserVO userVO) {
 		int result = userService.nicknameCheck(userVO);
 		return result;
+	}
+	
+	@GetMapping("/userUpdateView")
+	public void userUpdateView() {}
+	
+	@PostMapping("/userUpdate")
+	public String userUpdate(UserVO userVO, HttpSession session) {
+		if(userVO.getAttachList() != null) {
+			userService.removeProfile(userVO);
+			userVO.getAttachList().forEach(attach -> log.info(attach));
+		}
+		userService.userUpdate(userVO);
+		session.invalidate();
+		
+		return "redirect:/user/login";
+	}
+	
+	@GetMapping("/user/pwUpdate")
+	public void pwUpdate() {}
+	@PostMapping("/user/pwUpdate") //비밀번호 변경 
+	public String pwUpdate(loginDTO loginDTO, HttpSession httpsession) {
+		UserVO userVO = userService.login(loginDTO);
+		if ( BCrypt.checkpw(loginDTO.getPassword(), userVO.getPassword())) {
+			return "/user/pwUpdate";
+		}
+		//변경된 비번 업데이트
+		String hashedPw = BCrypt.hashpw(loginDTO.getPassword(), BCrypt.gensalt());
+		loginDTO.setPassword(hashedPw);
+		userService.pwUpdate(loginDTO);
+		httpsession.invalidate();
+		return "redirect:/user/login";
+
+	}
+	
+	@GetMapping(value = "/getAttachList",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<BoardAttachVO>> getAttachList(String email){
+ 
+		List<BoardAttachVO> list = userService.getAttachList(email);
+		//log.info(list.get(0).isFileType());
+		return new ResponseEntity<>(userService.getAttachList(email), HttpStatus.OK);
 	}
 }

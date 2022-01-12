@@ -17,7 +17,7 @@ public interface FriendService {
 	public boolean response(Map<String, Object> map);
 	
 	// 친구신청
-	public void addFriend(FriendRequestVO request);
+	public void addFriend(Map<String, Object> map);
 	
 	// 친구 삭제
 	public void removeFriend(FriendVO friend);

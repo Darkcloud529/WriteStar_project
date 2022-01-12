@@ -24,7 +24,13 @@ public interface ReplyMapper {
 	public List<ReplyVO> getListWithPaging(
 			@Param("cri") Criteria cri, 
 			@Param("bno") Long bno);
+	
 	// 해당 게시글의 댓글 개수 파악
 	public int getCountByBno(Long bno);
 	
+	// 게시글 삭제 시 해당 게시글의 모든 댓글 삭제
+	public int deleteAllReply(Long bno);
+	
+	// 게시글 삭제 시 댓글 전체 삭제
+	public void deleteAll(Long bno);
 }

@@ -58,6 +58,10 @@ public class ReplyServiceImpl implements ReplyService{
 				mapper.getListWithPaging(cri, bno));
 	}
 
-
+	@Override
+	public int replyAllRemove(Long bno) {
+		return mapper.deleteAllReply(bno);
+	}
+	
 	
 }

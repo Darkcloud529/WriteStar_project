@@ -15,5 +15,5 @@ public interface FriendRequestMapper {
 	public void deleteRequest(Map<String, Object> map);
 
 	// 친구신청
-	public void insertRequest(FriendRequestVO request);
+	public void insertRequest(Map<String, Object> map);
 }

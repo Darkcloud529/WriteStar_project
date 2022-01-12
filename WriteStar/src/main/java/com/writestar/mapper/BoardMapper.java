@@ -2,8 +2,6 @@ package com.writestar.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
 import com.writestar.domain.BoardVO;
 import com.writestar.domain.Criteria;
 
@@ -26,4 +24,6 @@ public interface BoardMapper {
 	public int updateHitsCnt(long bno);
 	// 인기글 상위 5개
 	public List<BoardVO> selectTop5();
+	// 메인화면 글목록
+	public List<BoardVO> getMainList();
 }

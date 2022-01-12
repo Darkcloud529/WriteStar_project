@@ -13,9 +13,7 @@ import com.writestar.mapper.FriendMapper;
 import com.writestar.mapper.FriendRequestMapper;
 
 import lombok.Setter;
-import lombok.extern.log4j.Log4j;
 
-@Log4j
 @Service
 public class FriendServiceImpl implements FriendService {
 	@Setter(onMethod_ = @Autowired)
@@ -42,13 +40,7 @@ public class FriendServiceImpl implements FriendService {
 	@Transactional
 	@Override
 	public boolean response(Map<String, Object> map) {
-		
-		  String hdnYN = (String) map.get("hdnYN");
-		  
-		  System.out.println(">>>>>>>>> FriendServiceImpl >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-		  System.out.println(">>>>>>>>> hdnYN : " + hdnYN);
-		  System.out.println(">>>>>>>>> map : " + map);
-		 
+		String hdnYN = (String) map.get("hdnYN");
 		
 		if ("Y".equals(hdnYN)) {
 			// 친구신청 테이블 기록 삭제
@@ -67,14 +59,16 @@ public class FriendServiceImpl implements FriendService {
 	// 친구신청
 	@Transactional
 	@Override
-	public void addFriend(FriendRequestVO request) {
-		requestMapper.insertRequest(request);
+	public void addFriend(Map<String, Object> map) {
+		String from_user = (String) map.get("from_user");
+		String email = (String) map.get("email");
+		
+		requestMapper.insertRequest(map);
 	}
 
-	//친구 삭제
+	// 친구 삭제
 	@Override
 	public void removeFriend(FriendVO friend) {
 		mapper.deleteFriend(friend);
 	}
-	
 }
