@@ -12,10 +12,10 @@
 		                    <img src="/resources/img/userPhoto.png" alt="#">
 		                </li>
 				        <li id="nickname">
-							<input name="nickname" value='<c:out value="${login.nickname}"/>'readonly>
+							<input name="nickname" value='<c:out value="${profile.nickname}"/>' readonly>
 						</li>
 						<li id="user_info">
-							<input name="user_info" value='<c:out value="${login.user_info}"/>'readonly>
+							<input name="user_info" value='<c:out value="${profile.user_info}"/>' readonly>
 						</li>
 						<li id="modi_icon">
 							<span class="iconify" data-icon="entypo:pencil"></span>
@@ -26,32 +26,73 @@
 		                <li id="new_star">
 		                    <button>새별쓰기</button>
 		                </li>
-		                <li id="friend_request">
-		                    <button>친구 요청하기</button>
-		                </li>
+						<li id="friend_request">
+							<form role="form" id="profileForm" action="/friend/addFriend" method="post">
+								<input type="hidden" name="from_user" value="<c:out value="${login.email}"/>">
+								<input type="hidden" name="email" value="<c:out value="${profile.email}"/>">
+								<button type="submit">친구 요청하기</button>
+							</form>
+						</li>
 		            </ul>
 		        </div>
-		        
-		        <c:forEach items="${list}" var="board">
-                     <ul id="board_list">
-						<li class='uploadResult'>
-							<!-- 첨부 이미지 정보 불러옴 ----------------->
-							<c:out value="${board.thumbnail.fileName}"/>
-							<c:out value="${board.thumbnail.uuid}"/>
-							<c:out value="${board.thumbnail.uploadPath}"/>
-							<!-- 첨부 이미지 정보 불러옴 ----------------->
-						</li>
-                     	<li>
-                     		<a class="move" href='/board/get?bno=<c:out value="${board.bno}"/>'>
-                     			<c:out value="${board.title}"/>
-                     		</a>
-                     	</li>
-                     	<li><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate}"/></li>
-                     	<li><c:out value="${board.email}"/></li>
-                     </ul>
-                </c:forEach>
-        
-	
+		       
+				<!-- 게시글 표시 ------------------------------------->
+			 	<div id="board_con">
+			 		<ul id="board_list">
+						<c:forEach items="${list}" var="board">
+							<a class="move" href='/board/get?bno=<c:out value="${board.bno}"/>'>
+								<li class="list_img">
+									<img src="/display?fileName=<c:out value="${board.thumbnail.uploadPath}"/>/<c:out value="${board.thumbnail.uuid}"/>_<c:out value="${board.thumbnail.fileName}"/>">
+			                  		<c:if test="${board.post_type eq '1'}">
+			                  			<h3 id="unlock"><span class="iconify" data-icon="bx:bxs-lock-open"></span></h3>
+			                  		</c:if>
+			                  		<c:if test="${board.post_type eq '2'}">
+			                  			<h3 id="lock"><span class="iconify" data-icon="bx:bxs-lock"></span></h3>
+			                  		</c:if>
+			                  		<c:if test="${board.post_type eq '3'}">
+			                  			<h3 id="lock"><span class="iconify" data-icon="bx:bxs-lock"></span></h3>
+			                  		</c:if>
+			                  		<h1><c:out value="${board.title}"/></h1>
+			                  		<h2><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate}"/></h2>
+			                  		<p><c:out value="${board.userVO.nickname}"/></p>
+			                  	</li>
+			                </a>
+			             </c:forEach>
+					 </ul>
+					 
+					 <!-- Paging -->
+	                <div class="paging">
+	                	<ul class="paging_bar">
+	                	
+	                		<c:if test="${pageMaker.prev}">
+	                			<li class="paginate_button previous">
+	                			<a href="${pageMaker.startPage -1 }"><span class="iconify" data-icon="bi:arrow-left-square"></span></a>
+	                			</li>
+	                		</c:if>
+	                		
+	                		<c:forEach var="num" begin="${pageMaker.startPage }"
+	                		end="${pageMaker.endPage }">
+	                			<li class="paginate_button ${pageMaker.cri.pageNum == num ?"active":""} ">
+	                			<a href="${num}">${num}</a>
+	                			</li>
+	                		</c:forEach>	
+	                		
+	                		<c:if test="${pageMaker.next }">
+	                			<li class="paginate_button next">
+	                			<a href="${pageMaker.endPage +1 }"><span class="iconify" data-icon="bi:arrow-right-square"></span></a>
+	                			</li>
+	                		</c:if>		
+	                	</ul>
+	                </div>
+	                <form id='actionForm' action="/board/list" method="get">
+	                	<input type="hidden" id="email" name="email" value='<c:out value="${pageMaker.cri.email}"/>'>
+	                	<input type='hidden' name='pageNum' value='${pageMaker.cri.pageNum}'>
+	                	<input type='hidden' name='amount' value='${pageMaker.cri.amount}'>
+	                </form>
+					<!-- Paging -->
+					
+				</div>
+				<!-- 게시글 표시 ------------------------------------->
 	
 	<script>
 	$(document).ready(function(){
@@ -85,9 +126,36 @@
              console.log("컴펌 아이콘 클릭");
         });
         ////////////////////////////////////////////////
-        
-
-      
+      //페이지번호 클릭하면 이동
+		var actionForm = $("#actionForm");
+		
+		$(".paginate_button a").on("click", function(e){
+			e.preventDefault();
+			actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+			actionForm.submit();
+		});
+		
+		/* 프로필 사진 출력 ************************************************************************/
+	   (function(){	                            		   
+			var email = '<c:out value="${login.email}"/>';	                            		   
+			$.getJSON("/user/getAttachList", {email: email}, function(arr){	                            		     
+			   var str = "";	                            		       
+			   $(arr).each(function(i, attach){	                            		       
+				 //image type
+				 if(attach.bno == null){
+				   var fileCallPath =  encodeURIComponent( attach.uploadPath+ "/"+attach.uuid +"_"+attach.fileName);
+				   str += "<img src='/display?fileName="+fileCallPath+"'>";
+				 }
+			   });
+			   if(str.length == 0) {
+				   str += "<img src='/resources/img/userPhoto.png'>";
+				   $("#user_photo").html(str);
+			   }else {
+				   $("#user_photo").html(str);
+			   }
+			 });
+		  })(); 
+		/* 프로필 사진 출력 */
 	});
 	</script>
 

@@ -53,7 +53,7 @@
                    	<input type="hidden" name="type" value='<c:out value="${cri.type}"/>'>
                    	<input type="hidden" name="keyword" value='<c:out value="${cri.keyword}"/>'> --%>
                    	<input type="hidden" name="bno" value='<c:out value="${board.bno}"/>'>
-                   	
+                   	<%-- <input type="hidden" id="email" name="email" value='<c:out value="${board.email}"/>'> --%>
 		            		
 		            <div id="board">
 		                <ul id="main">
@@ -86,7 +86,6 @@
 		                    <li id="board_btn">
 		                        <button type="submit" data-oper="modify">수정하기</button>
 		                        <button type="submit" data-oper="remove">삭제하기</button>
-		                        <button type="submit" data-oper="list">목록보기</button>
 		                    </li>
 		                </ul>
 		            </div>
@@ -178,7 +177,7 @@
             		    	//이미지이면 썸네일을 보여준다.
             		    	    if(attach.fileType){
             		    	      var fileCallPath =  encodeURIComponent( attach.uploadPath+"/"+attach.uuid +"_"+attach.fileName);
-            		    	      str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.image+"'><div>";
+            		    	      str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"'><div>";
             		    	      str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='cancle_btn'>x</button>";
             		    	      str += "<img src='/display?fileName="+fileCallPath+"'>";
             		    	      str += "</div>";
@@ -187,7 +186,7 @@
             		    	      var fileCallPath =  encodeURIComponent( attach.uploadPath+"/"+ attach.uuid +"_"+attach.fileName);            
             		    	      var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
             		    	          
-            		    	      str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.image+"'><div>";
+            		    	      str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"'><div>";
             		    	      str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='cancle_btn'>x</button>";
             		    	      str += "<img src='/resources/img/attach.png'></a>";
             		    	      str += "</div>";

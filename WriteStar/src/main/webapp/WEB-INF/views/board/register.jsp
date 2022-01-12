@@ -53,7 +53,7 @@
 		                        <input type="text" name="title" id="" placeholder="새로운 별 자리 제목을 입력하세요." >
 		                    </li>
 		                    <li id="email_hidden">
-		                        <input type="text" name="email" id="" placeholder='<c:out value="${login.email}"/>' >
+		                        <input type="text" name="email" id="" value='<c:out value="${login.email}"/>' readonly>
 		                    </li>
 		                    <li id="con_text">
 		                        <textarea name="content" id="" cols="30" rows="8" placeholder="내 별 자리에 대한 내용을 입력해 주세요."></textarea>

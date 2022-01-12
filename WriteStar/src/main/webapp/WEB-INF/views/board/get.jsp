@@ -16,7 +16,7 @@
 		.bigPictureWrapper {position: absolute; display: none; justify-content: center; align-items: center;
 								top:0%; width:100%; height:100%; background-color: gray; z-index: 100;}				
 		.bigPicture {position: relative; display:flex; justify-content: center; align-items: center;}
-		.bigPicture img {width:600px;}
+		.bigPicture img {}
 		
 	</style>
 		
@@ -27,10 +27,10 @@
 		                    <img src="/resources/img/userPhoto.png" alt="#">
 		                </li>
 				        <li id="nickname">
-							<input name="nickname" value='<c:out value="${login.nickname}"/>'readonly>
+							<input name="nickname" value='<c:out value="${board.userVO.nickname}"/>'readonly>
 						</li>
 						<li id="user_info">
-							<input name="user_info" value='<c:out value="${login.user_info}"/>'readonly>
+							<input name="user_info" value='<c:out value="${board.userVO.user_info}"/>'readonly>
 						</li>
 						<li id="modi_icon">
 							<span class="iconify" data-icon="entypo:pencil"></span>
@@ -50,7 +50,7 @@
 				<ul id="main">
 					<li id="article_title_get"><input name="title" value='<c:out value="${board.title}"/>'readonly></li>
 					<li id="article_date"><input name="redDate" value='<fmt:formatDate pattern="yyyy/MM/dd" value="${board.regdate}"/>' readonly></li>
-					<li id="article_nickname">By <input name="email" value='<c:out value="${board.email}"/>' readonly></li>
+					<li id="article_nickname">By <input name="email" value='<c:out value="${board.userVO.nickname}"/>' readonly></li>
 					<li id="article_img">
 						<div class='uploadResult'>
 							<ul>
@@ -68,8 +68,8 @@
 						<textarea rows="5" name="content" readonly><c:out value="${board.content}"/></textarea>
 					</li>
 					<li id="board_btn">
-						<button type="submit" data-oper="modify">수정하기</button>
-						<button type="submit" data-oper="list">목록보기</button>
+						<button id="modification" type="submit" data-oper="modify">수정하기</button>
+						<button id="showList" type="submit" data-oper="list">목록보기</button>
 					</li>
 				</ul>
 				<!-- 댓글목록 ------------------------------------------------------------------------------------------------->
@@ -86,6 +86,7 @@
 			</div>
 		<form id="operForm" action="/board/modify" method="get">
 					   <input type="hidden" id="bno" name="bno" value='<c:out value="${board.bno}"/>'>
+					   <input type="hidden" id="email" name="email" value='<c:out value="${board.email}"/>'>
 					   <%--<<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>'>
 					   input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>'>
 					   <input type="hidden" name="type" value='<c:out value="${cri.type}"/>'>
@@ -116,6 +117,17 @@
 		                          $("#modi_icon").show();
 		                          console.log("컴펌 아이콘 클릭");
 		                     });
+		                     ////////////////////////////////////////////////
+		                     
+		                     //로그인 유저에 따른 '새별쓰기','친구요청하기' 버튼 보여주기////////
+		                     if ("${login.email }" == "${board.email}"){
+		                    	 $("#friend_request").hide(); // 본인이 로그인 되어 있으니 '친구요청' 숨기기
+		                     } else {
+		                    	 $("#modi_icon").hide(); // 본인이 로그인 안되어 있으니 유저 정보 변경 버튼 숨김
+		                    	 $("#confirm_icon").hide(); // 본인이 로그인 안되어 있으니 유저 정보 변경 버튼 숨김
+		                    	 $("#new_star").hide(); // 본인이 로그인 안되어 있으니 새별쓰기 버튼 숨김
+		                    	 //$("#modification").hide(); // 본인이 로그인 안되어 있으니 수정하기 버튼 숨김
+		                     }
 		                     ////////////////////////////////////////////////
 							
 							$("#new_star").on("click",function(){
@@ -163,7 +175,7 @@
 										str+="<div class='reply_list_date'>"+replyService.displayTime(list[i].replyDate)+"</div>";
 										str+="</div></li>";
 									}
-									console.log(str);
+									
 									replyUL.html(str); //replyUL(#chatter)에 li태그 추가
 									
 								 	showReplyPage(replyCnt);
@@ -181,7 +193,7 @@
 							
 							//댓글추가 버튼을 누르면 모갈 창 내 close, registration 버튼을 제외한 다른 버튼 숨긴 후 모달창 보여주기.
 							$("#addReplyBtn").on("click", function(e){
-								modal.find("input").val(""); //input box내 내용 삭제 
+								modal.find("input[name='content']").val(""); //content input box내 내용 삭제 
 								modal.find("button[id !='modalCloseBtn']").hide();                            	        
 								modalRegisterBtn.show();                            	        
 								modal.show();                            	        
@@ -197,7 +209,7 @@
 							  var reply = {content: modalInputReply.val(), email:modalInputReplyer.val(), bno:bnoValue};
 							  replyService.add(reply, function(result){
 								alert(result); //댓글 등록 성공 확인 창 띄움 
-							  	modal.find("input").val(""); //input box내 내용 삭제 
+								modal.find("input[name='content']").val(""); //content input box내 내용 삭제 
 							  	modal.hide(); //Modal 창 숨김 
 							  	showList(-1);//등록후 마지막페이지로 이동
 							  	//showList(1);//테스트 후 삭제 
@@ -254,17 +266,17 @@
 							   var next = false;
 								  
 							   if(endNum * 10 >= replyCnt){
-								 endNum = Math.ceil(replyCnt/5.0);
+								  endNum = Math.ceil(replyCnt/5.0);
 							   }
 								  
 							   if(endNum * 10 < replyCnt){
 								 next = true;
 							   } 
 							       
-							   var str = "<ul class='pagination pull-right'>";
+							   var str = "<ul class='paging_bar'>";
 								  
 								 if(prev){
-								   str+= "<li class='page-item'><a class='page-link' href='"+(startNum -1)+"'>Previous</a></li>";
+								   str+= "<li class='page-item'><a class='page-link' href='"+(startNum -1)+"'><span class='iconify' data-icon='bi:arrow-left-square'></span></a></li>";
 								 }
 								  
 								 for(var i = startNum ; i <= endNum; i++){	                            	       
@@ -274,12 +286,12 @@
 								 }
 								  
 								 if(next){
-								   str+= "<li class='page-item'><a class='page-link' href='"+(endNum + 1)+"'>Next</a></li>";
+								   str+= "<li class='page-item'><a class='page-link' href='"+(endNum + 1)+"'><span class='iconify' data-icon='bi:arrow-right-square'></span></a></li>";
 								 }
 								  
 								 str += "</ul></div>";	                            	      
 								 
-								 console.log(str);
+								 
 								 replyPageFooter.html(str);
 							   } 
 							   
@@ -343,7 +355,7 @@
 										$(".bigPictureWrapper").hide();
 									});		
 								   });
-							   
+							     
 						});
 					</script>
 	
@@ -352,8 +364,11 @@
 						   <div class="modal-main">
 								<div class="modal-body">
 									<div class="reply_nickname">
-										<label>By</label> 
-										<input name='email'>
+										<label>By</label>
+										<c:if test="${login.email ne ''}">
+			                  				<input type="text" name="modal_nickname" value="${login.nickname}">
+			                  				<input type="hidden" name="email" value="${login.email}">
+			                  			</c:if> 
 									</div>	
 									<div class="reply_content">
 										<input name="content" placeholder="댓글을 입력해 주세요.">

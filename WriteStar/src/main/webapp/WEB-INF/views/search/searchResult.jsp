@@ -4,69 +4,58 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>  
  
 <%@ include file="../includes/header.jsp" %> 
- 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-<link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square-round.css" rel="stylesheet">
-<link rel="stylesheet" href="list.css">
-<title>목록리스트</title>
-</head>
-<body>
-	<div id="wrap">
-		<div id="content" class="clear">
-			<aside>
-				<div id="nickname" >
-	            	<img src="image/User.png" alt="">
-	            	<h4>혼별혼별</h4>
-	            	<div id="user_info">
-	              		<p>새벽에 잘 깨서 새벽에 별보기 좋아하는....<br>
-	                		혼자 별보기 좋아하는............</p>
-	              	</div>
-	          		<div id="edit"><i class="fas fa-edit"></i></div>
-					<div id="button">
-		          		<div>
-		            		<button class="new_star">새 별 쓰기</button>
-		          		</div>
-		          		<div>
-		            		<button class="friend_request">친구요청하기</button>
-		          		</div>
-					</div>
-				</div>
-			</aside>
-			
-	        <h1>검색결과</h1>
-		    <c:forEach items="${searchList}" var="searchList" begin="0" end="3">
-				<ul id="gallery01">
-					<li>
-						<div class="border">
-		           		</div>
-			            <div id="picter_01">
-							<p class="title">
-				              	<a class="move" href='/board/get?bno=<c:out value="${searchList.bno}"/>'>
-				              		<c:out value="${searchList.title}" />
-				              	</a>
-							</p>
-			              	<p class="date"><fmt:formatDate pattern="yyyy-MM-dd" value="${searchList.regdate}"/></p>
-			              	<p class='post_type'><c:out value="${searchList.post_type}"/></p>
-			              	<p class="nickname"><c:out value="${searchList.userVO.nickname}"/></p>
-		            	</div>
-		              	<span class="font01"><i class="fas fa-lock-open"></i></span>
-		          	</li>
-			</c:forEach>
-		</div>
+	
+	<!-- 검색 페이지 상단 검색창 ------------------------------->
+	<div id="search_wrapper">
+		<form id='searchForm' action="/search/searchResult" method='get'>
+	    	<input id="search_result_page" type="text" name="keyword" placeholder="검색어를 입력하세요.">
+	    	<button type="submit" id="search_icon_result"><span>Search</span></button>
+	    </form>
+	    
+	    <!-- 추천 검색어 표시 ------------------------------->
+	    <div id="recommand_title"><p>추천 검색어</p></div>
+		<div id="recommand">
+			<ul id="recommand_list">
+				<li>강원도 별 여행</li>
+				<li>연인끼리 별 보기 좋은 곳</li>
+				<li>아이들과 함께 별 볼 수 있는 여행지</li>
+				<li>새해에 해돋이와 함께 별을 볼 수 있는 곳</li>
+			</ul>
+	    </div>
+	    <!-- 추천 검색어 표시 ------------------------------->
+	    
+    </div>
+    <!-- 검색 페이지 상단 검색창 ------------------------------->
+    
+    
+	<!-- 컨텐츠 부분 - 검색결과 표시 ------------------------------->
+	<div id="search_title"><p>Search Result</p></div>
+	<div id="search_wrap">
+ 		<ul id="search_list">
+			<c:forEach items="${searchList}" var="searchList">
+				<a class="move" href='/board/get?bno=<c:out value="${searchList.bno}"/>'>
+					<li class="search_img">
+						<img src="/display?fileName=<c:out value="${searchList.thumbnail.uploadPath}"/>/<c:out value="${searchList.thumbnail.uuid}"/>_<c:out value="${searchList.thumbnail.fileName}"/>"><br>
+                  		<h1><c:out value="${searchList.userVO.nickname}"/></h1>
+                  		<h2>조회 : <c:out value="${searchList.hits}"/></h2>
+                  		<p><c:out value="${searchList.content}"/></p>
+                  	</li>
+                </a>
+             </c:forEach>
+		 </ul>
 	</div>
-
-	<script>
-		$(".title").on("click",function(){
-			self.location="/board/get";
+	<!-- 컨텐츠 부분 - 검색결과 표시 ------------------------------->
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			
+			//검색 action ///////////////////////////////////
+                  var searchForm = $("#searchForm");
+   			var keyword = $('#searchForm').find("input[name='keyword']").val();
+   			console.log("alert");
+			////////////////////////////////////////////////
+		
 		});
 	</script>
-</body>
-</html>
         
  <%@include file="../includes/footer.jsp" %>   

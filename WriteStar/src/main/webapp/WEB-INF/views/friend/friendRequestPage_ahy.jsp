@@ -2,56 +2,35 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>   
-<link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square-round.css" rel="stylesheet">
-
- <%@ include file="../includes/header.jsp" %> 
+ 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>친구목록</title>
 <style>
-    .divider01 {margin:10px 0px; border:1px solid #ccc; width:100%; }
-    .divider02 {margin:10px 0px; border:1px solid #ccc; width:100%; }
-    td { line-height: 70px; text-align: center; margin:0 auto; font-size:15px; font-family: "NanumSquareRound"; font-style: normal;} 
- 	h1 { font-weight: bolder; font-family: "NanumSquareRound"; font-style: normal; font-size:20px; margin-top:20px;}	
- 	th {  font-weight: bolder; font-family: "NanumSquareRound"; font-style: normal;}
-	img {width: 50px;  border-radius: 50%; }
-    .approve {width:60px; height:30px;  background-color:#58798C; color: #fff; border-radius:25px; border:none; display:inline-block; cursor:pointer;
-              font-size:15px;}
-	.refuse {width:60px; height:30px; font-size:15px; background-color:#8F8F8F; color:#fff; border-radius:25px; border:none; display:inline-block; cursor:pointer; }
-	.delete {width:60px; height:30px; font-size:15px; background-color:#2a2e33; color: #fff; border-radius:50px; border:none; cursor:pointer;display:inline-block;
-	          margin:13px;} 
-	.approve:hover { background-color:#1B3E50; color:#fff; }
-	.refuse:hover { background-color:#808080; color:#fff; }
-	#wrap {width:100%;} 
-	#form tr:nth-child(even) {background-color:#F2F2F2;}
-    #form2 tr:nth-child(even) {background-color:#F2F2F2;} 
-    #form tr td {padding:20px; }
-    #form2 tr td {padding:20px; }
-    #form {margin-top:20px;}
-    #innerwrap {margin-bottom:50px;}
+	td { text-align: center; }
+	#approve { width: 100px; border: 1px solid blue; color: blue; }
+	#refuse { width: 100px; border: 1px solid red; color: red; }
+	#approve:hover { background-color: blue; color: white; }
+	#refuse:hover { background-color: red; color: white; }
 </style>
 </head>
 <body>
-	<div id="wrap">
-	<div id="innerwrap">
+	<div>
 		<h1>친구 요청 목록</h1>
-		 <hr class="divider01">
 		<form role="form" id="form" action="/friend/response" method="post">
 			<table width="100%">
 			    <thead>
 			        <tr>
-			            <th>프로필사진</th>
-			            <th>이메일</th>
-			            <th>닉네임</th>
-			            <th>자기소개글</th>
-			            
+			            <th>email</th>
+			            <th>nickname</th>
+			            <th>user_info</th>
+			            <th>button</th>
 			        </tr>
 			    </thead>
 			    <c:forEach items="${list}" var="friend">
 			    <tr>
-			        <td><img src="/resources/img/userPhoto.png" alt="#"></td>
 			    	<td><c:out value="${friend.email}"/></td>
 			    	<td><c:out value="${friend.nickname}"/></td>
 			    	<td><c:out value="${friend.user_info}"/></td>
@@ -67,22 +46,21 @@
 			</table>
 		</form>
 	</div>
+	<hr>
 	<div>
 		<h1>친구 목록</h1>
-		<hr class="divider02">
 		<form role="form" id="form2" action="/friend/removeFriend" method="post">
 			<table width="100%">
 			    <thead>
 			        <tr>
-			            <th>프로필사진</th>
-			            <th>이메일</th>
-			            <th>닉네임</th>
-			            <th>자기소개글</th>
+			            <th>email</th>
+			            <th>nickname</th>
+			            <th>user_info</th>
+			            <th>button</th>
 			        </tr>
 			    </thead>
 			    <c:forEach items="${friendList}" var="frList">
 				    <tr>
-				        <td><img src="/resources/img/userPhoto.png" alt="#"></td>
 				    	<td><c:out value="${frList.email}"/></td>
 				    	<td><c:out value="${frList.nickname}"/></td>
 				    	<td><c:out value="${frList.user_info}"/></td>
@@ -96,8 +74,7 @@
 			</table>
 		</form>
 	</div>
-
-	</div>
+	
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<script>
 		let appBtn = document.querySelector("#approve");
@@ -215,5 +192,3 @@
 	</script>
 </body>
 </html>
-
-<%@include file="../includes/footer.jsp" %> 

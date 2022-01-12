@@ -19,8 +19,8 @@
 	        <nav class="main_box">
 	            <ul id="gnb">
 	                <li><a href="/">Home</a></li>
-	                <li><a href="/board/list">My star</a></li>
-	                <li><a href="/friend/friendListPage">Other Planet</a></li>
+	                <li><a href="/board/list?email=${login.email}">My star</a></li>
+	                <li><a href="/friend/friendRequestPage?to_user=${login.email}">Other Planet</a></li>
 	                <li><a href="/board/starmap">Star Map</a></li>
 	                <li>
 	                  <form id='searchForm' action="/search/searchResult" method='get'>
@@ -36,8 +36,10 @@
 	                </div>
 	           </ul>
 	        </nav>
-	        <div id="logo">
-	        <div><img src="/resources/img/logo.png" alt="logo"></div>
+	        <div id="logo_wrap">
+		        <div id="logo">
+		        <div><img src="/resources/img/logo.png" alt="logo"></div>
+		        </div>
 	        </div>
 	        
 	        <script type="text/javascript">
@@ -56,11 +58,17 @@
                     	$("#login").hide();
                     	$("#logout").show();
                     }
-                    });
-                    ////////////////////////////////////////////////
-                    
+					////////////////////////////////////////////////
+                 	
+					//검색 action ///////////////////////////////////
                     var searchForm = $("#searchForm");
 	    			var keyword = $('#searchForm').find("input[name='keyword']").val();
 	    			console.log("alert");
+					////////////////////////////////////////////////
+				
+				});
+                    
+                    
+                    
                     
 		    </script>

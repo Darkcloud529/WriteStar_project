@@ -24,12 +24,20 @@
 		        <tr>
 		            <th>title</th>
 		            <th>nickname</th>
+		            <th>hits</th>
 		        </tr>
 		    </thead>
-		    <c:forEach items="${topList}" var="top">
+		    <c:forEach items="${topList}" var="top" begin="0" end="4">
 			    <tr>
 			    	<td><c:out value="${top.title}"/></td>
-			    	<td><c:out value="${top.userVO.nickname}"/></td>
+			    	<td>
+			    		<a class="move" href='/board/list?email=<c:out value="${top.email}"/>'>
+			    			<c:out value="${top.userVO.nickname}"/>
+			    		</a>
+			    	</td>
+			    	<td>
+			    		<c:out value="${top.hits}" />
+			    	</td>
 			    </tr>
 			</c:forEach>
 		</table>
