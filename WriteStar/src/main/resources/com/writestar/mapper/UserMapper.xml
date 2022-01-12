@@ -11,11 +11,10 @@
   	<result property="user_info" column="user_info"/>
   </resultMap>
   
-  
   	<!-- 회원 가입 처리 sql문 -->
   	<insert id="register">
-  		insert into tbl_user (email, password, nickname)
-  		values (#{email}, #{password}, #{nickname})
+  		insert into tbl_user (email, password, nickname, user_info)
+  		values (#{email}, #{password}, #{nickname}, #{user_info})
   	</insert>
   	
   	<!-- 이메일 중복 확인 sql문 -->
@@ -34,4 +33,28 @@
   	<select id="login" resultMap="userVOResultMap">
   		select * from tbl_user where email = #{email}
   	</select>
-  </mapper>
+  	
+  	<!-- 회원 프로필 조회 -->
+	<select id="selectUserInfo" resultType="com.writestar.domain.UserVO">
+		select email,
+			   nickname,
+			   user_info
+		from tbl_user
+	   where email = #{email}
+	</select>
+	
+  	<!-- 회원 정보 수정 sql문 -->
+  	<update id="userUpdate">
+  		update tbl_user set
+  		nickname = #{nickname},
+  		user_info = #{user_info}
+  		where email = #{email}
+  	</update>
+  	
+  	<!-- 비밀번호 변경 sql문 -->
+  	<update id="pwUpdate">
+  		update tbl_user set
+  			   password = #{password}
+  		 where email = #{email}  	
+  	</update>
+</mapper>

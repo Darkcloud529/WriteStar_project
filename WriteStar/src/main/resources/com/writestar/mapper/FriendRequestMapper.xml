@@ -11,12 +11,12 @@
 	</resultMap>
 	
 	<resultMap type="com.writestar.domain.FriendRequestVO" id="friendRequestVo">
-		<result column="fno" property="fno"/>
 		<result column="from_user" property="from_user"/>
 		<result column="to_user" property="to_user"/>
 		<collection property="userVO" resultMap="userInfo" />
 	</resultMap>
 	
+	<!-- 친구요청 목록 조회 -->
 	<select id="selectRequest" resultMap="userInfo">
 		select A.email as email, A.nickname as nickname, A.user_info as user_info
 		  from tbl_user A,
@@ -26,6 +26,7 @@
 		 where B.from_user = A.email
 	</select>
 
+	<!-- 친구요청 거절 -->
 	<delete id="deleteRequest">
 		delete
 		  from tbl_fr_request
@@ -33,13 +34,8 @@
 		   and to_user = #{to_user}
 	</delete>
 	
+	<!-- 친구신청 -->
 	<insert id="insertRequest">
-		insert
-		into tbl_fr_request (fno,
-							 from_user,
-							 to_user)
-		values (seq_request.nextval,
-				#{from_user},
-				#{to_user})
+		insert into tbl_fr_request (from_user, to_user) values (#{from_user}, #{email})
 	</insert>
 </mapper>

@@ -63,7 +63,14 @@
 		]]>
 	</select>
 	
-	<update id="updateReplyCnt">
-		update tbl_board set replycnt = replycnt + #{amount} where bno = #{bno}
-	</update>
+	<delete id="deleteAllReply">
+		delete
+		  from tbl_reply
+		 where bno = #{bno}
+	</delete>
+	
+	<!-- 게시물 삭제 시 댓글도 삭제 sql문 -->
+	<delete id="deleteAll">
+		delete tbl_reply where bno = #{bno}
+	</delete>
 </mapper>

@@ -7,7 +7,7 @@
  	<!-- 첨부 파일 등록 sql문 -->
  	<insert id="insert">
 		insert into tbl_attach_file (uuid, filetype, uploadpath, filename, bno, email)
-		values (#{uuid}, #{fileType}, #{uploadPath}, #{fileName}, #{bno}, #{email} )
+		values (#{uuid}, #{fileType}, #{uploadPath}, #{fileName}, #{bno, jdbcType=VARCHAR}, #{email} )
 	</insert>
 	
 	<!-- 첨부 파일 삭제 sql문 -->
@@ -20,13 +20,22 @@
 		select * from tbl_attach_file where bno = #{bno}
 	</select>
 	
+	<!-- 특정 이메일로 프로필 찾는 sql문 -->
+	<select id="findByEmail" resultType="com.writestar.domain.BoardAttachVO">
+		select * from tbl_attach_file where email = #{email}
+	</select>
+	
 	<!-- 게시물 삭제 시 첨부 파일도 삭제 sql문 -->
 	<delete id="deleteAll">
-		delete tbl_attach_file where bno = #{bno}
+		delete from tbl_attach_file where bno = #{bno}
 	</delete>
 	
 	<!-- 어제 날짜를 기준으로 첨부 파일 검색 sql문 -->
 	<select id="getOldFiles" resultType="com.writestar.domain.BoardAttachVO">
 		select * from tbl_attach_file where uploadpath = to_char(sysdate -1, 'yyyy\mm\dd')
 	</select>
+	
+	<delete id="deleteProfile">
+		delete from tbl_attach_file where bno is null and email = #{email}
+	</delete>
 </mapper>
