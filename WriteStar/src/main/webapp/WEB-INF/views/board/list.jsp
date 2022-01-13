@@ -23,9 +23,12 @@
 		                <li id="confirm_icon">
 							<span class="iconify" data-icon="line-md:confirm-circle"></span>
 						</li>
-		                <li id="new_star">
-		                    <button>새별쓰기</button>
-		                </li>
+						<c:if test="${login.email eq profile.email }">
+							 <li id="new_star">
+		                    	<button>새별쓰기</button>
+		                	</li>
+						</c:if>
+						<c:if test="${login.email ne profile.email }">
 						<li id="friend_request">
 							<form role="form" id="profileForm" action="/friend/addFriend" method="post">
 								<input type="hidden" name="from_user" value="<c:out value="${login.email}"/>">
@@ -33,6 +36,7 @@
 								<button type="submit">친구 요청하기</button>
 							</form>
 						</li>
+						</c:if>
 		            </ul>
 		        </div>
 		       
@@ -41,7 +45,7 @@
 			 		<ul id="board_list">
 						<c:forEach items="${list}" var="board">
 							<a class="move" href='/board/get?bno=<c:out value="${board.bno}"/>'>
-								<li class="list_img">
+								<li class="list_img" data-type='<c:out value="${board.post_type}"/>'>
 									<img src="/display?fileName=<c:out value="${board.thumbnail.uploadPath}"/>/<c:out value="${board.thumbnail.uuid}"/>_<c:out value="${board.thumbnail.fileName}"/>">
 			                  		<c:if test="${board.post_type eq '1'}">
 			                  			<h3 id="unlock"><span class="iconify" data-icon="bx:bxs-lock-open"></span></h3>
@@ -96,6 +100,38 @@
 	
 	<script>
 	$(document).ready(function(){
+		/* 친구 여부 확인 *********************************************************/
+		var friendArr = [];
+		<c:forEach items="${friendList}" var="friend">
+		 	friendArr.push("${friend.email}");
+		</c:forEach>
+		
+		var friendResult = friendArr.includes("${login.email}");
+		
+		var friendFlag = 0;
+		if ( friendResult == true) {
+			//console.log("친구입니다.");
+			friendFlag = 1;
+		} 
+ 		/* 친구 여부 확인 */
+		
+ 		$(".move").on("click", function(e){
+			// 공개여부
+ 			var postType = $(this).find('.list_img').attr('data-type');
+ 			// 비공개글
+			if(postType == 3) {
+ 				e.preventDefault();
+ 				alert("비공개 글입니다.");
+ 				return;
+ 			} else if(postType == 2) { //친구공개글
+ 				if(friendFlag == 0) { // 친구여부확인
+ 					e.preventDefault();
+ 					alert("친구 공개 글입니다.");
+ 	 				return;
+ 				}
+ 			}
+ 		});
+ 		
 		$("#new_star").on("click",function(){
 			self.location="/board/register";
 		});
