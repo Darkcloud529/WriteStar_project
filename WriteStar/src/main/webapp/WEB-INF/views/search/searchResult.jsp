@@ -34,8 +34,13 @@
  		<ul id="search_list">
 			<c:forEach items="${searchList}" var="searchList">
 				<a class="move" href='/board/get?bno=<c:out value="${searchList.bno}"/>'>
-					<li class="search_img">
-						<img src="/display?fileName=<c:out value="${searchList.thumbnail.uploadPath}"/>/<c:out value="${searchList.thumbnail.uuid}"/>_<c:out value="${searchList.thumbnail.fileName}"/>"><br>
+					<li class="search_img"
+					data-path='<c:out value="${searchList.thumbnail.uploadPath}"/>'
+					data-uuid='<c:out value="${searchList.thumbnail.uuid}"/>'
+					data-filename='<c:out value="${searchList.thumbnail.fileName}"/>'
+					>
+						<!-- <img src="/display?fileName=<c:out value="${searchList.thumbnail.uploadPath}"/>/<c:out value="${searchList.thumbnail.uuid}"/>_<c:out value="${searchList.thumbnail.fileName}"/>"><br>
+                  		-->
                   		<h1><c:out value="${searchList.userVO.nickname}"/></h1>
                   		<h2>조회 : <c:out value="${searchList.hits}"/></h2>
                   		<p><c:out value="${searchList.content}"/></p>
@@ -49,6 +54,17 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			
+			$('.move').find('li').each(function(i,e){
+					var str = "";
+					var path = $(this).attr("data-path");
+					var uuid = $(this).attr("data-uuid");
+					var fileName = $(this).attr("data-filename");
+					
+					var fileCallPath =  encodeURIComponent(path+ "/"+uuid +"_"+fileName);
+					console.log(fileCallPath);
+					str += "<img src='/display?fileName="+fileCallPath+"'><br>";
+					$(this).prepend(str);
+				 });
 			//검색 action ///////////////////////////////////
                   var searchForm = $("#searchForm");
    			var keyword = $('#searchForm').find("input[name='keyword']").val();

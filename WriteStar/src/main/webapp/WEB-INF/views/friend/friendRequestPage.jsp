@@ -51,10 +51,10 @@
 			    </thead>
 			    <c:forEach items="${list}" var="friend">
 			    <tr>
-			        <td><img src="/resources/img/userPhoto.png" alt="#"></td>
-			    	<td><c:out value="${friend.email}"/></td>
-			    	<td><c:out value="${friend.nickname}"/></td>
-			    	<td><c:out value="${friend.user_info}"/></td>
+			        <td><a href="/board/list?email=<c:out value="${friend.email}"/>"><img src="/resources/img/userPhoto.png" alt="#"></a></td>
+			    	<td><a href="/board/list?email=<c:out value="${friend.email}"/>"><c:out value="${friend.email}"/></a></td>
+			    	<td><a href="/board/list?email=<c:out value="${friend.email}"/>"><c:out value="${friend.nickname}"/></a></td>
+			    	<td><a href="/board/list?email=<c:out value="${friend.email}"/>"><c:out value="${friend.user_info}"/></a></td>
 			    	<td>
 			    		<input  type="hidden" class="fromUser" name="from_user" value="<c:out value="${friend.email}"/>">
 			    		<input  type="hidden" class="toUser"   name="to_user"   value="<c:out value="${login.email}"/>">
@@ -82,10 +82,10 @@
 			    </thead>
 			    <c:forEach items="${friendList}" var="frList">
 				    <tr>
-				        <td><img src="/resources/img/userPhoto.png" alt="#"></td>
-				    	<td><c:out value="${frList.email}"/></td>
-				    	<td><c:out value="${frList.nickname}"/></td>
-				    	<td><c:out value="${frList.user_info}"/></td>
+				        <td><a href="/board/list?email=<c:out value="${frList.email}"/>"><img src="/resources/img/userPhoto.png" alt="#"></a></td>
+				    	<td><a href="/board/list?email=<c:out value="${frList.email}"/>"><c:out value="${frList.email}"/></a></td>
+				    	<td><a href="/board/list?email=<c:out value="${frList.email}"/>"><c:out value="${frList.nickname}"/></a></td>
+				    	<td><a href="/board/list?email=<c:out value="${frList.email}"/>"><c:out value="${frList.user_info}"/></a></td>
 				    	<td>
 				    		<input type="hidden"  class="friendEmail" name="friend_email" value="<c:out value="${frList.email}"/>">
 				    		<input type="hidden"  class="userEmail"   name="user_email"   value="<c:out value="${login.email}"/>">

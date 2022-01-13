@@ -8,8 +8,8 @@
  	<div id="slider">
  		<ul id="slide">
 			<c:forEach items="${topList}" var="top" begin="0" end="4">
-				<li class="slide_img">
-					<img src="\display?fileName=<c:out value="${top.thumbnail.uploadPath}"/>\<c:out value="${top.thumbnail.uuid}"/>_<c:out value="${top.thumbnail.fileName}"/>">
+				<li class="slide_img" data-path='<c:out value="${top.thumbnail.uploadPath}"/>' data-uuid='<c:out value="${top.thumbnail.uuid}"/>' data-filename='<c:out value="${top.thumbnail.fileName}"/>'>
+					<!-- <img src="\display?fileName=<c:out value="${top.thumbnail.uploadPath}"/>\<c:out value="${top.thumbnail.uuid}"/>_<c:out value="${top.thumbnail.fileName}"/>">  -->
                   	<h1><a class="move" href='/board/get?bno=<c:out value="${top.bno}"/>'><c:out value="${top.title}"/></a></h1>
                   	<h2><fmt:formatDate pattern="yyyy-MM-dd" value="${top.regdate}"/></h2>
                   	<p><a class="move" href='/board/list?email=<c:out value="${top.email}"/>'><c:out value="${top.userVO.nickname}"/></p>
@@ -39,8 +39,9 @@
  		<ul id="content">
 			<c:forEach items="${otherList}" var="other" begin="0" end="5">
 				<a class="move" href='/board/get?bno=<c:out value="${other.bno}"/>'>
-					<li class="content_img">
-						<img src="\display?fileName=<c:out value="${other.thumbnail.uploadPath}"/>\<c:out value="${other.thumbnail.uuid}"/>_<c:out value="${other.thumbnail.fileName}"/>"><br>
+					<li class="content_img" data-path='<c:out value="${other.thumbnail.uploadPath}"/>' data-uuid='<c:out value="${other.thumbnail.uuid}"/>' data-filename='<c:out value="${other.thumbnail.fileName}"/>'>
+						<!--  <img src="\display?fileName=<c:out value="${other.thumbnail.uploadPath}"/>\<c:out value="${other.thumbnail.uuid}"/>_<c:out value="${other.thumbnail.fileName}"/>"><br>
+                  		-->
                   		<h1><c:out value="${other.userVO.nickname}"/></h1>
                   		<h2>조회 : <c:out value="${other.hits}"/></h2>
                   		<p><c:out value="${other.content}"/></p>
@@ -53,6 +54,30 @@
 	
 	<script>
 		$(function(){
+			$('#content').find('li').each(function(i,e){
+				var str = "";
+				var path = $(this).attr("data-path");
+				var uuid = $(this).attr("data-uuid");
+				var fileName = $(this).attr("data-filename");
+				
+				var fileCallPath =  encodeURIComponent(path+ "/"+uuid +"_"+fileName);
+				console.log(fileCallPath);
+				str += "<img src='/display?fileName="+fileCallPath+"'><br>";
+				$(this).prepend(str);
+			 });
+			
+			$('#slide').find('li').each(function(i,e){
+				var str = "";
+				var path = $(this).attr("data-path");
+				var uuid = $(this).attr("data-uuid");
+				var fileName = $(this).attr("data-filename");
+				
+				var fileCallPath =  encodeURIComponent(path+ "/"+uuid +"_"+fileName);
+				console.log(fileCallPath);
+				str += "<img src='/display?fileName="+fileCallPath+"'><br>";
+				$(this).prepend(str);
+			 });
+			
 			var imgWidth = $('.slide_img').outerWidth();
 			$("button.next").on("click", playNext);
 			$("button.prev").on("click", playPrev);
@@ -84,7 +109,7 @@
 					var idx = $('.slide_img:first').children('img').attr("alt");
 					$('.dotList>li').eq(idx-1).addClass('on').siblings('li').removeClass("on");
 				});
-			}
+			} 
 		});
 	</script>
  <%@include file="../includes/footer.jsp" %>   

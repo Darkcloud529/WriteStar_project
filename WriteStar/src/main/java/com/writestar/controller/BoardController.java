@@ -22,7 +22,9 @@ import com.writestar.domain.BoardAttachVO;
 import com.writestar.domain.BoardVO;
 import com.writestar.domain.Criteria;
 import com.writestar.domain.PageDTO;
+import com.writestar.domain.loginDTO;
 import com.writestar.service.BoardService;
+import com.writestar.service.FriendService;
 import com.writestar.service.ReplyService;
 import com.writestar.service.UserService;
 
@@ -37,6 +39,7 @@ public class BoardController {
 	private BoardService service;
 	private UserService userService;
 	private ReplyService replyService;
+	private FriendService friendService;
 	
 	// 조회수 TOP 5 조회
 	@GetMapping("/main")
@@ -59,6 +62,13 @@ public class BoardController {
 
 		model.addAttribute("email", cri);		// 친구신청 후 list 화면 유지
 		
+		// 친구 목록 조회
+		String to_user = cri.getEmail();
+		model.addAttribute("friendList", friendService.selectFriendList(to_user));
+		
+		// 친구 요청 목록 조회
+		model.addAttribute("requestList", friendService.checkRequest(to_user));
+
 		int total = service.getTotal(cri);
 		model.addAttribute("pageMaker",new PageDTO(cri, total));
 	}

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.writestar.domain.Criteria;
 import com.writestar.domain.FriendRequestVO;
 import com.writestar.domain.FriendVO;
 import com.writestar.mapper.FriendMapper;
@@ -70,5 +71,11 @@ public class FriendServiceImpl implements FriendService {
 	@Override
 	public void removeFriend(FriendVO friend) {
 		mapper.deleteFriend(friend);
+	}
+
+	// 친구 요청 목록 조회
+	@Override
+	public List<FriendRequestVO> checkRequest(String to_user) {
+		return requestMapper.checkRequest(to_user);
 	}
 }

@@ -87,302 +87,294 @@
 		<form id="operForm" action="/board/modify" method="get">
 					   <input type="hidden" id="bno" name="bno" value='<c:out value="${board.bno}"/>'>
 					   <input type="hidden" id="email" name="email" value='<c:out value="${board.email}"/>'>
-					   <%--<<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>'>
-					   input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>'>
-					   <input type="hidden" name="type" value='<c:out value="${cri.type}"/>'>
-					   <input type="hidden" name="keyword" value='<c:out value="${cri.keyword}"/>'> --%>
-		</form>
-	
-												
-					<script type="text/javascript" src="/resources/js/reply.js"></script>
+		</form>							
+		<script type="text/javascript" src="/resources/js/reply.js"></script>
+		
+		<script type="text/javascript">
+			$(document).ready(function(){
+				
+				/* user info 수정 버튼 ****************************/
+                    $("#confirm_icon").hide();
+                    $("#modi_icon").on("click", function(){
+                         $("#user_info input").removeAttr("readonly");
+                         $("#nickname input").addClass("info_change");
+                         $("#user_info input").addClass("info_change");
+                         $("#confirm_icon").show();
+                         $("#modi_icon").hide();
+                    });
+                    $("#confirm_icon").on("click", function(){
+                         $("#user_info input").attr("readonly",true);
+                         $("#nickname input").removeClass("info_change");
+                         $("#user_info input").removeClass("info_change");
+                         $("#confirm_icon").hide();
+                         $("#modi_icon").show();
+                    });
+                    /* user info 수정 버튼 */
+                    
+                    /* 로그인 유저에 따른 '새별쓰기','친구요청하기' 버튼 보여주기 ****************************/
+                    if ("${login.email }" == "${board.email}"){
+                   	 $("#friend_request").hide(); // 본인이 로그인 되어 있으니 '친구요청' 숨기기
+                    } else {
+                   	 $("#modi_icon").hide(); // 본인이 로그인 안되어 있으니 유저 정보 변경 버튼 숨김
+                   	 $("#confirm_icon").hide(); // 본인이 로그인 안되어 있으니 유저 정보 변경 버튼 숨김
+                   	 $("#new_star").hide(); // 본인이 로그인 안되어 있으니 새별쓰기 버튼 숨김
+                   	 //$("#modification").hide(); // 본인이 로그인 안되어 있으니 수정하기 버튼 숨김
+                    }
+                    /* 로그인 유저에 따른 '새별쓰기','친구요청하기' 버튼 보여주기 */
+				
+				$("#new_star").on("click",function(){
+					self.location="/board/register";
+				});
+				var operForm=$("#operForm");
+				$("button[data-oper='modify']").on("click",function(e){
+					operForm.attr("action","/board/modify").submit();
+				});
+				$("button[data-oper='list']").on("click",function(e){
+					operForm.find("#bno").remove();
+					operForm.attr("action","/board/list");
+					operForm.submit();
+				});
+				
+				var bnoValue='<c:out value="${board.bno}"/>';
+				var replyUL=$("#chatter");//댓글목록이 출력되는 ul태그
+				
+				showList(1); 
+				
+				//댓글 목록을 get page에 표시하기 
+				function showList(page){
+					replyService.getList({bno:bnoValue,page:page||1},
+							function(replyCnt, list){ //reply.js 함수 호출
 					
-					<script type="text/javascript">
-						$(document).ready(function(){
-							
-							//user info 수정 버튼//////////////////////////////
-		                     $("#confirm_icon").hide();
-		                     $("#modi_icon").on("click", function(){
-		                          $("#user_info input").removeAttr("readonly");
-		                          $("#nickname input").addClass("info_change");
-		                          $("#user_info input").addClass("info_change");
-		                          $("#confirm_icon").show();
-		                          $("#modi_icon").hide();
-		                          console.log("변경 아이콘 클릭");
-		                     });
-		                     $("#confirm_icon").on("click", function(){
-		                          $("#user_info input").attr("readonly",true);
-		                          $("#nickname input").removeClass("info_change");
-		                          $("#user_info input").removeClass("info_change");
-		                          $("#confirm_icon").hide();
-		                          $("#modi_icon").show();
-		                          console.log("컴펌 아이콘 클릭");
-		                     });
-		                     ////////////////////////////////////////////////
-		                     
-		                     //로그인 유저에 따른 '새별쓰기','친구요청하기' 버튼 보여주기////////
-		                     if ("${login.email }" == "${board.email}"){
-		                    	 $("#friend_request").hide(); // 본인이 로그인 되어 있으니 '친구요청' 숨기기
-		                     } else {
-		                    	 $("#modi_icon").hide(); // 본인이 로그인 안되어 있으니 유저 정보 변경 버튼 숨김
-		                    	 $("#confirm_icon").hide(); // 본인이 로그인 안되어 있으니 유저 정보 변경 버튼 숨김
-		                    	 $("#new_star").hide(); // 본인이 로그인 안되어 있으니 새별쓰기 버튼 숨김
-		                    	 //$("#modification").hide(); // 본인이 로그인 안되어 있으니 수정하기 버튼 숨김
-		                     }
-		                     ////////////////////////////////////////////////
-							
-							$("#new_star").on("click",function(){
-								self.location="/board/register";
-							});
-							var operForm=$("#operForm");
-							$("button[data-oper='modify']").on("click",function(e){
-								operForm.attr("action","/board/modify").submit();
-							});
-							$("button[data-oper='list']").on("click",function(e){
-								operForm.find("#bno").remove();
-								operForm.attr("action","/board/list");
-								operForm.submit();
-							});
-							
-							var bnoValue='<c:out value="${board.bno}"/>';
-							var replyUL=$("#chatter");//댓글목록이 출력되는 ul태그
-							
-							showList(1); 
-							
-							//댓글 목록을 get page에 표시하기 
-							function showList(page){
-								replyService.getList({bno:bnoValue,page:page||1},
-										function(replyCnt, list){ //reply.js 함수 호출
-								
-									
-								if(page == -1) {
-									pageNum = Math.ceil(replyCnt/10.0);
-									showList(pageNum);
-									return;
-								}
-								
-								var str="";
-								
-								//댓글의 갯수(list)가 0개이면 replyUL(#chatter)에 추가 내용 없음.
-									if(list==null || list.length==0){
-										replyUL.html("");
-										return;
-									}
-								    //DB단 댓글 갯수에 맞추어 li tag 추가.
-									for(var i=0,len=list.length || 0; i<len; i++){
-										str+="<li class='reply_list' data-rno='"+list[i].rno+"'style='cursor:pointer'>";
-										str+="<div class='reply_list_con'>"+list[i].content+"</div>";
-										str+="<div class='reply_list_nick'>"+list[i].email+"</div>";
-										str+="<div class='reply_list_date'>"+replyService.displayTime(list[i].replyDate)+"</div>";
-										str+="</div></li>";
-									}
-									
-									replyUL.html(str); //replyUL(#chatter)에 li태그 추가
-									
-								 	showReplyPage(replyCnt);
-								});
-							};
-							
-							var modal = $(".modal");
-							var modalInputReply = modal.find("input[name='content']");
-							var modalInputReplyer = modal.find("input[name='email']");
-							var modalInputReplyDate = modal.find("input[name='replyDate']");
-							
-							var modalModBtn = $("#modalModBtn");
-							var modalRemoveBtn = $("#modalRemoveBtn");
-							var modalRegisterBtn = $("#modalRegisterBtn");
-							
-							//댓글추가 버튼을 누르면 모갈 창 내 close, registration 버튼을 제외한 다른 버튼 숨긴 후 모달창 보여주기.
-							$("#addReplyBtn").on("click", function(e){
-								modal.find("input[name='content']").val(""); //content input box내 내용 삭제 
-								modal.find("button[id !='modalCloseBtn']").hide();                            	        
-								modalRegisterBtn.show();                            	        
-								modal.show();                            	        
-							  }); 
-							
-							//close 버튼 누르면 모달창 닫기.
-							$("#modalCloseBtn").on("click", function(e){                            	    	
-								modal.hide();
-							}); 
-
-							//댓글 등록 버튼을 누르면, reply.js 내 add function 실행 
-						   modalRegisterBtn.on("click",function(e){                            	        
-							  var reply = {content: modalInputReply.val(), email:modalInputReplyer.val(), bno:bnoValue};
-							  replyService.add(reply, function(result){
-								alert(result); //댓글 등록 성공 확인 창 띄움 
-								modal.find("input[name='content']").val(""); //content input box내 내용 삭제 
-							  	modal.hide(); //Modal 창 숨김 
-							  	showList(-1);//등록후 마지막페이지로 이동
-							  	//showList(1);//테스트 후 삭제 
-							  });                            	        
-							}); 
 						
-							//댓글을 클릭했을 때 
-						  $("#chatter").on("click", "li", function(e){                            	          
-							  var rno = $(this).data("rno");                            	          
-							  replyService.get (rno, function(reply){                            	          
-								modalInputReply.val(reply.content);
-								modalInputReplyer.val(reply.email);
-								modalInputReplyDate.val(replyService.displayTime( reply.replyDate)).attr("readonly","readonly");
-								modal.data("rno", reply.rno);
-								modal.find("button[id !='modalCloseBtn']").hide();
-								modalModBtn.show();
-								modalRemoveBtn.show();
-								
-								modal.show(); 
-									
-							  });
-							}); 
-							  
-						  //댓글 수정 버튼을 누르면, reply.js 내 update function 실행	
-						  modalModBtn.on("click", function(e){
-							  var reply = {rno:modal.data("rno"), content: modalInputReply.val()};                            	      
-							  replyService.update (reply, function(result){
-								modal.hide();
-								showList(pageNum); 
-								//showList(1);//테스트 후 삭제 
-							  });                            	      
-							}); 
+					if(page == -1) {
+						pageNum = Math.ceil(replyCnt/10.0);
+						showList(pageNum);
+						return;
+					}
+					
+					var str="";
+					
+					//댓글의 갯수(list)가 0개이면 replyUL(#chatter)에 추가 내용 없음.
+						if(list==null || list.length==0){
+							replyUL.html("");
+							return;
+						}
+					    //DB단 댓글 갯수에 맞추어 li tag 추가.
+						for(var i=0,len=list.length || 0; i<len; i++){
+							str+="<li class='reply_list' data-rno='"+list[i].rno+"'style='cursor:pointer'>";
+							str+="<div class='reply_list_con'>"+list[i].content+"</div>";
+							str+="<div class='reply_list_nick'>"+list[i].email+"</div>";
+							str+="<div class='reply_list_date'>"+replyService.displayTime(list[i].replyDate)+"</div>";
+							str+="</div></li>";
+						}
+						
+						replyUL.html(str); //replyUL(#chatter)에 li태그 추가
+						
+					 	showReplyPage(replyCnt);
+					});
+				};
+				
+				var modal = $(".modal");
+				var modalInputReply = modal.find("input[name='content']");
+				var modalInputReplyer = modal.find("input[name='email']");
+				var modalInputReplyDate = modal.find("input[name='replyDate']");
+				
+				var modalModBtn = $("#modalModBtn");
+				var modalRemoveBtn = $("#modalRemoveBtn");
+				var modalRegisterBtn = $("#modalRegisterBtn");
+				
+				//댓글추가 버튼을 누르면 모갈 창 내 close, registration 버튼을 제외한 다른 버튼 숨긴 후 모달창 보여주기.
+				$("#addReplyBtn").on("click", function(e){
+					modal.find("input[name='content']").val(""); //content input box내 내용 삭제 
+					modal.find("button[id !='modalCloseBtn']").hide();                            	        
+					modalRegisterBtn.show();                            	        
+					modal.show();                            	        
+				  }); 
+				
+				//close 버튼 누르면 모달창 닫기.
+				$("#modalCloseBtn").on("click", function(e){                            	    	
+					modal.hide();
+				}); 
 
-						  //댓글 삭제 버튼을 누르면, reply.js 내 remove function 실행
-						  modalRemoveBtn.on("click", function (e){                            	    	  
-								var rno = modal.data("rno");                            	  	  
-								replyService.remove(rno, function(result){
-									modal.hide();
-									showList(pageNum);
-									//showList(1);//테스트 후 삭제 
-								});                            	  	  
-						  });  
+				//댓글 등록 버튼을 누르면, reply.js 내 add function 실행 
+			   modalRegisterBtn.on("click",function(e){                            	        
+				  var reply = {content: modalInputReply.val(), email:modalInputReplyer.val(), bno:bnoValue};
+				  replyService.add(reply, function(result){
+					alert(result); //댓글 등록 성공 확인 창 띄움 
+					modal.find("input[name='content']").val(""); //content input box내 내용 삭제 
+				  	modal.hide(); //Modal 창 숨김 
+				  	showList(-1);//등록후 마지막페이지로 이동
+				  	//showList(1);//테스트 후 삭제 
+				  });                            	        
+				}); 
+			
+				//댓글을 클릭했을 때 
+			  $("#chatter").on("click", "li", function(e){                            	          
+				  var rno = $(this).data("rno");                            	          
+				  replyService.get (rno, function(reply){                            	          
+					modalInputReply.val(reply.content);
+					modalInputReplyer.val(reply.email);
+					modalInputReplyDate.val(replyService.displayTime( reply.replyDate)).attr("readonly","readonly");
+					modal.data("rno", reply.rno);
+					modal.find("button[id !='modalCloseBtn']").hide();
+					modalModBtn.show();
+					modalRemoveBtn.show();
+					
+					modal.show(); 
+						
+				  });
+				}); 
+				  
+			  //댓글 수정 버튼을 누르면, reply.js 내 update function 실행	
+			  modalModBtn.on("click", function(e){
+				  var reply = {rno:modal.data("rno"), content: modalInputReply.val()};                            	      
+				  replyService.update (reply, function(result){
+					modal.hide();
+					showList(pageNum); 
+					//showList(1);//테스트 후 삭제 
+				  });                            	      
+				}); 
+
+			  //댓글 삭제 버튼을 누르면, reply.js 내 remove function 실행
+			  modalRemoveBtn.on("click", function (e){                            	    	  
+					var rno = modal.data("rno");                            	  	  
+					replyService.remove(rno, function(result){
+						modal.hide();
+						showList(pageNum);
+						//showList(1);//테스트 후 삭제 
+					});                            	  	  
+			  });  
+				   
+			  		//페이징 처리 
+				   var pageNum = 1;
+				   var replyPageFooter = $(".panel-footer");
+					
+				   function showReplyPage(replyCnt){
+					  
+				   var endNum = Math.ceil(pageNum / 5.0) * 10;  
+				   var startNum = endNum - 9; 
+					  
+				   var prev = startNum != 1;
+				   var next = false;
+					  
+				   if(endNum * 10 >= replyCnt){
+					  endNum = Math.ceil(replyCnt/5.0);
+				   }
+					  
+				   if(endNum * 10 < replyCnt){
+					 next = true;
+				   } 
+				       
+				   var str = "<ul class='paging_bar'>";
+					  
+					 if(prev){
+					   str+= "<li class='page-item'><a class='page-link' href='"+(startNum -1)+"'><span class='iconify' data-icon='bi:arrow-left-square'></span></a></li>";
+					 }
+					  
+					 for(var i = startNum ; i <= endNum; i++){	                            	       
+					   var active = pageNum == i? "active":"";
+					  
+					   str+= "<li class='page-item "+active+" '><a class='page-link' href='"+i+"'>"+i+"</a></li>";
+					 }
+					  
+					 if(next){
+					   str+= "<li class='page-item'><a class='page-link' href='"+(endNum + 1)+"'><span class='iconify' data-icon='bi:arrow-right-square'></span></a></li>";
+					 }
+					  
+					 str += "</ul></div>";	                            	      
+					 
+					 
+					 replyPageFooter.html(str);
+				   } 
+				   
+				   replyPageFooter.on("click","li a", function(e){
+					   e.preventDefault();	                            	       
+					   
+					   var targetPageNum = $(this).attr("href"); 
+					   
+					   pageNum = targetPageNum;
+					   
+					   showList(pageNum);
+				   });   
+				   
+				   /* 첨부파일 목록 ************************************************************************/
+				   (function(){	                            		   
+						var bno = '<c:out value="${board.bno}"/>';	                            		   
+						$.getJSON("/board/getAttachList", {bno: bno}, function(arr){	                            		     
+						   var str = "";	                            		       
+						   $(arr).each(function(i, attach){	                            		       
+							 //image type
+							 if(attach.fileType){
+							   var fileCallPath =  encodeURIComponent( attach.uploadPath+ "/"+attach.uuid +"_"+attach.fileName);
 							   
-						  		//페이징 처리 
-							   var pageNum = 1;
-							   var replyPageFooter = $(".panel-footer");
-								
-							   function showReplyPage(replyCnt){
-								  
-							   var endNum = Math.ceil(pageNum / 5.0) * 10;  
-							   var startNum = endNum - 9; 
-								  
-							   var prev = startNum != 1;
-							   var next = false;
-								  
-							   if(endNum * 10 >= replyCnt){
-								  endNum = Math.ceil(replyCnt/5.0);
-							   }
-								  
-							   if(endNum * 10 < replyCnt){
-								 next = true;
-							   } 
-							       
-							   var str = "<ul class='paging_bar'>";
-								  
-								 if(prev){
-								   str+= "<li class='page-item'><a class='page-link' href='"+(startNum -1)+"'><span class='iconify' data-icon='bi:arrow-left-square'></span></a></li>";
-								 }
-								  
-								 for(var i = startNum ; i <= endNum; i++){	                            	       
-								   var active = pageNum == i? "active":"";
-								  
-								   str+= "<li class='page-item "+active+" '><a class='page-link' href='"+i+"'>"+i+"</a></li>";
-								 }
-								  
-								 if(next){
-								   str+= "<li class='page-item'><a class='page-link' href='"+(endNum + 1)+"'><span class='iconify' data-icon='bi:arrow-right-square'></span></a></li>";
-								 }
-								  
-								 str += "</ul></div>";	                            	      
-								 
-								 
-								 replyPageFooter.html(str);
-							   } 
-							   
-							   replyPageFooter.on("click","li a", function(e){
-								   e.preventDefault();	                            	       
-								   
-								   var targetPageNum = $(this).attr("href"); 
-								   
-								   pageNum = targetPageNum;
-								   
-								   showList(pageNum);
-							   });   
-							   
-							   /* 첨부파일 목록 ************************************************************************/
-							   (function(){	                            		   
-									var bno = '<c:out value="${board.bno}"/>';	                            		   
-									$.getJSON("/board/getAttachList", {bno: bno}, function(arr){	                            		     
-									   var str = "";	                            		       
-									   $(arr).each(function(i, attach){	                            		       
-										 //image type
-										 if(attach.fileType){
-										   var fileCallPath =  encodeURIComponent( attach.uploadPath+ "/"+attach.uuid +"_"+attach.fileName);
-										   
-										   str += "<li style='cursor:pointer' data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"' ><div>";
-										   str += "<img src='/display?fileName="+fileCallPath+"'>";
-										   str += "</div>";
-										   str +"</li>";
-										 }else{	                            		             
-										   str += "<li style='cursor:pointer' data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"' ><div>";
-										   str += "<span> "+ attach.fileName+"</span><br/>";
-										   str += "<img src='/resources/img/attach.png'></a>";
-										   str += "</div>";
-										   str +"</li>";
-										 }
-									   });
-									   
-									   $(".uploadResult ul").html(str); 
-									 });
-								  })(); 
-								/* 첨부파일 목록 */
-							   
-								/* 썸네일을 클릭했을 때 full screen으로 띄우기 *****************************************************************/
-								   function showImage(fileCallPath){
-									   $(".bigPictureWrapper").css("display","flex").show();
-									   $(".bigPicture").html("<img src='/display?fileName="+fileCallPath+"'>").animate({width:'100%',height:'100%'},1000);
-								   } 
-								   /* 썸네일을 클릭했을 때 full screen으로 띄우기 */
-								   
-								   $(".uploadResult").on("click","li",function(e){
-									   var liObj=$(this);
-									   var path=encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
-									   if(liObj.data("type")){
-										   showImage(path.replace(new RegExp(/\\/g),"/"));
-									   }else{
-										   self.location="/download?fileName="+path;
-									   }
-								   });
-								   
-								   $(".bigPictureWrapper").on("click",function(e){
-									   $(".bigPicture").animate({width:'0%',height:'0%'},1000,function(){
-										$(".bigPictureWrapper").hide();
-									});		
-								   });
-							     
-						});
-					</script>
+							   str += "<li style='cursor:pointer' data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"' ><div>";
+							   str += "<img src='/display?fileName="+fileCallPath+"'>";
+							   str += "</div>";
+							   str +"</li>";
+							 }else{	                            		             
+							   str += "<li style='cursor:pointer' data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"' ><div>";
+							   str += "<span> "+ attach.fileName+"</span><br/>";
+							   str += "<img src='/resources/img/attach.png'></a>";
+							   str += "</div>";
+							   str +"</li>";
+							 }
+						   });
+						   
+						   $(".uploadResult ul").html(str); 
+						 });
+					  })(); 
+					/* 첨부파일 목록 */
+				   
+					/* 썸네일을 클릭했을 때 full screen으로 띄우기 *****************************************************************/
+					   function showImage(fileCallPath){
+						   $(".bigPictureWrapper").css("display","flex").show();
+						   $(".bigPicture").html("<img src='/display?fileName="+fileCallPath+"'>").animate({width:'100%',height:'100%'},1000);
+					   } 
+					   /* 썸네일을 클릭했을 때 full screen으로 띄우기 */
+					   
+					   $(".uploadResult").on("click","li",function(e){
+						   var liObj=$(this);
+						   var path=encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
+						   if(liObj.data("type")){
+							   showImage(path.replace(new RegExp(/\\/g),"/"));
+						   }else{
+							   self.location="/download?fileName="+path;
+						   }
+					   });
+					   
+					   $(".bigPictureWrapper").on("click",function(e){
+						   $(".bigPicture").animate({width:'0%',height:'0%'},1000,function(){
+							$(".bigPictureWrapper").hide();
+						});		
+					   });
+				     
+			});
+		</script>
 	
-					<!-- Modal -------------------------------------------------------------------------------->
-					<div class="modal">
-						   <div class="modal-main">
-								<div class="modal-body">
-									<div class="reply_nickname">
-										<label>By</label>
-										<c:if test="${login.email ne ''}">
-			                  				<input type="text" name="modal_nickname" value="${login.nickname}">
-			                  				<input type="hidden" name="email" value="${login.email}">
-			                  			</c:if> 
-									</div>	
-									<div class="reply_content">
-										<input name="content" placeholder="댓글을 입력해 주세요.">
-									</div>  		      
-								</div>
-								<div class="modal-footer">
-									<button id='modalModBtn' type="button">Modify</button>
-									<button id='modalRemoveBtn' type="button">Remove</button>
-									<button id='modalRegisterBtn' type="button">Register</button>
-									<button id='modalCloseBtn' type="button">Close</button>
-								  </div>          
-						   </div>					       
-					  </div> 
-					<!-- modal -->
+		<!-- Modal -------------------------------------------------------------------------------->
+		<div class="modal">
+			   <div class="modal-main">
+					<div class="modal-body">
+						<div class="reply_nickname">
+							<label>By</label>
+							<c:if test="${login.email ne ''}">
+                  				<input type="text" name="modal_nickname" value="${login.nickname}">
+                  				<input type="hidden" name="email" value="${login.email}">
+                  			</c:if> 
+						</div>	
+						<div class="reply_content">
+							<input name="content" placeholder="댓글을 입력해 주세요.">
+						</div>  		      
+					</div>
+					<div class="modal-footer">
+						<button id='modalModBtn' type="button">Modify</button>
+						<button id='modalRemoveBtn' type="button">Remove</button>
+						<button id='modalRegisterBtn' type="button">Register</button>
+						<button id='modalCloseBtn' type="button">Close</button>
+					  </div>          
+			   </div>					       
+		  </div> 
+		<!-- modal -->
             
             
         

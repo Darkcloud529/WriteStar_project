@@ -24,7 +24,7 @@
 			<tr>
 				<td>
 					<input type="submit" id="registration" value="수정하기" onclick="return registerPwCheck()">
-                    <button id="pwUpdateCancel" type="reset">취소</button>
+                    <button id="pwUpdateCancel">취소</button>
 				</td>
 			</tr>
 		</table>

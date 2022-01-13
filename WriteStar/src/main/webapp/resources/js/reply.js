@@ -23,10 +23,10 @@ var replyService=(function(){
 	function getList(param,callback,error){
 		var bno=param.bno; //부모글번호
 		var page= param.page || 1; //param.page 값이 있으면 page에 param.page저장. 없으면 1을 저장
-		$.getJSON("/replies/pages/" +bno+"/"+page+".json",
+		$.getJSON("/replies/pages/"+bno+"/"+page+".json",
 			function(data){
 				if(callback){
-				callback(data.replyCnt, data.list);
+					callback(data.replyCnt, data.list);
 				}
 			}
 		).fail(function(xhr,status,err){

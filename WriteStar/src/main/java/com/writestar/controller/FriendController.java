@@ -82,6 +82,4 @@ public class FriendController {
 		
 		return "/friend/friendRequestPage";
 	}
-	
-	
 }

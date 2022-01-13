@@ -3,8 +3,7 @@
  <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
  <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>  
  
- <%@ include file="../includes/header.jsp" %> 
- 
+ <%@ include file="../includes/header.jsp" %>
 
  				<div id="profile">
 		            <ul id="user">
@@ -23,12 +22,9 @@
 		                <li id="confirm_icon">
 							<span class="iconify" data-icon="line-md:confirm-circle"></span>
 						</li>
-						<c:if test="${login.email eq profile.email }">
-							 <li id="new_star">
-		                    	<button>새별쓰기</button>
-		                	</li>
-						</c:if>
-						<c:if test="${login.email ne profile.email }">
+		                <li id="new_star">
+		                    <button>새별쓰기</button>
+		                </li>
 						<li id="friend_request">
 							<form role="form" id="profileForm" action="/friend/addFriend" method="post">
 								<input type="hidden" name="from_user" value="<c:out value="${login.email}"/>">
@@ -36,17 +32,22 @@
 								<button type="submit">친구 요청하기</button>
 							</form>
 						</li>
-						</c:if>
 		            </ul>
 		        </div>
-		       
+				
 				<!-- 게시글 표시 ------------------------------------->
 			 	<div id="board_con">
 			 		<ul id="board_list">
 						<c:forEach items="${list}" var="board">
 							<a class="move" href='/board/get?bno=<c:out value="${board.bno}"/>'>
-								<li class="list_img" data-type='<c:out value="${board.post_type}"/>'>
-									<img src="/display?fileName=<c:out value="${board.thumbnail.uploadPath}"/>/<c:out value="${board.thumbnail.uuid}"/>_<c:out value="${board.thumbnail.fileName}"/>">
+								<li class="list_img" 
+								data-type='<c:out value="${board.post_type}"/>'
+								data-path='<c:out value="${board.thumbnail.uploadPath}"/>'
+								data-uuid='<c:out value="${board.thumbnail.uuid}"/>'
+								data-filename='<c:out value="${board.thumbnail.fileName}"/>'
+								>
+									<!-- <img src="/display?fileName=<c:out value="${board.thumbnail.uploadPath}"/>/<c:out value="${board.thumbnail.uuid}"/>_<c:out value="${board.thumbnail.fileName}"/>">
+			                  		-->
 			                  		<c:if test="${board.post_type eq '1'}">
 			                  			<h3 id="unlock"><span class="iconify" data-icon="bx:bxs-lock-open"></span></h3>
 			                  		</c:if>
@@ -108,30 +109,60 @@
 		
 		var friendResult = friendArr.includes("${login.email}");
 		
-		var friendFlag = 0;
-		if ( friendResult == true) {
-			//console.log("친구입니다.");
-			friendFlag = 1;
-		} 
+ 		if ( friendResult == true) {
+			$("#profileForm > button").hide();
+		} else {
+			$("#profileForm > button").show();
+		}
  		/* 친구 여부 확인 */
-		
+ 		
+ 		/* 친구 신청 여부 확인 *********************************************************/
+ 		var requestArr = [];
+ 	 	<c:forEach items="${requestList}" var="request">
+	 		requestArr.push("${request.to_user}");
+	 		requestArr.push("${request.from_user}");
+	 	</c:forEach>
+	 	
+	 	var requestResult = requestArr.includes("${login.email}");
+	 	
+ 	 	if (requestResult == true) {
+	 		// 요청이 있을 경우 친구요청 버튼 숨김
+ 	 		$("#profileForm > button").hide();
+	 	}
+ 		/* 친구 신청 여부 확인 */
+ 		
+ 		/* 본인 여부 확인 *********************************************************/
+ 		var profileUser = "<c:out value='${profile.email}'/>";
+		var postUser = [];
+ 		var loginUser = "<c:out value='${login.email}'/>";
+		<c:forEach items="${list}" var="board">
+			postUser.push("${board.email}");
+		</c:forEach>
+ 		
+		var identify = postUser.includes("${login.email}");
+ 		
+ 		if (profileUser === loginUser) {
+ 			$("#profileForm > button").hide();
+ 		}
+ 		/* 본인 여부 확인 */
+ 		
+ 		/* 게시글 공개 범위 설정 *********************************************************/
  		$(".move").on("click", function(e){
 			// 공개여부
  			var postType = $(this).find('.list_img').attr('data-type');
  			// 비공개글
-			if(postType == 3) {
+			if(postType == 3 && identify == false) {
  				e.preventDefault();
  				alert("비공개 글입니다.");
  				return;
- 			} else if(postType == 2) { //친구공개글
- 				if(friendFlag == 0) { // 친구여부확인
- 					e.preventDefault();
- 					alert("친구 공개 글입니다.");
- 	 				return;
- 				}
+ 			} else if(postType == 2 && friendResult == false && identify == false) { //친구공개글
+				e.preventDefault();
+				alert("친구 공개 글입니다.");
+ 				return;
  			}
  		});
- 		
+ 		/* 게시글 공개 범위 설정 */
+		
 		$("#new_star").on("click",function(){
 			self.location="/board/register";
 		});
@@ -143,7 +174,7 @@
             
 		});
 		
-		//user info 수정 버튼//////////////////////////////
+		/* user info 수정 버튼 *********************************************************/
         $("#confirm_icon").hide();
         $("#modi_icon").on("click", function(){
              $("#user_info input").removeAttr("readonly");
@@ -151,7 +182,6 @@
              $("#user_info input").addClass("info_change");
              $("#confirm_icon").show();
              $("#modi_icon").hide();
-             console.log("변경 아이콘 클릭");
         });
         $("#confirm_icon").on("click", function(){
              $("#user_info input").attr("readonly",true);
@@ -159,10 +189,10 @@
              $("#user_info input").removeClass("info_change");
              $("#confirm_icon").hide();
              $("#modi_icon").show();
-             console.log("컴펌 아이콘 클릭");
         });
-        ////////////////////////////////////////////////
-      //페이지번호 클릭하면 이동
+        /* user info 수정 버튼 */
+        
+        //페이지번호 클릭하면 이동
 		var actionForm = $("#actionForm");
 		
 		$(".paginate_button a").on("click", function(e){
@@ -171,7 +201,7 @@
 			actionForm.submit();
 		});
 		
-		/* 프로필 사진 출력 ************************************************************************/
+	   /* 프로필 사진 출력 ************************************************************************/
 	   (function(){	                            		   
 			var email = '<c:out value="${login.email}"/>';	                            		   
 			$.getJSON("/user/getAttachList", {email: email}, function(arr){	                            		     
@@ -192,6 +222,19 @@
 			 });
 		  })(); 
 		/* 프로필 사진 출력 */
+		
+	   $('.move').find('li').each(function(i,e){
+			var str = "";
+			var path = $(this).attr("data-path");
+			var uuid = $(this).attr("data-uuid");
+			var fileName = $(this).attr("data-filename");
+			
+			var fileCallPath =  encodeURIComponent(path+ "/"+uuid +"_"+fileName);
+			console.log(fileCallPath);
+			str += "<img src='/display?fileName="+fileCallPath+"'><br>";
+			$(this).prepend(str);
+		 });
+		
 	});
 	</script>
 

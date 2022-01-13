@@ -38,4 +38,13 @@
 	<insert id="insertRequest">
 		insert into tbl_fr_request (from_user, to_user) values (#{from_user}, #{email})
 	</insert>
+	
+	<!-- 친구요청 목록 조회 -->
+	<select id="checkRequest" resultType="com.writestar.domain.FriendRequestVO">
+		select from_user as from_user,
+		to_user as to_user
+		from tbl_fr_request
+		where from_user = #{to_user}
+		   or to_user = #{to_user}
+	</select>
 </mapper>
