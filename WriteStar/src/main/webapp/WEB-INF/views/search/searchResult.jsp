@@ -33,7 +33,7 @@
 	<div id="search_wrap">
  		<ul id="search_list">
 			<c:forEach items="${searchList}" var="searchList">
-				<a class="move" href='/board/get?bno=<c:out value="${searchList.bno}"/>'>
+				<a class="move" href='/board/get?bno=<c:out value="${searchList.bno}"/>&email=<c:out value="${searchList.email}"/>'>
 					<li class="search_img"
 					data-path='<c:out value="${searchList.thumbnail.uploadPath}"/>'
 					data-uuid='<c:out value="${searchList.thumbnail.uuid}"/>'
@@ -53,18 +53,18 @@
 	
 	<script type="text/javascript">
 		$(document).ready(function(){
-			
 			$('.move').find('li').each(function(i,e){
-					var str = "";
-					var path = $(this).attr("data-path");
-					var uuid = $(this).attr("data-uuid");
-					var fileName = $(this).attr("data-filename");
-					
-					var fileCallPath =  encodeURIComponent(path+ "/"+uuid +"_"+fileName);
-					console.log(fileCallPath);
-					str += "<img src='/display?fileName="+fileCallPath+"'><br>";
-					$(this).prepend(str);
-				 });
+				var str = "";
+				var path = $(this).attr("data-path");
+				var uuid = $(this).attr("data-uuid");
+				var fileName = $(this).attr("data-filename");
+				
+				var fileCallPath =  encodeURIComponent(path+ "/"+uuid +"_"+fileName);
+				console.log(fileCallPath);
+				str += "<img src='/display?fileName="+fileCallPath+"'><br>";
+				$(this).prepend(str);
+			 });
+			
 			//검색 action ///////////////////////////////////
                   var searchForm = $("#searchForm");
    			var keyword = $('#searchForm').find("input[name='keyword']").val();

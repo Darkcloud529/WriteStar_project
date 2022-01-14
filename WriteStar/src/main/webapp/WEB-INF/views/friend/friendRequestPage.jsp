@@ -5,56 +5,17 @@
 <link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square-round.css" rel="stylesheet">
 
  <%@ include file="../includes/header.jsp" %> 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>친구목록</title>
-<style>
-    .divider01 {margin:10px 0px; border:1px solid #ccc; width:100%; }
-    .divider02 {margin:10px 0px; border:1px solid #ccc; width:100%; }
-    td { line-height: 70px; text-align: center; margin:0 auto; font-size:15px; font-family: "NanumSquareRound"; font-style: normal;} 
- 	h1 { font-weight: bolder; font-family: "NanumSquareRound"; font-style: normal; font-size:20px; margin-top:20px;}	
- 	th {  font-weight: bolder; font-family: "NanumSquareRound"; font-style: normal;}
-	img {width: 50px;  border-radius: 50%; }
-    .approve {width:60px; height:30px;  background-color:#58798C; color: #fff; border-radius:25px; border:none; display:inline-block; cursor:pointer;
-              font-size:15px;}
-	.refuse {width:60px; height:30px; font-size:15px; background-color:#8F8F8F; color:#fff; border-radius:25px; border:none; display:inline-block; cursor:pointer; }
-	.delete {width:60px; height:30px; font-size:15px; background-color:#2a2e33; color: #fff; border-radius:50px; border:none; cursor:pointer;display:inline-block;
-	          margin:13px;} 
-	.approve:hover { background-color:#1B3E50; color:#fff; }
-	.refuse:hover { background-color:#808080; color:#fff; }
-	#wrap {width:100%;} 
-	#form tr:nth-child(even) {background-color:#F2F2F2;}
-    #form2 tr:nth-child(even) {background-color:#F2F2F2;} 
-    #form tr td {padding:20px; }
-    #form2 tr td {padding:20px; }
-    #form {margin-top:20px;}
-    #innerwrap {margin-bottom:50px;}
-</style>
-</head>
-<body>
+
 	<div id="wrap">
 	<div id="innerwrap">
-		<h1>친구 요청 목록</h1>
-		 <hr class="divider01">
+		<h1 id="r_title">내 별을 초대한 행성 <span class="iconify" data-icon="noto-v1:shooting-star"></span></h1>
 		<form role="form" id="form" action="/friend/response" method="post">
-			<table width="100%">
-			    <thead>
-			        <tr>
-			            <th>프로필사진</th>
-			            <th>이메일</th>
-			            <th>닉네임</th>
-			            <th>자기소개글</th>
-			            
-			        </tr>
-			    </thead>
-			    <c:forEach items="${list}" var="friend">
-			    <tr>
-			        <td><a href="/board/list?email=<c:out value="${friend.email}"/>"><img src="/resources/img/userPhoto.png" alt="#"></a></td>
-			    	<td><a href="/board/list?email=<c:out value="${friend.email}"/>"><c:out value="${friend.email}"/></a></td>
-			    	<td><a href="/board/list?email=<c:out value="${friend.email}"/>"><c:out value="${friend.nickname}"/></a></td>
-			    	<td><a href="/board/list?email=<c:out value="${friend.email}"/>"><c:out value="${friend.user_info}"/></a></td>
+			<table id="r_table" width="100%">
+			    <c:forEach items="${list}" var="friend" varStatus="status">
+			    <tr class="table_item" id="friend_requested_list${status.count}">
+			        <td><a href="/board/list?email=<c:out value="${frList.email}"/>" class='path'><img src="/resources/img/userPhoto.png" alt="#"></a></td>	
+			    	<td class="r_nickname"><a href="/board/list?email=<c:out value="${friend.email}"/>"><c:out value="${friend.nickname}"/></a></td>
+			    	<td class="r_info"><a href="/board/list?email=<c:out value="${friend.email}"/>"><c:out value="${friend.user_info}"/></a></td>
 			    	<td>
 			    		<input  type="hidden" class="fromUser" name="from_user" value="<c:out value="${friend.email}"/>">
 			    		<input  type="hidden" class="toUser"   name="to_user"   value="<c:out value="${login.email}"/>">
@@ -68,24 +29,14 @@
 		</form>
 	</div>
 	<div>
-		<h1>친구 목록</h1>
-		<hr class="divider02">
+		<h1 id="f_title">내 행성에 떠있는 별들.. <span class="iconify" data-icon="noto-v1:shooting-star"></span></h1>
 		<form role="form" id="form2" action="/friend/removeFriend" method="post">
-			<table width="100%">
-			    <thead>
-			        <tr>
-			            <th>프로필사진</th>
-			            <th>이메일</th>
-			            <th>닉네임</th>
-			            <th>자기소개글</th>
-			        </tr>
-			    </thead>
-			    <c:forEach items="${friendList}" var="frList">
-				    <tr>
-				        <td><a href="/board/list?email=<c:out value="${frList.email}"/>"><img src="/resources/img/userPhoto.png" alt="#"></a></td>
-				    	<td><a href="/board/list?email=<c:out value="${frList.email}"/>"><c:out value="${frList.email}"/></a></td>
-				    	<td><a href="/board/list?email=<c:out value="${frList.email}"/>"><c:out value="${frList.nickname}"/></a></td>
-				    	<td><a href="/board/list?email=<c:out value="${frList.email}"/>"><c:out value="${frList.user_info}"/></a></td>
+			<table id="r_table" width="100%">
+			    <c:forEach items="${friendList}" var="frList" varStatus="status">
+				    <tr class="table_item2" id="friend_list${status.count}">
+				        <td><a href="/board/list?email=<c:out value="${frList.email}"/>" class='path'><img src="/resources/img/userPhoto.png" alt="#"></a></td>
+				    	<td class="r_nickname"><a href="/board/list?email=<c:out value="${frList.email}"/>"><c:out value="${frList.nickname}"/></a></td>
+				    	<td class="r_info"><a href="/board/list?email=<c:out value="${frList.email}"/>"><c:out value="${frList.user_info}"/></a></td>
 				    	<td>
 				    		<input type="hidden"  class="friendEmail" name="friend_email" value="<c:out value="${frList.email}"/>">
 				    		<input type="hidden"  class="userEmail"   name="user_email"   value="<c:out value="${login.email}"/>">
@@ -104,6 +55,58 @@
 	    let refBtn = document.querySelector("#refuse");
 	    
 	    $(document).ready(function(){
+	    	/* 초대 목록 프로필 사진 출력 **********************************/
+		 	var inviationList = [];
+			invitationList = $('.table_item>td>.fromUser');
+			invitationList.each(function(index, item){
+				var email = $(this).val();
+				console.log(email);
+					$.getJSON("/user/getAttachList", {email: email}, function(arr){	                            		     
+			 			  var str = "";	  
+			 			 console.log(email);
+			 			  $(arr).each(function(n, attach){	                            		       
+			 			 //image type
+			 			 console.log(attach);
+			 			 if(attach.bno == null){
+			 			   var fileCallPath =  encodeURIComponent( attach.uploadPath+ "/"+attach.uuid +"_"+attach.fileName);
+			 			   str += "<img src='/display?fileName="+fileCallPath+"'>";
+			 			 }
+			 		  });
+				 		if(str.length == 0) {
+					 		str += "<img src='/resources/img/userPhoto.png'>";
+					 		$('.table_item:eq('+index+')').find('.path').html(str);
+					 	} else {
+					 		$('.table_item:eq('+index+')').find('.path').html(str);
+					 	}
+			    	});
+			});
+	    	
+	    	/* 친구 목록 프로필 사진 출력 **********************************/
+		 	var myFiendList = [];
+			myFiendList = $('.table_item2>td>.friendEmail');
+			myFiendList.each(function(index, item){
+				var email = $(this).val();
+				console.log(email);
+					$.getJSON("/user/getAttachList", {email: email}, function(arr){	                            		     
+			 			  var str = "";	  
+			 			 console.log(email);
+			 			  $(arr).each(function(n, attach){	                            		       
+			 			 //image type
+			 			 console.log(attach);
+			 			 if(attach.bno == null){
+			 			   var fileCallPath =  encodeURIComponent( attach.uploadPath+ "/"+attach.uuid +"_"+attach.fileName);
+			 			   str += "<img src='/display?fileName="+fileCallPath+"'>";
+			 			 }
+			 		  });
+				 		if(str.length == 0) {
+					 		str += "<img src='/resources/img/userPhoto.png'>";
+					 		$('.table_item2:eq('+index+')').find('.path').html(str);
+					 	} else {
+					 		$('.table_item2:eq('+index+')').find('.path').html(str);
+					 	}
+			    	});
+			});
+			
 	    	// 수락버튼을 클릭했을 때
 	    	$(".approve").on("click",function(e){
 	    		var operation = $(this).data("oper");
@@ -211,9 +214,9 @@
 	    		}
 	    		
 	    	});
+	    	
 	    });
 	</script>
-</body>
-</html>
+
 
 <%@include file="../includes/footer.jsp" %> 

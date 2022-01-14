@@ -9,10 +9,9 @@
  		<ul id="slide">
 			<c:forEach items="${topList}" var="top" begin="0" end="4">
 				<li class="slide_img" data-path='<c:out value="${top.thumbnail.uploadPath}"/>' data-uuid='<c:out value="${top.thumbnail.uuid}"/>' data-filename='<c:out value="${top.thumbnail.fileName}"/>'>
-					<!-- <img src="\display?fileName=<c:out value="${top.thumbnail.uploadPath}"/>\<c:out value="${top.thumbnail.uuid}"/>_<c:out value="${top.thumbnail.fileName}"/>">  -->
-                  	<h1><a class="move" href='/board/get?bno=<c:out value="${top.bno}"/>'><c:out value="${top.title}"/></a></h1>
+                  	<h1><a class="move" href='/board/get?bno=<c:out value="${top.bno}"/>&email=<c:out value="${top.email}"/>'><c:out value="${top.title}"/></a></h1>
                   	<h2><fmt:formatDate pattern="yyyy-MM-dd" value="${top.regdate}"/></h2>
-                  	<p><a class="move" href='/board/list?email=<c:out value="${top.email}"/>'><c:out value="${top.userVO.nickname}"/></p>
+                  	<p><a class="move" href='/board/list?email=<c:out value="${top.email}"/>'><c:out value="${top.userVO.nickname}"/></a></p>
              	</li>
              </c:forEach>
 		 </ul>
@@ -33,15 +32,13 @@
 		<hr color="#E9E9E9">
 	</div>
 	<!-- 서비스 소개 부분 ------------------------------------------------------->
-	<!-- 컨텐츠 부분 - 최근 게시글 6번째 부터 11번째까지 표시 ------------------------------->
+	<!-- 컨텐츠 부분 - 공개된 최근 게시글 중 1번째 부터 5번째까지 표시 ------------------------------->
 	<div id="content_title"><p>Other Planet</p></div>
 	<div id="content_wrap">
  		<ul id="content">
 			<c:forEach items="${otherList}" var="other" begin="0" end="5">
-				<a class="move" href='/board/get?bno=<c:out value="${other.bno}"/>'>
+				<a class="move" href='/board/get?bno=<c:out value="${other.bno}"/>&email=<c:out value="${other.email}"/>'>
 					<li class="content_img" data-path='<c:out value="${other.thumbnail.uploadPath}"/>' data-uuid='<c:out value="${other.thumbnail.uuid}"/>' data-filename='<c:out value="${other.thumbnail.fileName}"/>'>
-						<!--  <img src="\display?fileName=<c:out value="${other.thumbnail.uploadPath}"/>\<c:out value="${other.thumbnail.uuid}"/>_<c:out value="${other.thumbnail.fileName}"/>"><br>
-                  		-->
                   		<h1><c:out value="${other.userVO.nickname}"/></h1>
                   		<h2>조회 : <c:out value="${other.hits}"/></h2>
                   		<p><c:out value="${other.content}"/></p>
@@ -50,7 +47,7 @@
              </c:forEach>
 		 </ul>
 	</div>
-	<!-- 컨텐츠 부분 - 최근 게시글 6번째 부터 11번째까지 표시 ------------------------------->
+	<!-- 컨텐츠 부분 - 공개된 최근 게시글 중 1번째 부터 5번째까지 표시 ------------------------------->
 	
 	<script>
 		$(function(){
@@ -109,7 +106,7 @@
 					var idx = $('.slide_img:first').children('img').attr("alt");
 					$('.dotList>li').eq(idx-1).addClass('on').siblings('li').removeClass("on");
 				});
-			} 
+			}
 		});
 	</script>
  <%@include file="../includes/footer.jsp" %>   

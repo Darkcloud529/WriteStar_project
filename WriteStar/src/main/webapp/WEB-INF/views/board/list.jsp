@@ -3,12 +3,13 @@
  <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
  <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>  
  
- <%@ include file="../includes/header.jsp" %>
+ <%@ include file="../includes/header.jsp" %> 
+ 
 
  				<div id="profile">
 		            <ul id="user">
 		                <li id="user_photo">
-		                    <img src="/resources/img/userPhoto.png" alt="#">
+		                    
 		                </li>
 				        <li id="nickname">
 							<input name="nickname" value='<c:out value="${profile.nickname}"/>' readonly>
@@ -18,9 +19,6 @@
 						</li>
 						<li id="modi_icon">
 							<span class="iconify" data-icon="entypo:pencil"></span>
-						</li>
-		                <li id="confirm_icon">
-							<span class="iconify" data-icon="line-md:confirm-circle"></span>
 						</li>
 		                <li id="new_star">
 		                    <button>새별쓰기</button>
@@ -34,12 +32,12 @@
 						</li>
 		            </ul>
 		        </div>
-				
+		       
 				<!-- 게시글 표시 ------------------------------------->
 			 	<div id="board_con">
 			 		<ul id="board_list">
 						<c:forEach items="${list}" var="board">
-							<a class="move" href='/board/get?bno=<c:out value="${board.bno}"/>'>
+							<a class="move" href='/board/get?bno=<c:out value="${board.bno}"/>&email=<c:out value="${board.email}"/>'>
 								<li class="list_img" 
 								data-type='<c:out value="${board.post_type}"/>'
 								data-path='<c:out value="${board.thumbnail.uploadPath}"/>'
@@ -52,7 +50,7 @@
 			                  			<h3 id="unlock"><span class="iconify" data-icon="bx:bxs-lock-open"></span></h3>
 			                  		</c:if>
 			                  		<c:if test="${board.post_type eq '2'}">
-			                  			<h3 id="lock"><span class="iconify" data-icon="bx:bxs-lock"></span></h3>
+			                  			<h3 id="lock"><span class="iconify" data-icon="la:user-friends"></span></h3>
 			                  		</c:if>
 			                  		<c:if test="${board.post_type eq '3'}">
 			                  			<h3 id="lock"><span class="iconify" data-icon="bx:bxs-lock"></span></h3>
@@ -162,11 +160,11 @@
  			}
  		});
  		/* 게시글 공개 범위 설정 */
-		
+ 		
 		$("#new_star").on("click",function(){
 			self.location="/board/register";
 		});
-		$(".friend_request").on("click",function(){
+		$("#friend_request").on("click",function(){
 			self.location="";
 		});
 		
@@ -174,25 +172,25 @@
             
 		});
 		
-		/* user info 수정 버튼 *********************************************************/
-        $("#confirm_icon").hide();
+		//user 로그인에 따른 버튼 보여주고 숨기기 //////////////////////////////
+		(function(){
+			var l_user = "${login.email}";
+			var b_user = "${profile.email}";
+			if(l_user == b_user){
+				$("#modi_icon").show();
+				$("#friend_request").hide();
+			} else {
+				$("#modi_icon").hide();
+				$("#new_star").hide();
+			}
+		})(); 
+		
         $("#modi_icon").on("click", function(){
-             $("#user_info input").removeAttr("readonly");
-             $("#nickname input").addClass("info_change");
-             $("#user_info input").addClass("info_change");
-             $("#confirm_icon").show();
-             $("#modi_icon").hide();
+        	self.location="/user/userUpdateView";
         });
-        $("#confirm_icon").on("click", function(){
-             $("#user_info input").attr("readonly",true);
-             $("#nickname input").removeClass("info_change");
-             $("#user_info input").removeClass("info_change");
-             $("#confirm_icon").hide();
-             $("#modi_icon").show();
-        });
-        /* user info 수정 버튼 */
+        /////////////////////////////////////////////////////////////
         
-        //페이지번호 클릭하면 이동
+      //페이지번호 클릭하면 이동
 		var actionForm = $("#actionForm");
 		
 		$(".paginate_button a").on("click", function(e){
@@ -201,9 +199,9 @@
 			actionForm.submit();
 		});
 		
-	   /* 프로필 사진 출력 ************************************************************************/
+		/* 프로필 사진 출력 ************************************************************************/
 	   (function(){	                            		   
-			var email = '<c:out value="${login.email}"/>';	                            		   
+			var email = "${profile.email}"                          		   
 			$.getJSON("/user/getAttachList", {email: email}, function(arr){	                            		     
 			   var str = "";	                            		       
 			   $(arr).each(function(i, attach){	                            		       
@@ -234,7 +232,6 @@
 			str += "<img src='/display?fileName="+fileCallPath+"'><br>";
 			$(this).prepend(str);
 		 });
-		
 	});
 	</script>
 

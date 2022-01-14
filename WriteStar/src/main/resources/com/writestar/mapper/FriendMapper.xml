@@ -10,6 +10,7 @@
 		<result column="user_info" property="user_info"/>
 	</resultMap>
 	
+	
 	<resultMap type="com.writestar.domain.FriendVO" id="friendVo">
 		<result column="user_email" property="user_email"/>
 		<result column="friend_email" property="friend_email"/>

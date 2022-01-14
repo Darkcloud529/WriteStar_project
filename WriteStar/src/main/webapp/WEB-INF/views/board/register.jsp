@@ -22,7 +22,7 @@
 		        <div id="profile">
 		            <ul id="user">
 		                <li id="user_photo">
-		                    <img src="/resources/img/userPhoto.png" alt="#">
+		                    
 		                </li>
 				        <li id="nickname">
 							<input name="nickname" value='<c:out value="${login.nickname}"/>'readonly>
@@ -32,9 +32,6 @@
 						</li>
 						<li id="modi_icon">
 							<span class="iconify" data-icon="entypo:pencil"></span>
-						</li>
-		                <li id="confirm_icon">
-							<span class="iconify" data-icon="line-md:confirm-circle"></span>
 						</li>
 		                <li id="new_star">
 		                    <button>새별쓰기</button>
@@ -87,25 +84,9 @@
 			<script>
             	 $(document).ready(function(){   
             		 
-            		 //user info 수정 버튼//////////////////////////////
-                     $("#confirm_icon").hide();
-                     $("#modi_icon").on("click", function(){
-                          $("#user_info input").removeAttr("readonly");
-                          $("#nickname input").addClass("info_change");
-                          $("#user_info input").addClass("info_change");
-                          $("#confirm_icon").show();
-                          $("#modi_icon").hide();
-                          console.log("변경 아이콘 클릭");
+            		 $("#modi_icon").on("click", function(){
+                     	self.location="/user/userUpdateView";
                      });
-                     $("#confirm_icon").on("click", function(){
-                          $("#user_info input").attr("readonly",true);
-                          $("#nickname input").removeClass("info_change");
-                          $("#user_info input").removeClass("info_change");
-                          $("#confirm_icon").hide();
-                          $("#modi_icon").show();
-                          console.log("컴펌 아이콘 클릭");
-                     });
-                     ////////////////////////////////////////////////
       
              		var formObj = $("form[role='form']");            		  
              	    $("button[type='submit']").on("click", function(e){            		    
@@ -220,6 +201,28 @@
             			         }
             			    });
             		});
+            			
+            		/* 프로필 사진 출력 ************************************************************************/
+           		   (function(){	                            		   
+           				var email = "${login.email}";	                            		   
+           				$.getJSON("/user/getAttachList", {email: email}, function(arr){	                            		     
+           				   var str = "";	                            		       
+           				   $(arr).each(function(i, attach){	                            		       
+           					 //image type
+           					 if(attach.bno == null){
+           					   var fileCallPath =  encodeURIComponent( attach.uploadPath+ "/"+attach.uuid +"_"+attach.fileName);
+           					   str += "<img src='/display?fileName="+fileCallPath+"'>";
+           					 }
+           				   });
+           				   if(str.length == 0) {
+           					   str += "<img src='/resources/img/userPhoto.png'>";
+           					   $("#user_photo").html(str);
+           				   }else {
+           					   $("#user_photo").html(str);
+           				   }
+           				 });
+           			  })(); 
+           			/* 프로필 사진 출력 */
             		
             	});
           

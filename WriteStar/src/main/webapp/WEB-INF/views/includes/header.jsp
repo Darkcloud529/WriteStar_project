@@ -16,50 +16,62 @@
 </head>
 <body>
 	<div id="wrapper">
-        <nav class="main_box">
-            <ul id="gnb">
-                <li><a href="/">Home</a></li>
-                <li><a href="/board/list?email=${login.email}">My star</a></li>
-                <li><a href="/friend/friendRequestPage?to_user=${login.email}">Other Planet</a></li>
-                <li><a href="/board/starmap">Star Map</a></li>
-                <li>
-                  <form id='searchForm' action="/search/searchResult" method='get'>
-                  	<input id="search" type="text" name="keyword" placeholder="검색어를 입력하세요.">
-                  	<button type="submit" id="search_icon"><span class="iconify" data-icon="bx:bx-search-alt"></span></button>
-                  	
-                  </form>
-                </li>
-                <div id="gnb_right">
-                    <li id="join"><a href="/user/userRegister">Join <span class="iconify" data-icon="noto-v1:shooting-star"></span></a></li>
-                    <li id="login"><a href="/user/login">Log In >>>> <span class="iconify" data-icon="noto-v1:shooting-star"></span></a></li>
-                    <li id="logout"><a href="/user/logout">Log Out <<<< <span class="iconify" data-icon="noto-v1:shooting-star"></span></a></li>
-                </div>
-           </ul>
-        </nav>
-        <div id="logo_wrap">
-	        <div id="logo">
-	        <div><img src="/resources/img/logo.png" alt="logo"></div>
+	        <nav class="main_box">
+	            <ul id="gnb">
+	                <li><a href="/">Home</a></li>
+	                <li><a href="/board/list?email=${login.email}">My star</a></li>
+	                <li><a href="/friend/friendRequestPage?to_user=${login.email}">Other Planet</a></li>
+	                <li>
+	                  <form id='searchForm' action="/search/searchResult" method='get'>
+	                  	<input id="search" type="text" name="keyword" placeholder="검색어를 입력하세요.">
+	                  	<button type="submit" id="search_icon"><span class="iconify" data-icon="bx:bx-search-alt"></span></button>
+	                  	
+	                  </form>
+	                </li>
+	                <div id="gnb_right">
+	                	<li id="user_update"><a href="/user/userUpdateView">${login.nickname} 님의 <span class="iconify" data-icon="noto-v1:shooting-star"></span></a></li>
+	                    <li id="join"><a href="/user/userRegister">Join <span class="iconify" data-icon="noto-v1:shooting-star"></span></a></li>
+	                    <li id="login"><a href="/user/login">Log In >>>> <span class="iconify" data-icon="noto-v1:shooting-star"></span></a></li>
+	                    <li id="logout"><a href="/user/logout">Log Out <<<< <span class="iconify" data-icon="noto-v1:shooting-star"></span></a></li>
+	                </div>
+	           </ul>
+	        </nav>
+	        <div id="logo_wrap">
+		        <div id="logo">
+		        <div><img src="/resources/img/logo.png" alt="logo"></div>
+		        </div>
 	        </div>
-        </div>
-        
-        <script type="text/javascript">
-			$(document).ready(function(){
-				/* 로그인 상태에 따라서 로그인, 로그아웃 변경 **************************/
-				var checking = '<c:out value="${login.email}"/>';
+	        
+	        <script type="text/javascript">
+				$(document).ready(function(){
+					
+					//로그인 상태에 따라서 로그인, 로그아웃 변경//////////////////////////////
+					var checking = "${login.email}";
+					console.log(checking);
+                    if (checking == ""){
+                    	console.log("로그인 안된 상태");
+                    	$("#login").show();
+                    	$("#logout").hide();
+                    	$("#user_update").hide();
+                    	$("#gnb_right").css("margin-left","150px");
+                    } else {
+                    	console.log("로그인 상태");
+                    	$("#join").hide();
+                    	$("#login").hide();
+                    	$("#logout").show();
+                    	$("#user_update").show();
+                    }
+					////////////////////////////////////////////////
+                 	
+					//검색 action ///////////////////////////////////
+                    var searchForm = $("#searchForm");
+	    			var keyword = $('#searchForm').find("input[name='keyword']").val();
+	    			console.log("alert");
+					////////////////////////////////////////////////
 				
-                   if (checking == "" || '<c:out value=""/>'){
-                   	$("#login").show();
-                   	$("#logout").hide();
-                   } else {
-                   	$("#join").hide();
-                   	$("#login").hide();
-                   	$("#logout").show();
-                   }
-				/* 로그인 상태에 따라서 로그인, 로그아웃 변경 */
-                	
-				/* 검색 action **************************/
-                   var searchForm = $("#searchForm");
-    			var keyword = $('#searchForm').find("input[name='keyword']").val();
-    			/* 검색 action */
-			}); 
-	    </script>
+				});
+                    
+                    
+                    
+                    
+		    </script>

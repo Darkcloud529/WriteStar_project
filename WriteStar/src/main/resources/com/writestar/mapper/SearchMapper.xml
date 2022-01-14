@@ -27,6 +27,7 @@
 		<result column="address" property="address"/>
 		<result column="post_type" property="post_type"/>
 		<result column="email" property="email"/>
+		<result column="hits" property="hits"/>
 		<collection property="userVO" resultMap="userInfo" />
 		<collection property="thumbnail" resultMap="fileInfo" />
 	</resultMap>
@@ -66,7 +67,7 @@
 		                b.hits,
 		                a.nickname
 		            from
-		                tbl_user a left outer join tbl_board b on (a.email = b.email)
+		                tbl_user a left outer join tbl_board b on (a.email = b.email and post_type = 1)
 		            where
 		                b.title like '%' || #{keyword} || '%'
 		                or b.content like '%' || #{keyword} || '%'

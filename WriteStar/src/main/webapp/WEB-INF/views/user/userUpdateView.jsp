@@ -3,41 +3,46 @@
  <%@ include file="../includes/header.jsp" %> 
 
 	<div id="user_box">
-		<form action="/user/userUpdate" method="post" name="userUpdateForm" role='form'>
-		<table id="table_reg">
-			<tr>
-				<td>
-					<input type="email" id="email_reg" name="email" placeholder="이메일" value="${login.email }" readonly>
-                    <!-- <button type="button" id="emailCheckBtn" name="emailCheck" value="N">이메일 중복 확인</button> -->
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<input type="text" id="nickname_reg" name="nickname" placeholder="닉네임">
-                    <button type="button" id="nicknameCheckBtn" name="nicknameCheck" value="N">닉네임 중복 확인</button>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<input type="text" id="pw_check" name="user_info" placeholder="간단한 소개글을 입력해 주세요.">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<input type="submit" id="registration" value="수정하기" onclick="return registerCheck()">
-                    <button>취소</button>
-                    <button type="button" onclick="location.href='/user/pwUpdate'">비밀번호변경</button>
-				</td>
-			</tr>
-		</table>
-		</form>
-		
-		<input type="file" id="file_btn" name='uploadFile' multiple>
-		<div id="image">
-			<ul>
-			
-			</ul>
+		<div id="userphoto_reg">
+			<p>Profile Photo</p>
+			<div id="user_photo">
+			</div>
+			<input type="file" id="file_change_btn" name='uploadFile' multiple>
+			<div id="image">
+				<ul>
+				
+				</ul>
+			</div>
 		</div>
+		
+		<form action="/user/userUpdate" method="post" name="userUpdateForm" role='form'>
+			<table id="table_change">
+				<tr>
+					<td>
+						<input type="email" id="email_reg" name="email" placeholder="이메일" value="${login.email}" readonly>
+	                    <!-- <button type="button" id="emailCheckBtn" name="emailCheck" value="N">이메일 중복 확인</button> -->
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" id="nickname_reg" name="nickname" value="${login.nickname}">
+	                    <button type="button" id="nicknameCheckBtn" name="nicknameCheck" value="N">닉네임 중복 확인</button>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" id="pw_check" name="user_info" value="${login.user_info}">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="submit" id="infochange" value="수정하기" onclick="return registerCheck()">
+	                    <button>취소</button>
+	                    <button type="button" id="pwchange" onclick="location.href='/user/pwUpdate'">비밀번호변경</button>
+					</td>
+				</tr>
+			</table>
+		</form>
 	</div>
 	<script>
 	function registerCheck(){ 
@@ -58,6 +63,7 @@
 	</script>
 	<script>
 	$(document).ready(function(){
+		
 		// 닉네임 중복 확인 버튼 클릭 시 
 		$('#nicknameCheckBtn').click(function(){
 			
@@ -161,7 +167,8 @@
 			        if(obj.image){
 			          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/"+obj.uuid +"_"+obj.fileName);
 			          str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'><div>";
-			          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='cancle_btn'>x</button>";
+			          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='cancel_btn'>x</button>";
+			          str += "<p>New Photo</p>";
 			          str += "<img src='/display?fileName="+fileCallPath+"'>";
 			          str += "</div>";
 			          str +"</li>";
@@ -198,7 +205,31 @@
 			           targetLi.remove();
 			         }
 			    });
-		});
+		  });
+		
+		  /* 프로필 사진 출력 ************************************************************************/
+		   (function(){	                            		   
+			    var email = "${login.email}";	                            		   
+				$.getJSON("/user/getAttachList", {email: email}, function(arr){	                            		     
+				   var str = "";	                            		       
+				   $(arr).each(function(i, attach){	                            		       
+					 //image type
+					 if(attach.bno == null){
+					   var fileCallPath =  encodeURIComponent(attach.uploadPath+"/"+attach.uuid+"_"+attach.fileName);
+					   str += "<img src='/display?fileName="+fileCallPath+"'>";
+					 }
+				   });
+				   
+				   console.log(str.length);
+				   if(str.length == 0) {
+					   str += "<img src='/resources/img/userPhoto.png'>";
+					   $("#user_photo").html(str);
+				   }else {
+					   $("#user_photo").html(str);
+				   }
+				 });
+			  })(); 
+			/* 프로필 사진 출력 */
 	});
 	</script>
 	

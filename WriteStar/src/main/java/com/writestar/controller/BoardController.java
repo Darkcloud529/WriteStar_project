@@ -88,7 +88,7 @@ public class BoardController {
 		service.register(board);
 		rttr.addFlashAttribute("result", board.getBno());
 		
-		return "redirect:/board/get?bno=" + board.getBno();
+		return "redirect:/board/get?bno=" + board.getBno() + "&email=" + board.getEmail();
 	}
 	
 	//글상세보기.글수정화면
@@ -96,6 +96,13 @@ public class BoardController {
 	public void get(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, Model model) {
 		// 조회수 처리
 		service.hitsCount(bno);
+		
+		// 친구 목록 조회
+		String to_user = cri.getEmail();
+		model.addAttribute("friendList", friendService.selectFriendList(to_user));
+		
+		// 친구 요청 목록 조회
+		model.addAttribute("requestList", friendService.checkRequest(to_user));
 		
 	    // 게시글 상세 조회
 		model.addAttribute("board", service.get(bno));
@@ -110,7 +117,7 @@ public class BoardController {
 
 	    rttr.addAttribute("keyword",cri.getKeyword());
 	    
-	    return "redirect:/board/get?bno=" + board.getBno();
+	    return "redirect:/board/get?bno=" + board.getBno() + "&email=" + board.getEmail();
 	}
 	
 	//글 삭제
