@@ -3,13 +3,17 @@ package com.writestar.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.writestar.domain.BoardAttachVO;
 import com.writestar.domain.UserVO;
 import com.writestar.domain.loginDTO;
-import com.writestar.service.BoardService;
 import com.writestar.service.UserService;
 
 import lombok.AllArgsConstructor;
@@ -36,14 +39,21 @@ public class UserController {
 	
 	// 회원 가입 처리
 	@PostMapping("/userRegister")
-	//@Valid : 유효성 검사가 필요한 객체에 추가
+	@Valid //유효성 검사가 필요한 객체에 추가
 	//BindingResult : 객체 검증 결과에 대한 정보를 담고 있다.
-	public String register(UserVO userVO) {
+	public String register(@ModelAttribute @Valid UserVO userVO, BindingResult result) {
 		// 회원 가입 시 비밀번호를 암호화 하는 작업 -> 회원으로부터 받은 정보 중 비밀번호의 경우 암호화해서 보관해야 보안에 비교적 안전
 		// BCrypt.hashpw(parameter1, BCrypt.gensalt()) 
 		// parameter : 암호화할 비밀번호 
 		// BCrypt.gensalt() : 암호화된 비밀번호를 리턴
 		// BCrypt를 사용하기 위해서는 pom.xml 추가 -> 'jbcrypt'
+		if(result.hasErrors()) {
+			List<ObjectError> list = result.getAllErrors();
+			for(ObjectError error : list) {
+				System.out.println(error);
+			}
+			return "/user/userRegister";
+		}
 		String hashedPw = BCrypt.hashpw(userVO.getPassword(), BCrypt.gensalt());
 		userVO.setPassword(hashedPw);
 		userService.register(userVO);
