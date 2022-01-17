@@ -194,7 +194,7 @@
 									for(var i=0,len=list.length || 0; i<len; i++){
 										str+="<li class='reply_list' data-rno='"+list[i].rno+"'style='cursor:pointer'>";
 										str+="<div class='reply_list_con'>"+list[i].content+"</div>";
-										str+="<div class='reply_list_nick'>"+list[i].email+"</div>";
+										str+="<div class='reply_list_nick'>"+list[i].userVO.nickname+"</div>";
 										str+="<div class='reply_list_date'>"+replyService.displayTime(list[i].replyDate)+"</div>";
 										str+="</div></li>";
 									}
@@ -420,10 +420,10 @@
 									</div>  		      
 								</div>
 								<div class="modal-footer">
-									<button id='modalModBtn' type="button">Modify</button>
-									<button id='modalRemoveBtn' type="button">Remove</button>
-									<button id='modalRegisterBtn' type="button">Register</button>
-									<button id='modalCloseBtn' type="button">Close</button>
+									<button id='modalModBtn' type="button">수정하기</button>
+									<button id='modalRemoveBtn' type="button">삭제하기</button>
+									<button id='modalRegisterBtn' type="button">등록하기</button>
+									<button id='modalCloseBtn' type="button">취소</button>
 								  </div>          
 						   </div>					       
 					  </div> 
