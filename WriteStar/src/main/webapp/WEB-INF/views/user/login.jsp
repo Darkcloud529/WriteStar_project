@@ -39,6 +39,7 @@
 			return false;
 		}
 	}
+	window.history.forward();
 	</script>
 	
  <%@include file="../includes/footer.jsp" %>   

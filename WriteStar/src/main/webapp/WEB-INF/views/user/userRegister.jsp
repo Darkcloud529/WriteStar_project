@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
  <%@ include file="../includes/header.jsp" %> 
+ <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+ <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
 	<div id="user_box">
 		<form action="/user/userRegister" method="post" name="registerForm">
@@ -41,6 +43,8 @@
 		</table>
 		</form>
 	</div>
+	
+	<!---------------------------------------------->
 	<script>
 	function registerCheck(){ 
 		// 각 입력칸 공란 확인
@@ -155,6 +159,7 @@
 			})
 		});
 	});
+	window.history.forward();
 	</script>
 	
  <%@include file="../includes/footer.jsp" %>   
